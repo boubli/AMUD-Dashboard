@@ -61,8 +61,7 @@ pub async fn settings_page_handler(
         custom_search_engines,
     );
     let timezone_options_html = crate::settings::build_timezone_options_html(&clock_timezone);
-    let default_search_options_html =
-        crate::settings::build_search_engine_options_html(&settings);
+    let default_search_options_html = crate::settings::build_search_engine_options_html(&settings);
     let donate_enabled = settings
         .get("donate_enabled")
         .map(|s| s.as_str())

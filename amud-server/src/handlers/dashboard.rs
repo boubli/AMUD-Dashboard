@@ -408,7 +408,10 @@ async fn render_page(
         .replace("{{weather_temp_unit}}", &escape_html(weather_temp_unit))
         .replace("{{clock_config_json}}", &clock_config_json)
         .replace("{{search_config_json}}", &search_config_json)
-        .replace("<!-- SEARCH_ENGINE_OPTIONS -->", &search_engine_options_html)
+        .replace(
+            "<!-- SEARCH_ENGINE_OPTIONS -->",
+            &search_engine_options_html,
+        )
         .replace("<!-- CATEGORY_OPTIONS -->", &category_options_html)
         .replace("{{csrf_token}}", &safe_csrf_meta)
         .replace("{{telemetry_public}}", telemetry_public)

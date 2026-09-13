@@ -797,8 +797,7 @@ pub(crate) fn sanitize_clock_timezone(value: &str) -> String {
     }
     // Allow other valid-looking IANA ids (Area/Location) so users aren't blocked.
     let ok = v.len() <= 64
-        && v
-            .chars()
+        && v.chars()
             .all(|c| c.is_ascii_alphanumeric() || c == '/' || c == '_' || c == '+' || c == '-');
     if ok && v.contains('/') {
         v.to_string()
@@ -918,10 +917,7 @@ pub(crate) fn sanitize_custom_search_engines(value: &str) -> String {
     serde_json::to_string(&out).unwrap_or_else(|_| "[]".into())
 }
 
-pub(crate) fn sanitize_default_search_engine(
-    value: &str,
-    custom_engines_json: &str,
-) -> String {
+pub(crate) fn sanitize_default_search_engine(value: &str, custom_engines_json: &str) -> String {
     let v = value.trim().to_lowercase();
     if BUILTIN_SEARCH_ENGINES.iter().any(|(id, _, _)| *id == v) {
         return v;
@@ -985,9 +981,7 @@ pub(crate) fn build_search_engines_json(settings: &HashMap<String, String>) -> S
         "default": default,
         "engines": engines,
     }))
-    .unwrap_or_else(|_| {
-        r#"{"default":"google","engines":[]}"#.into()
-    })
+    .unwrap_or_else(|_| r#"{"default":"google","engines":[]}"#.into())
 }
 
 pub(crate) fn build_search_engine_options_html(settings: &HashMap<String, String>) -> String {
