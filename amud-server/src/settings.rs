@@ -792,7 +792,7 @@ pub(crate) fn sanitize_clock_timezone(value: &str) -> String {
     if v.is_empty() || v.eq_ignore_ascii_case("auto") || v.eq_ignore_ascii_case("local") {
         return "auto".into();
     }
-    if CLOCK_TIMEZONE_OPTIONS.iter().any(|z| *z == v) {
+    if CLOCK_TIMEZONE_OPTIONS.contains(&v) {
         return v.to_string();
     }
     // Allow other valid-looking IANA ids (Area/Location) so users aren't blocked.
@@ -1046,7 +1046,7 @@ pub(crate) fn build_timezone_options_html(selected: &str) -> String {
             selected_attr = selected_attr,
         ));
     }
-    if sel != "auto" && !CLOCK_TIMEZONE_OPTIONS.iter().any(|z| *z == sel) {
+    if sel != "auto" && !CLOCK_TIMEZONE_OPTIONS.contains(&sel.as_str()) {
         html.push_str(&format!(
             r#"<option value="{z}" selected>{z}</option>"#,
             z = crate::templates::escape_html(&sel),
