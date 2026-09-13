@@ -31,6 +31,8 @@ pub async fn settings_handler(
         let mut new_token = None;
         let mut changed_keys = 0usize;
         let mut preset_to_apply: Option<String> = None;
+        let mut pending_default_engine: Option<String> = None;
+        let mut sanitized_custom_engines: Option<String> = None;
         for (key, val) in form {
             if key == "csrf_token"
                 || key == "new_password"
@@ -41,6 +43,10 @@ pub async fn settings_handler(
                 continue;
             }
             if !setting_key_allowed(&key) {
+                continue;
+            }
+            if key == "default_search_engine" {
+                pending_default_engine = Some(val.trim().to_lowercase());
                 continue;
             }
             let value = if key == "custom_bg_url" || key == "app_logo" {
@@ -115,6 +121,14 @@ pub async fn settings_handler(
                 crate::templates::safe_accent_hex(&val)
             } else if key == "wallpaper_overlay_strength" {
                 sanitize_wallpaper_overlay_strength(&val)
+            } else if key == "clock_timezone" {
+                sanitize_clock_timezone(&val)
+            } else if key == "clock_time_format" {
+                sanitize_clock_time_format(&val)
+            } else if key == "custom_search_engines" {
+                let cleaned = sanitize_custom_search_engines(&val);
+                sanitized_custom_engines = Some(cleaned.clone());
+                cleaned
             } else if SECRET_SETTING_KEYS.contains(&key.as_str()) {
                 match setting_value_or_existing(db, &key, &val) {
                     Some(v) => v,
@@ -130,6 +144,19 @@ pub async fn settings_handler(
                 preset_to_apply = Some(value.clone());
             }
             crate::db::upsert_setting(db, &key, &value);
+            changed_keys += 1;
+        }
+        if let Some(raw_default) = pending_default_engine {
+            let customs = sanitized_custom_engines.unwrap_or_else(|| {
+                db.query_row(
+                    "SELECT value FROM settings WHERE key = 'custom_search_engines'",
+                    [],
+                    |r| r.get::<_, String>(0),
+                )
+                .unwrap_or_else(|_| "[]".into())
+            });
+            let value = sanitize_default_search_engine(&raw_default, &customs);
+            crate::db::upsert_setting(db, "default_search_engine", &value);
             changed_keys += 1;
         }
         if let Some(preset) = preset_to_apply {

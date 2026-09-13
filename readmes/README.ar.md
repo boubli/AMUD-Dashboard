@@ -10,17 +10,17 @@
 
 **[سجل التغييرات](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[المدونة](https://boubli.github.io/AMUD-Dashboard/blog)** · **[معرض السمات](https://boubli.github.io/AMUD-Dashboard/themes)** · **[خارطة الطريق](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[المستندات](https://boubli.github.io/AMUD-Dashboard/)** · **[الأسئلة الشائعة](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### الجديد في v1.9.2
+### الجديد في v1.9.3
 
-- **Docs currency** — Theme Gallery + roadmap synced to 41 themes
-- **v1.9.1** — Crimson Flare theme
-- **v1.9.0** — Glow & Glass / Neumorphism shell consolidation
+- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
+- **Custom search engines** — Add your own web search engines (#17)
+- **v1.9.2** — Docs currency / 41 themes
 
 السجل الكامل: **[سجل التغييرات](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### حالة الإصدار
 
-الإصدار الموصى به: **1.9.2**. التفاصيل والإصدارات المسحوبة: **[README الإنجليزي](../README.md)** (قسم Release status).
+الإصدار الموصى به: **1.9.3**. التفاصيل والإصدارات المسحوبة: **[README الإنجليزي](../README.md)** (قسم Release status).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

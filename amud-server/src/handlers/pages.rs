@@ -37,6 +37,32 @@ pub async fn settings_page_handler(
         .get("weather_temp_unit")
         .map(|s| s.as_str())
         .unwrap_or("celsius");
+    let clock_timezone = crate::settings::sanitize_clock_timezone(
+        settings
+            .get("clock_timezone")
+            .map(|s| s.as_str())
+            .unwrap_or("auto"),
+    );
+    let clock_time_format = crate::settings::sanitize_clock_time_format(
+        settings
+            .get("clock_time_format")
+            .map(|s| s.as_str())
+            .unwrap_or("12h"),
+    );
+    let custom_search_engines = settings
+        .get("custom_search_engines")
+        .map(|s| s.as_str())
+        .unwrap_or("[]");
+    let default_search_engine = crate::settings::sanitize_default_search_engine(
+        settings
+            .get("default_search_engine")
+            .map(|s| s.as_str())
+            .unwrap_or("google"),
+        custom_search_engines,
+    );
+    let timezone_options_html = crate::settings::build_timezone_options_html(&clock_timezone);
+    let default_search_options_html =
+        crate::settings::build_search_engine_options_html(&settings);
     let donate_enabled = settings
         .get("donate_enabled")
         .map(|s| s.as_str())
@@ -125,6 +151,24 @@ pub async fn settings_page_handler(
         .replace(
             "{{eq_weather_temp_fahrenheit}}",
             crate::templates::theme_eq_attr(weather_temp_unit, "fahrenheit"),
+        )
+        .replace("{{timezone_options}}", &timezone_options_html)
+        .replace(
+            "{{eq_clock_12h}}",
+            crate::templates::theme_eq_attr(&clock_time_format, "12h"),
+        )
+        .replace(
+            "{{eq_clock_24h}}",
+            crate::templates::theme_eq_attr(&clock_time_format, "24h"),
+        )
+        .replace(
+            "{{custom_search_engines}}",
+            &escape_html(custom_search_engines),
+        )
+        .replace("{{default_search_options}}", &default_search_options_html)
+        .replace(
+            "{{default_search_engine}}",
+            &escape_html(&default_search_engine),
         )
         .replace(
             "{{pve_api_token_placeholder}}",

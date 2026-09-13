@@ -27,6 +27,8 @@
     <script src="/static/theme-scheduler.js?v={{app_version}}"></script>
     <script src="/static/theme-engine.js?v={{app_version}}"></script>
     <script id="amud-live-config" type="application/json">{"isAdmin":{{is_admin}},"hideTelemetry":{{hide_telemetry}},"totalApps":{{total_apps}},"pageSize":50}</script>
+    <script id="amud-clock-config" type="application/json">{{clock_config_json}}</script>
+    <script id="amud-search-config" type="application/json">{{search_config_json}}</script>
     <script src="/static/dashboard-live.js?v={{app_version}}"></script>
     <script src="/static/app-search.js?v={{app_version}}"></script>
     <script src="/static/shortcuts.js?v={{app_version}}"></script>
@@ -97,7 +99,7 @@
                         <span class="clock-time" id="live-time">12:00</span>
                         <div class="clock-meta">
                             <span class="clock-ampm" id="live-ampm">AM</span>
-                            <span class="clock-label">LOCAL TIME</span>
+                            <span class="clock-label" id="clock-tz-label">LOCAL</span>
                         </div>
                     </div>
                 </div>
@@ -126,11 +128,7 @@
                 <div class="search-input-divider"></div>
                 <label for="search-engine" class="visually-hidden">Search engine</label>
                 <select id="search-engine" class="search-engine-select" aria-label="Search engine">
-                    <option value="google">Google</option>
-                    <option value="bing">Bing</option>
-                    <option value="duckduckgo">DuckDuckGo</option>
-                    <option value="youtube">YouTube</option>
-                    <option value="github">GitHub</option>
+                    <!-- SEARCH_ENGINE_OPTIONS -->
                 </select>
                 <div class="search-input-divider"></div>
                 <div class="search-input-wrapper">

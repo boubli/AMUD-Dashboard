@@ -8,6 +8,16 @@ All notable changes to AMUD Dashboard are documented here and on the docs site.
 
 ---
 
+## [1.9.3](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.3) — 2026-09-13
+
+Configurable dashboard clock timezone/format and custom web search engines ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17)).
+
+### Added
+- **Clock timezone & format** — IANA timezone picker and 12h/24h preference in Settings → Appearance; dashboard clock follows them
+- **Custom search engines** — Add HTTPS search URL templates (`{query}` / `%s`) alongside built-ins; choose a default engine
+
+---
+
 ## [1.9.2](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.2) — 2026-08-12
 
 Docs currency and release hygiene: Theme Gallery / roadmap / README surfaces aligned with the live **41**-theme UI set.

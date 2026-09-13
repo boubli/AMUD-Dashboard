@@ -83,6 +83,9 @@ async fn render_page(
         .get("weather_temp_unit")
         .map(|s| s.as_str())
         .unwrap_or("celsius");
+    let clock_config_json = crate::settings::build_clock_config_json(&settings);
+    let search_config_json = crate::settings::build_search_engines_json(&settings);
+    let search_engine_options_html = crate::settings::build_search_engine_options_html(&settings);
     let is_admin = session.as_ref().map(|s| s.role == "Admin").unwrap_or(false);
     let telemetry_public = settings
         .get("telemetry_public")
@@ -403,6 +406,9 @@ async fn render_page(
         .replace("{{weather_latitude}}", &safe_weather_lat)
         .replace("{{weather_longitude}}", &safe_weather_lon)
         .replace("{{weather_temp_unit}}", &escape_html(weather_temp_unit))
+        .replace("{{clock_config_json}}", &clock_config_json)
+        .replace("{{search_config_json}}", &search_config_json)
+        .replace("<!-- SEARCH_ENGINE_OPTIONS -->", &search_engine_options_html)
         .replace("<!-- CATEGORY_OPTIONS -->", &category_options_html)
         .replace("{{csrf_token}}", &safe_csrf_meta)
         .replace("{{telemetry_public}}", telemetry_public)

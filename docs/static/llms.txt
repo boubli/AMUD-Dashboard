@@ -37,7 +37,7 @@ Docker Compose is optional: https://boubli.github.io/AMUD-Dashboard/docs/install
 - Architecture: https://boubli.github.io/AMUD-Dashboard/docs/ARCHITECTURE
 - Custom themes: https://boubli.github.io/AMUD-Dashboard/docs/themes
 - Theme gallery (41 themes): https://boubli.github.io/AMUD-Dashboard/themes
-- Latest release: v1.9.2 (see repository changelog)
+- Latest release: v1.9.3 (see repository changelog)
 
 ## What AMUD Dashboard is
 - Product name: **AMUD Dashboard** (repository: AMUD-Dashboard on GitHub)

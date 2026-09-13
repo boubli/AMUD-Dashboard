@@ -27,6 +27,18 @@ The setting is stored as `grid_columns` in the SQLite settings table (default: `
 
 Other appearance options on the same tab include accent color, glass blur/opacity, background image, logo, and bento card radius.
 
+### Clock
+
+**Timezone** (`clock_timezone`) — Browser local (default) or an IANA zone such as `Europe/Paris`. Drives the dashboard clock, date line, and greeting.
+
+**Time format** (`clock_time_format`) — `12h` (AM/PM) or `24h`.
+
+### Web search
+
+**Default search engine** (`default_search_engine`) — built-in (Google, Bing, DuckDuckGo, YouTube, GitHub) or a custom id.
+
+**Custom engines** (`custom_search_engines`) — JSON list of `{ "id", "name", "url" }` where `url` is `https://…` and includes `{query}` or `%s`. Managed from Settings → Appearance → Web search.
+
 ---
 
 ## Dashboard widgets

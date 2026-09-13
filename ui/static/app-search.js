@@ -1,5 +1,6 @@
 (function () {
     const MODE_KEY = 'amud_search_mode';
+    const ENGINE_KEY = 'amud_search_engine';
 
     function readStorage(key, fallback) {
         try {
@@ -25,6 +26,44 @@
     function setMode(mode) {
         writeStorage(MODE_KEY, mode);
         refreshModeUi();
+    }
+
+    function readSearchConfig() {
+        const el = document.getElementById('amud-search-config');
+        if (!el) {
+            return {
+                default: 'google',
+                engines: [
+                    { id: 'google', name: 'Google', url: 'https://www.google.com/search?q={query}' },
+                    { id: 'bing', name: 'Bing', url: 'https://www.bing.com/search?q={query}' },
+                    { id: 'duckduckgo', name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q={query}' },
+                    { id: 'youtube', name: 'YouTube', url: 'https://www.youtube.com/results?search_query={query}' },
+                    { id: 'github', name: 'GitHub', url: 'https://github.com/search?q={query}' },
+                ],
+            };
+        }
+        try {
+            const cfg = JSON.parse(el.textContent || '{}');
+            return {
+                default: cfg.default || 'google',
+                engines: Array.isArray(cfg.engines) ? cfg.engines : [],
+            };
+        } catch (err) {
+            console.warn('amud-search-config parse failed:', err);
+            return { default: 'google', engines: [] };
+        }
+    }
+
+    function buildSearchUrl(template, query) {
+        const q = encodeURIComponent(query);
+        if (!template) return 'https://www.google.com/search?q=' + q;
+        return String(template).split('{query}').join(q).split('%s').join(q);
+    }
+
+    function engineUrlById(id) {
+        const cfg = readSearchConfig();
+        const found = cfg.engines.find(function (e) { return e.id === id; });
+        return found ? found.url : null;
     }
 
     function updateEngineVisibility(mode, engineSelect, divider) {
@@ -88,6 +127,16 @@
                 input.focus();
             }
         });
+    }
+
+    function applyPreferredEngine() {
+        const select = document.getElementById('search-engine');
+        if (!select) return;
+        const cfg = readSearchConfig();
+        const stored = readStorage(ENGINE_KEY, '');
+        const preferred = stored || cfg.default || 'google';
+        const hasOption = Array.from(select.options).some(function (o) { return o.value === preferred; });
+        select.value = hasOption ? preferred : (cfg.default || 'google');
     }
 
     function refreshModeUi() {
@@ -154,39 +203,29 @@
         }
     }
 
-    const SEARCH_ENGINES = {
-        google: function (q) {
-            return 'https://www.google.com/search?q=' + encodeURIComponent(q);
-        },
-        bing: function (q) {
-            return 'https://www.bing.com/search?q=' + encodeURIComponent(q);
-        },
-        duckduckgo: function (q) {
-            return 'https://duckduckgo.com/?q=' + encodeURIComponent(q);
-        },
-        youtube: function (q) {
-            return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
-        },
-        github: function (q) {
-            return 'https://github.com/search?q=' + encodeURIComponent(q);
-        },
-    };
-
     function openWebSearch(query) {
         const engine = document.getElementById('search-engine')?.value || 'google';
-        const build = SEARCH_ENGINES[engine] || SEARCH_ENGINES.google;
-        globalThis.open(build(query), '_blank');
+        const url = buildSearchUrl(engineUrlById(engine) || 'https://www.google.com/search?q={query}', query);
+        writeStorage(ENGINE_KEY, engine);
+        globalThis.open(url, '_blank');
     }
 
     function init() {
         const input = document.getElementById('search-input');
         const modeApps = document.getElementById('search-mode-apps');
         const modeWeb = document.getElementById('search-mode-web');
+        const engineSelect = document.getElementById('search-engine');
         if (!input) return;
 
+        applyPreferredEngine();
         refreshModeUi();
         if (modeApps) modeApps.addEventListener('click', function () { setMode('apps'); });
         if (modeWeb) modeWeb.addEventListener('click', function () { setMode('web'); });
+        if (engineSelect) {
+            engineSelect.addEventListener('change', function () {
+                writeStorage(ENGINE_KEY, engineSelect.value);
+            });
+        }
 
         input.addEventListener('input', function () {
             if (getMode() === 'apps') {

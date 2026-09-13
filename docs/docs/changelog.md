@@ -5,6 +5,16 @@ title: Changelog
 
 # Changelog
 
+## v1.9.3 — Clock timezone/format + custom search engines
+
+**2026-09-13** · [Release notes](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.3)
+
+### Added
+- **Clock timezone & format** — IANA timezone + 12h/24h in Settings → Appearance ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17))
+- **Custom search engines** — User-defined HTTPS search URL templates next to built-ins; selectable default
+
+---
+
 ## v1.9.2 — Docs currency and release hygiene
 
 **2026-08-12** · [Release notes](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.2)

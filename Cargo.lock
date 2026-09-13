@@ -35,7 +35,7 @@ dependencies = [
 
 [[package]]
 name = "amud-agent"
-version = "1.9.2"
+version = "1.9.3"
 dependencies = [
  "amud-protocol",
  "http-body-util",
@@ -53,7 +53,7 @@ dependencies = [
 
 [[package]]
 name = "amud-protocol"
-version = "1.9.2"
+version = "1.9.3"
 dependencies = [
  "hex",
  "serde",
@@ -62,7 +62,7 @@ dependencies = [
 
 [[package]]
 name = "amud-server"
-version = "1.9.2"
+version = "1.9.3"
 dependencies = [
  "amud-protocol",
  "argon2",

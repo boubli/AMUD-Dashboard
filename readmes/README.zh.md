@@ -10,17 +10,17 @@
 
 **[更新日志](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[博客](https://boubli.github.io/AMUD-Dashboard/blog)** · **[主题画廊](https://boubli.github.io/AMUD-Dashboard/themes)** · **[路线图](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[文档](https://boubli.github.io/AMUD-Dashboard/)** · **[常见问题](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### v1.9.2 新特性
+### v1.9.3 新特性
 
-- **Docs currency** — Theme Gallery + roadmap synced to 41 themes
-- **v1.9.1** — Crimson Flare theme
-- **v1.9.0** — Glow & Glass / Neumorphism shell consolidation
+- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
+- **Custom search engines** — Add your own web search engines (#17)
+- **v1.9.2** — Docs currency / 41 themes
 
 完整历史：**[更新日志](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### 版本状态
 
-当前推荐：**1.9.2**。详情与已撤回版本：见 **[英文 README](../README.md)**（Release status 部分）。
+当前推荐：**1.9.3**。详情与已撤回版本：见 **[英文 README](../README.md)**（Release status 部分）。
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

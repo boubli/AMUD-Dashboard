@@ -805,6 +805,26 @@
                                 </div>
 
                                 <div class="settings-block settings-block--full" style="margin:0;">
+                                    <h3><i data-lucide="clock" style="color:var(--accent-color);"></i> Clock</h3>
+                                    <p class="form-help" style="margin-bottom:1rem;">Timezone and format for the dashboard clock and greeting. Browser local uses the visitor’s system timezone.</p>
+                                    <div class="appearance-pair-row appearance-pair-row--triple">
+                                        <div class="form-group" style="margin:0;">
+                                            <label for="setting-clock-timezone">Timezone</label>
+                                            <select id="setting-clock-timezone" name="clock_timezone" class="form-control" style="height:3rem; cursor:pointer;">
+                                                {{timezone_options}}
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="margin:0;">
+                                            <label for="setting-clock-time-format">Time format</label>
+                                            <select id="setting-clock-time-format" name="clock_time_format" class="form-control" style="height:3rem; cursor:pointer;">
+                                                <option value="12h" {{eq_clock_12h}}>12-hour (AM/PM)</option>
+                                                <option value="24h" {{eq_clock_24h}}>24-hour</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-block settings-block--full" style="margin:0;">
                                     <h3><i data-lucide="cloud-sun" style="color:var(--accent-color);"></i> Weather</h3>
                                     <p class="form-help" style="margin-bottom:1rem;">Location and units for the dashboard weather widget. Leave coordinates blank for IP geolocation.</p>
                                     <div class="appearance-pair-row appearance-pair-row--triple">
@@ -824,6 +844,20 @@
                                             </select>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="settings-block settings-block--full" style="margin:0;">
+                                    <h3><i data-lucide="search" style="color:var(--accent-color);"></i> Web search</h3>
+                                    <p class="form-help" style="margin-bottom:1rem;">Default engine for Web search mode, plus optional custom engines. URL templates must use <code>{query}</code> or <code>%s</code> and start with <code>https://</code>.</p>
+                                    <div class="form-group" style="margin-bottom:1rem;">
+                                        <label for="setting-default-search-engine">Default search engine</label>
+                                        <select id="setting-default-search-engine" name="default_search_engine" class="form-control" style="height:3rem; cursor:pointer;">
+                                            {{default_search_options}}
+                                        </select>
+                                    </div>
+                                    <input type="hidden" id="setting-custom-search-engines" name="custom_search_engines" value="{{custom_search_engines}}">
+                                    <div id="custom-search-engines-list" style="display:flex; flex-direction:column; gap:0.75rem;"></div>
+                                    <button type="button" class="btn btn-secondary" id="add-custom-search-engine" style="margin-top:0.75rem;">Add custom engine</button>
                                 </div>
 
                                 <div class="settings-block settings-block--full" style="margin:0;">
@@ -2876,11 +2910,125 @@
             refreshPicker();
         }
 
+        function initCustomSearchEngines() {
+            const hidden = document.getElementById('setting-custom-search-engines');
+            const list = document.getElementById('custom-search-engines-list');
+            const addBtn = document.getElementById('add-custom-search-engine');
+            const defaultSelect = document.getElementById('setting-default-search-engine');
+            if (!hidden || !list) return;
+
+            const builtins = [
+                { id: 'google', name: 'Google' },
+                { id: 'bing', name: 'Bing' },
+                { id: 'duckduckgo', name: 'DuckDuckGo' },
+                { id: 'youtube', name: 'YouTube' },
+                { id: 'github', name: 'GitHub' },
+            ];
+
+            function parseEngines() {
+                try {
+                    const raw = hidden.value || '[]';
+                    const decoded = document.createElement('textarea');
+                    decoded.innerHTML = raw;
+                    const parsed = JSON.parse(decoded.value || raw);
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (err) {
+                    return [];
+                }
+            }
+
+            function syncHidden(engines) {
+                hidden.value = JSON.stringify(engines);
+                const form = document.getElementById('mainSettingsForm');
+                if (form) {
+                    form.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                refreshDefaultOptions(engines);
+            }
+
+            function refreshDefaultOptions(engines) {
+                if (!defaultSelect) return;
+                const current = defaultSelect.value;
+                defaultSelect.innerHTML = '';
+                builtins.concat(engines.map(function (e) {
+                    return { id: e.id || '', name: e.name || 'Custom' };
+                })).forEach(function (e) {
+                    if (!e.id) return;
+                    const opt = document.createElement('option');
+                    opt.value = e.id;
+                    opt.textContent = e.name;
+                    defaultSelect.appendChild(opt);
+                });
+                const ids = Array.from(defaultSelect.options).map(function (o) { return o.value; });
+                defaultSelect.value = ids.includes(current) ? current : 'google';
+            }
+
+            function render() {
+                const engines = parseEngines();
+                list.innerHTML = '';
+                engines.forEach(function (engine, index) {
+                    const row = document.createElement('div');
+                    row.className = 'appearance-pair-row';
+                    row.style.gap = '0.75rem';
+                    row.innerHTML =
+                        '<div class="form-group" style="margin:0; flex:1;">' +
+                        '<label>Name</label>' +
+                        '<input type="text" class="form-control cse-name" maxlength="64" placeholder="My search">' +
+                        '</div>' +
+                        '<div class="form-group" style="margin:0; flex:2;">' +
+                        '<label>URL template</label>' +
+                        '<input type="url" class="form-control cse-url" maxlength="512" placeholder="https://example.com/search?q={query}">' +
+                        '</div>' +
+                        '<div class="form-group" style="margin:0; align-self:flex-end;">' +
+                        '<button type="button" class="btn btn-secondary cse-remove" aria-label="Remove engine">Remove</button>' +
+                        '</div>';
+                    const nameInput = row.querySelector('.cse-name');
+                    const urlInput = row.querySelector('.cse-url');
+                    nameInput.value = engine.name || '';
+                    urlInput.value = engine.url || '';
+                    function commit() {
+                        const next = parseEngines();
+                        next[index] = {
+                            id: engine.id || '',
+                            name: nameInput.value.trim(),
+                            url: urlInput.value.trim(),
+                        };
+                        syncHidden(next);
+                    }
+                    nameInput.addEventListener('input', commit);
+                    urlInput.addEventListener('input', commit);
+                    row.querySelector('.cse-remove').addEventListener('click', function () {
+                        const next = parseEngines().filter(function (_e, i) { return i !== index; });
+                        syncHidden(next);
+                        render();
+                    });
+                    list.appendChild(row);
+                });
+                refreshDefaultOptions(engines);
+            }
+
+            if (addBtn) {
+                addBtn.addEventListener('click', function () {
+                    const next = parseEngines();
+                    if (next.length >= 20) return;
+                    next.push({
+                        id: '',
+                        name: '',
+                        url: 'https://example.com/search?q={query}',
+                    });
+                    syncHidden(next);
+                    render();
+                });
+            }
+            render();
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             lucide.createIcons();
             initLivePreview();
             initThemeSchedulerUI();
             initGuestCategoryControls();
+            initCustomSearchEngines();
             if (typeof window.amudInitThemePicker === 'function') {
                 window.amudInitThemePicker({
                     defaultAccent: '{{accent_color}}',

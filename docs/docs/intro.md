@@ -38,7 +38,7 @@ See the full **[Features](./features.md)** page for every shipped capability —
 
 ## Next Steps
 
-- [Features](./features.md) — complete feature inventory (1.9.2)
+- [Features](./features.md) — complete feature inventory (1.9.3)
 - [FAQ](./faq.md) — common questions (install, RAM, YAML, comparisons)
 - [Blog](/blog) — guides and homelab notes (canonical source for cross-posts)
 - [Dashboard Configuration](./configuration.md) — appearance, custom CSS, smart home, and media integrations

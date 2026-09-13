@@ -5,7 +5,7 @@ title: Features
 
 # Features
 
-Complete inventory of what AMUD Dashboard ships today (1.9.2). Everything below is implemented in the compiled Rust binaries — no YAML files, no Node.js runtime.
+Complete inventory of what AMUD Dashboard ships today (1.9.3). Everything below is implemented in the compiled Rust binaries — no YAML files, no Node.js runtime.
 
 ![AMUD Dashboard — default theme](/img/AMUD-Dashboard.png)
 
@@ -27,6 +27,8 @@ Complete inventory of what AMUD Dashboard ships today (1.9.2). Everything below 
 | **Light & dark mode** | System-wide theme toggle with **41 bundled CSS themes** (including WebGL Taghawsa) and visual Theme Gallery |
 | **Video wallpapers** | `.mp4`, `.webm`, `.ogg` background support |
 | **Weather widget** | Open-Meteo via latitude/longitude in Settings |
+| **Clock timezone & format** | IANA timezone + 12h/24h for the dashboard clock (Settings → Appearance) |
+| **Web search + custom engines** | Built-in engines plus user-defined HTTPS `{query}` / `%s` templates; default engine selectable |
 | **Live settings preview** | Accent, glass blur/opacity, wallpaper overlay strength, grid columns, wallpaper |
 | **Dedicated `/feeds` page** | RSS-only view for guest-friendly news cards |
 | **Featured hero headline** | Top story banner on `/feeds` |

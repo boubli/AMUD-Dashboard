@@ -10,17 +10,17 @@
 
 **[बदलावों की सूची](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[ब्लॉग](https://boubli.github.io/AMUD-Dashboard/blog)** · **[थीम गैलरी](https://boubli.github.io/AMUD-Dashboard/themes)** · **[रोडमैप](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[दस्तावेज़](https://boubli.github.io/AMUD-Dashboard/)** · **[अक्सर पूछे जाने वाले सवाल](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### v1.9.2 में नया
+### v1.9.3 में नया
 
-- **Docs currency** — Theme Gallery + roadmap synced to 41 themes
-- **v1.9.1** — Crimson Flare theme
-- **v1.9.0** — Glow & Glass / Neumorphism shell consolidation
+- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
+- **Custom search engines** — Add your own web search engines (#17)
+- **v1.9.2** — Docs currency / 41 themes
 
 पूरा इतिहास: **[चेंजलॉग](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### रिलीज़ स्थिति
 
-अनुशंसित: **1.9.2**. विवरण: **[अंग्रेज़ी README](../README.md)** (Release status अनुभाग)।
+अनुशंसित: **1.9.3**. विवरण: **[अंग्रेज़ी README](../README.md)** (Release status अनुभाग)।
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

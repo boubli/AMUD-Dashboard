@@ -78,6 +78,10 @@ pub(crate) const EXTRA_SETTING_KEYS: &[&str] = &[
     "weather_latitude",
     "weather_longitude",
     "weather_temp_unit",
+    "clock_timezone",
+    "clock_time_format",
+    "default_search_engine",
+    "custom_search_engines",
     "accept_invalid_certs",
     "webhooks_allow_private_ips",
     "enable_proxmox",
@@ -721,6 +725,340 @@ pub(crate) fn sanitize_performance_preset(value: &str) -> String {
         "custom" => "custom".into(),
         _ => "light".into(),
     }
+}
+
+/// Built-in web search engines: (id, label, url template with `{query}`).
+pub(crate) const BUILTIN_SEARCH_ENGINES: &[(&str, &str, &str)] = &[
+    (
+        "google",
+        "Google",
+        "https://www.google.com/search?q={query}",
+    ),
+    ("bing", "Bing", "https://www.bing.com/search?q={query}"),
+    (
+        "duckduckgo",
+        "DuckDuckGo",
+        "https://duckduckgo.com/?q={query}",
+    ),
+    (
+        "youtube",
+        "YouTube",
+        "https://www.youtube.com/results?search_query={query}",
+    ),
+    ("github", "GitHub", "https://github.com/search?q={query}"),
+];
+
+/// Curated IANA timezones for the clock setting (plus empty/`auto` for browser local).
+pub(crate) const CLOCK_TIMEZONE_OPTIONS: &[&str] = &[
+    "UTC",
+    "America/New_York",
+    "America/Chicago",
+    "America/Denver",
+    "America/Los_Angeles",
+    "America/Toronto",
+    "America/Mexico_City",
+    "America/Sao_Paulo",
+    "America/Argentina/Buenos_Aires",
+    "Europe/London",
+    "Europe/Paris",
+    "Europe/Berlin",
+    "Europe/Madrid",
+    "Europe/Rome",
+    "Europe/Amsterdam",
+    "Europe/Brussels",
+    "Europe/Warsaw",
+    "Europe/Moscow",
+    "Europe/Istanbul",
+    "Africa/Casablanca",
+    "Africa/Cairo",
+    "Africa/Johannesburg",
+    "Asia/Dubai",
+    "Asia/Karachi",
+    "Asia/Kolkata",
+    "Asia/Bangkok",
+    "Asia/Shanghai",
+    "Asia/Hong_Kong",
+    "Asia/Tokyo",
+    "Asia/Seoul",
+    "Asia/Singapore",
+    "Australia/Sydney",
+    "Australia/Melbourne",
+    "Pacific/Auckland",
+    "Pacific/Honolulu",
+];
+
+pub(crate) fn sanitize_clock_timezone(value: &str) -> String {
+    let v = value.trim();
+    if v.is_empty() || v.eq_ignore_ascii_case("auto") || v.eq_ignore_ascii_case("local") {
+        return "auto".into();
+    }
+    if CLOCK_TIMEZONE_OPTIONS.iter().any(|z| *z == v) {
+        return v.to_string();
+    }
+    // Allow other valid-looking IANA ids (Area/Location) so users aren't blocked.
+    let ok = v.len() <= 64
+        && v
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '/' || c == '_' || c == '+' || c == '-');
+    if ok && v.contains('/') {
+        v.to_string()
+    } else {
+        "auto".into()
+    }
+}
+
+pub(crate) fn sanitize_clock_time_format(value: &str) -> String {
+    match value.trim().to_lowercase().as_str() {
+        "24h" | "24" | "HH" => "24h".into(),
+        _ => "12h".into(),
+    }
+}
+
+fn slugify_engine_id(name: &str) -> String {
+    let mut out = String::new();
+    for c in name.chars() {
+        if c.is_ascii_alphanumeric() {
+            out.push(c.to_ascii_lowercase());
+        } else if (c == '-' || c == '_' || c.is_whitespace()) && !out.ends_with('-') {
+            out.push('-');
+        }
+        if out.len() >= 32 {
+            break;
+        }
+    }
+    let trimmed = out.trim_matches('-').to_string();
+    if trimmed.is_empty() {
+        "custom".into()
+    } else {
+        trimmed
+    }
+}
+
+fn normalize_search_url_template(raw: &str) -> Option<String> {
+    let url = raw.trim();
+    if !url.starts_with("https://") || url.len() > 512 {
+        return None;
+    }
+    if url.contains("{query}") || url.contains("%s") {
+        Some(url.to_string())
+    } else {
+        None
+    }
+}
+
+/// Sanitize custom search engines JSON to a compact array of `{id,name,url}`.
+pub(crate) fn sanitize_custom_search_engines(value: &str) -> String {
+    let trimmed = value.trim();
+    if trimmed.is_empty() {
+        return "[]".into();
+    }
+    let Ok(parsed) = serde_json::from_str::<serde_json::Value>(trimmed) else {
+        return "[]".into();
+    };
+    let Some(arr) = parsed.as_array() else {
+        return "[]".into();
+    };
+    let mut out = Vec::new();
+    let mut used_ids = std::collections::HashSet::new();
+    for builtin in BUILTIN_SEARCH_ENGINES {
+        used_ids.insert(builtin.0.to_string());
+    }
+    for item in arr.iter().take(20) {
+        let name = item
+            .get("name")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .trim();
+        let name: String = name
+            .chars()
+            .filter(|c| !matches!(c, '<' | '>' | '"' | '\'' | '&' | '`'))
+            .take(64)
+            .collect();
+        let name = name.trim();
+        let url_raw = item
+            .get("url")
+            .and_then(|v| v.as_str())
+            .unwrap_or("")
+            .trim();
+        if name.is_empty() || name.len() > 64 {
+            continue;
+        }
+        let Some(url) = normalize_search_url_template(url_raw) else {
+            continue;
+        };
+        let mut id = item
+            .get("id")
+            .and_then(|v| v.as_str())
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .unwrap_or_else(|| slugify_engine_id(name));
+        if !id
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
+            || id.len() > 40
+        {
+            id = slugify_engine_id(name);
+        }
+        let mut candidate = id.clone();
+        let mut n = 2u32;
+        while used_ids.contains(&candidate) {
+            candidate = format!("{id}-{n}");
+            n += 1;
+            if n > 99 {
+                break;
+            }
+        }
+        used_ids.insert(candidate.clone());
+        out.push(serde_json::json!({
+            "id": candidate,
+            "name": name,
+            "url": url,
+        }));
+    }
+    serde_json::to_string(&out).unwrap_or_else(|_| "[]".into())
+}
+
+pub(crate) fn sanitize_default_search_engine(
+    value: &str,
+    custom_engines_json: &str,
+) -> String {
+    let v = value.trim().to_lowercase();
+    if BUILTIN_SEARCH_ENGINES.iter().any(|(id, _, _)| *id == v) {
+        return v;
+    }
+    if let Ok(arr) = serde_json::from_str::<Vec<serde_json::Value>>(custom_engines_json) {
+        if arr.iter().any(|e| {
+            e.get("id")
+                .and_then(|x| x.as_str())
+                .is_some_and(|id| id.eq_ignore_ascii_case(&v))
+        }) {
+            return v;
+        }
+    }
+    "google".into()
+}
+
+pub(crate) fn parse_custom_search_engines(
+    settings: &HashMap<String, String>,
+) -> Vec<(String, String, String)> {
+    let raw = settings
+        .get("custom_search_engines")
+        .map(|s| s.as_str())
+        .unwrap_or("[]");
+    let Ok(arr) = serde_json::from_str::<Vec<serde_json::Value>>(raw) else {
+        return Vec::new();
+    };
+    arr.into_iter()
+        .filter_map(|e| {
+            let id = e.get("id")?.as_str()?.to_string();
+            let name = e.get("name")?.as_str()?.to_string();
+            let url = e.get("url")?.as_str()?.to_string();
+            Some((id, name, url))
+        })
+        .collect()
+}
+
+pub(crate) fn build_search_engines_json(settings: &HashMap<String, String>) -> String {
+    let custom = parse_custom_search_engines(settings);
+    let default = settings
+        .get("default_search_engine")
+        .map(|s| s.as_str())
+        .unwrap_or("google");
+    let mut engines = Vec::new();
+    for (id, name, url) in BUILTIN_SEARCH_ENGINES {
+        engines.push(serde_json::json!({
+            "id": id,
+            "name": name,
+            "url": url,
+            "builtin": true,
+        }));
+    }
+    for (id, name, url) in &custom {
+        engines.push(serde_json::json!({
+            "id": id,
+            "name": name,
+            "url": url,
+            "builtin": false,
+        }));
+    }
+    serde_json::to_string(&serde_json::json!({
+        "default": default,
+        "engines": engines,
+    }))
+    .unwrap_or_else(|_| {
+        r#"{"default":"google","engines":[]}"#.into()
+    })
+}
+
+pub(crate) fn build_search_engine_options_html(settings: &HashMap<String, String>) -> String {
+    let default = settings
+        .get("default_search_engine")
+        .map(|s| s.as_str())
+        .unwrap_or("google");
+    let custom = parse_custom_search_engines(settings);
+    let mut html = String::new();
+    for (id, name, _) in BUILTIN_SEARCH_ENGINES {
+        let selected = if *id == default { " selected" } else { "" };
+        html.push_str(&format!(
+            r#"<option value="{id}"{selected}>{name}</option>"#,
+            id = crate::templates::escape_html(id),
+            selected = selected,
+            name = crate::templates::escape_html(name),
+        ));
+    }
+    for (id, name, _) in &custom {
+        let selected = if id == default { " selected" } else { "" };
+        html.push_str(&format!(
+            r#"<option value="{}"{}>{}</option>"#,
+            crate::templates::escape_html(id),
+            selected,
+            crate::templates::escape_html(name),
+        ));
+    }
+    html
+}
+
+pub(crate) fn build_clock_config_json(settings: &HashMap<String, String>) -> String {
+    let timezone = sanitize_clock_timezone(
+        settings
+            .get("clock_timezone")
+            .map(|s| s.as_str())
+            .unwrap_or("auto"),
+    );
+    let format = sanitize_clock_time_format(
+        settings
+            .get("clock_time_format")
+            .map(|s| s.as_str())
+            .unwrap_or("12h"),
+    );
+    serde_json::to_string(&serde_json::json!({
+        "timezone": timezone,
+        "format": format,
+    }))
+    .unwrap_or_else(|_| r#"{"timezone":"auto","format":"12h"}"#.into())
+}
+
+pub(crate) fn build_timezone_options_html(selected: &str) -> String {
+    let sel = sanitize_clock_timezone(selected);
+    let mut html = format!(
+        r#"<option value="auto"{}>Browser local</option>"#,
+        if sel == "auto" { " selected" } else { "" }
+    );
+    for zone in CLOCK_TIMEZONE_OPTIONS {
+        let selected_attr = if *zone == sel { " selected" } else { "" };
+        html.push_str(&format!(
+            r#"<option value="{z}"{selected_attr}>{z}</option>"#,
+            z = crate::templates::escape_html(zone),
+            selected_attr = selected_attr,
+        ));
+    }
+    if sel != "auto" && !CLOCK_TIMEZONE_OPTIONS.iter().any(|z| *z == sel) {
+        html.push_str(&format!(
+            r#"<option value="{z}" selected>{z}</option>"#,
+            z = crate::templates::escape_html(&sel),
+        ));
+    }
+    html
 }
 
 pub(crate) fn backup_export_overdue(settings: &HashMap<String, String>) -> bool {

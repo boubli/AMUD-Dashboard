@@ -557,18 +557,85 @@
         }
     }
 
+    function readClockConfig() {
+        const el = document.getElementById('amud-clock-config');
+        if (!el) return { timezone: 'auto', format: '12h' };
+        try {
+            const cfg = JSON.parse(el.textContent || '{}');
+            return {
+                timezone: (cfg.timezone || 'auto').trim() || 'auto',
+                format: (cfg.format || '12h').trim() === '24h' ? '24h' : '12h',
+            };
+        } catch (err) {
+            console.warn('amud-clock-config parse failed:', err);
+            return { timezone: 'auto', format: '12h' };
+        }
+    }
+
+    function clockZoneLabel(timezone) {
+        if (!timezone || timezone === 'auto') return 'LOCAL';
+        const parts = timezone.split('/');
+        const last = parts[parts.length - 1] || timezone;
+        return last.replace(/_/g, ' ').toUpperCase();
+    }
+
     function updateClock() {
+        const cfg = readClockConfig();
+        const useTz = cfg.timezone && cfg.timezone !== 'auto';
         const now = new Date();
-        let hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        setDashboardText('live-time', `${hours}:${minutes}`);
-        setDashboardText('live-ampm', ampm);
+        const hour12 = cfg.format !== '24h';
+
+        const timeOpts = {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: hour12,
+        };
+        if (useTz) timeOpts.timeZone = cfg.timezone;
+
+        let hoursStr = '';
+        let ampm = '';
+        try {
+            if (hour12) {
+                const parts = new Intl.DateTimeFormat('en-US', timeOpts).formatToParts(now);
+                hoursStr = (parts.find((p) => p.type === 'hour')?.value || '12') + ':' +
+                    (parts.find((p) => p.type === 'minute')?.value || '00');
+                ampm = (parts.find((p) => p.type === 'dayPeriod')?.value || '').toUpperCase();
+            } else {
+                const parts = new Intl.DateTimeFormat('en-GB', timeOpts).formatToParts(now);
+                const h = parts.find((p) => p.type === 'hour')?.value || '00';
+                const m = parts.find((p) => p.type === 'minute')?.value || '00';
+                hoursStr = h.padStart(2, '0') + ':' + m.padStart(2, '0');
+            }
+        } catch (err) {
+            console.warn('Clock timezone failed, falling back to local:', err);
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            if (hour12) {
+                ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                hoursStr = hours + ':' + minutes;
+            } else {
+                hoursStr = String(hours).padStart(2, '0') + ':' + minutes;
+            }
+        }
+
+        setDashboardText('live-time', hoursStr);
+        const ampmEl = document.getElementById('live-ampm');
+        if (ampmEl) {
+            ampmEl.textContent = hour12 ? ampm : '';
+            ampmEl.style.display = hour12 ? '' : 'none';
+        }
+        setDashboardText('clock-tz-label', clockZoneLabel(useTz ? cfg.timezone : 'auto'));
 
         const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const rawDate = now.toLocaleDateString('en-US', dateOptions);
+        if (useTz) dateOptions.timeZone = cfg.timezone;
+        let rawDate;
+        try {
+            rawDate = now.toLocaleDateString('en-US', dateOptions);
+        } catch (err) {
+            rawDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
         const parts = rawDate.split(', ');
         if (parts.length >= 3) {
             setDashboardText('live-date', `${parts[0]} · ${parts[1]}, ${parts[2]}`);
@@ -576,7 +643,17 @@
             setDashboardText('live-date', rawDate.replace(/,/g, ' ·'));
         }
 
-        const rawHours = now.getHours();
+        let rawHours = now.getHours();
+        if (useTz) {
+            try {
+                const hp = new Intl.DateTimeFormat('en-US', {
+                    hour: 'numeric',
+                    hour12: false,
+                    timeZone: cfg.timezone,
+                }).formatToParts(now);
+                rawHours = parseInt(hp.find((p) => p.type === 'hour')?.value || String(rawHours), 10);
+            } catch (err) { /* keep local hour */ }
+        }
         let greeting = 'Hello';
         if (rawHours >= 5 && rawHours < 12) {
             greeting = 'Good morning';

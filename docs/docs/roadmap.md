@@ -13,6 +13,7 @@ Items move between **Now**, **Next**, and **Later** as reality hits. Recently sh
 
 ## Recently shipped (v1.9.x / late v1.8.x)
 
+- **v1.9.3** — Clock timezone/format + custom web search engines ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17))
 - **v1.9.2** — Docs currency: Theme Gallery + roadmap + README surfaces synced to **41** themes; release-notes hygiene
 - **v1.9.1** — **Crimson Flare** theme (crimson light / obsidian dark, flare wallpaper, icon pack)
 - **v1.9.0** — Single dashboard HTML shell for Glow/Neu; SonarCloud maintainability + CPD exclusions
