@@ -548,7 +548,7 @@
     <div class="settings-layout">
         <!-- Sidebar Navigation -->
         <aside class="settings-sidebar">
-            <div class="settings-mobile-nav" @click.outside="settingsMenuOpen = false">
+            <div class="settings-mobile-nav" @mousedown.outside="settingsMenuOpen = false" @keydown.escape.window="settingsMenuOpen = false">
             <div class="settings-sidebar-top">
                 <a href="/" class="settings-header-brand">
                     <i data-lucide="arrow-left" style="width:1.2rem; height:1.2rem; color:var(--text-muted);"></i>
@@ -663,7 +663,7 @@
                                     <label for="setting-app-logo">Dashboard Logo (URL or Upload)</label>
                                     <input type="text" id="setting-app-logo" name="app_logo" x-ref="logoInputText" class="form-control" value="{{app_logo}}" placeholder="/static/logo.svg">
                                     <p class="form-help">Favicon, Apple touch icon, and PWA install icon.</p>
-                                    <div class="upload-zone upload-zone--compact" @click="$refs.logoFileInput.click()">
+                                    <div class="upload-zone upload-zone--compact" role="button" tabindex="0" aria-label="Upload logo image" @click="$refs.logoFileInput.click()" @keydown.enter="$refs.logoFileInput.click()" @keydown.space.prevent="$refs.logoFileInput.click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
                                         <label for="setting-logo-file" class="visually-hidden">Upload logo image</label>
                                         <input type="file" id="setting-logo-file" x-ref="logoFileInput" style="display:none;" @change="handleFileUpload($event, 'logo')">
                                         <i data-lucide="upload-cloud"></i>
@@ -677,7 +677,7 @@
                                 <div class="form-group" style="margin:0;">
                                     <label for="setting-custom-bg-url">Background image (URL or Upload)</label>
                                     <input type="text" id="setting-custom-bg-url" name="custom_bg_url" x-ref="bgInputText" class="form-control" value="{{custom_bg_url}}" placeholder="/static/wallpaper.png">
-                                    <div class="upload-zone upload-zone--compact" @click="$refs.bgFileInput.click()">
+                                    <div class="upload-zone upload-zone--compact" role="button" tabindex="0" aria-label="Upload wallpaper image" @click="$refs.bgFileInput.click()" @keydown.enter="$refs.bgFileInput.click()" @keydown.space.prevent="$refs.bgFileInput.click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
                                         <label for="setting-bg-file" class="visually-hidden">Upload wallpaper image</label>
                                         <input type="file" id="setting-bg-file" x-ref="bgFileInput" style="display:none;" @change="handleFileUpload($event, 'bg')">
                                         <i data-lucide="upload-cloud"></i>
@@ -1910,7 +1910,7 @@
 
     <!-- Modals for Management -->
     <!-- Category Modal -->
-    <div class="drawer-backdrop" x-show="catModalOpen" x-transition.opacity @click="catModalOpen = false" style="display: none; z-index:90;"></div>
+    <div class="drawer-backdrop" x-show="catModalOpen" x-transition.opacity @click="catModalOpen = false" @keydown.enter="catModalOpen = false" @keydown.space.prevent="catModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none; z-index:90;"></div>
     <div class="mgmt-modal" x-show="catModalOpen" x-transition.opacity style="display: none;">
         <h3 style="margin-bottom:1.5rem;"><span x-text="catEditing ? 'Edit Category' : 'Add Category'">Add Category</span></h3>
         <input type="hidden" id="cat-id">
@@ -1933,7 +1933,7 @@
     </div>
 
     <!-- Webhook Modal -->
-    <div class="drawer-backdrop" x-show="whModalOpen" x-transition.opacity @click="whModalOpen = false" style="display: none; z-index:90;"></div>
+    <div class="drawer-backdrop" x-show="whModalOpen" x-transition.opacity @click="whModalOpen = false" @keydown.enter="whModalOpen = false" @keydown.space.prevent="whModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none; z-index:90;"></div>
     <div class="mgmt-modal" x-show="whModalOpen" x-transition.opacity style="display: none;">
         <h3 style="margin-bottom:1.5rem;"><span x-text="whEditing ? 'Edit Webhook' : 'Add Webhook'">Add Webhook</span></h3>
         <input type="hidden" id="wh-id">
@@ -1965,7 +1965,7 @@
     </div>
 
     <!-- User Modal -->
-    <div class="drawer-backdrop" x-show="usrModalOpen" x-transition.opacity @click="usrModalOpen = false" style="display: none; z-index:90;"></div>
+    <div class="drawer-backdrop" x-show="usrModalOpen" x-transition.opacity @click="usrModalOpen = false" @keydown.enter="usrModalOpen = false" @keydown.space.prevent="usrModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none; z-index:90;"></div>
     <div class="mgmt-modal" x-show="usrModalOpen" x-transition.opacity style="display: none;">
         <h3 style="margin-bottom:1.5rem;"><span x-text="usrEditing ? 'Edit User' : 'Add User'">Add User</span></h3>
         <input type="hidden" id="usr-id">
@@ -1992,7 +1992,7 @@
     </div>
 
     <!-- WOL Device Modal -->
-    <div class="drawer-backdrop" x-show="wolModalOpen" x-transition.opacity @click="wolModalOpen = false" style="display: none; z-index:90;"></div>
+    <div class="drawer-backdrop" x-show="wolModalOpen" x-transition.opacity @click="wolModalOpen = false" @keydown.enter="wolModalOpen = false" @keydown.space.prevent="wolModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none; z-index:90;"></div>
     <div class="mgmt-modal" x-show="wolModalOpen" x-transition.opacity style="display: none;">
         <h3 style="margin-bottom:1.5rem;">Add WOL Device</h3>
         <form action="/api/wol/add" method="POST" style="margin:0;">
@@ -2021,7 +2021,7 @@
     </div>
 
     <!-- RSS Feed Modal -->
-    <div class="drawer-backdrop" x-show="rssModalOpen" x-transition.opacity @click="rssModalOpen = false" style="display: none; z-index:90;"></div>
+    <div class="drawer-backdrop" x-show="rssModalOpen" x-transition.opacity @click="rssModalOpen = false" @keydown.enter="rssModalOpen = false" @keydown.space.prevent="rssModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none; z-index:90;"></div>
     <div class="mgmt-modal" x-show="rssModalOpen" x-transition.opacity style="display: none; max-width: 520px;">
         <h3 style="margin-bottom:1.5rem;" x-text="rssEditing ? 'Edit RSS Feed' : 'Add RSS Feed'">Add RSS Feed</h3>
         <form @submit.prevent="saveRssFeed()" style="margin:0;">
@@ -2074,7 +2074,7 @@
     </div>
 
     <!-- Feed Category Modal -->
-    <div class="drawer-backdrop" x-show="feedCatModalOpen" x-transition.opacity @click="feedCatModalOpen = false" style="display: none; z-index:90;"></div>
+    <div class="drawer-backdrop" x-show="feedCatModalOpen" x-transition.opacity @click="feedCatModalOpen = false" @keydown.enter="feedCatModalOpen = false" @keydown.space.prevent="feedCatModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none; z-index:90;"></div>
     <div class="mgmt-modal" x-show="feedCatModalOpen" x-transition.opacity style="display: none;">
         <h3 style="margin-bottom:1.5rem;" x-text="feedCatEditing ? 'Edit Feed Category' : 'Add Feed Category'">Add Feed Category</h3>
         <input type="hidden" id="feed-cat-id" aria-label="Feed category identifier">
