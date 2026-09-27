@@ -35,6 +35,7 @@ Older releases (v1.8.0–v1.8.8, v1.7.x, v1.6.x, …): see the full [Changelog](
 
 ## Next
 
+- **15 Oct 2026 — Tittim Surprise** — a quiet gift for the Queen (loyalty after ~1 month, or a rare surprise)
 - **Docusaurus locale packs** — translate docs site (READMEs already in 11 languages)
 - **Backup/restore UX** — export *scheduling* reminders (overdue export banner already shipped)
 
