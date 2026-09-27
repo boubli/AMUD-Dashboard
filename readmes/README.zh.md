@@ -5,6 +5,9 @@
 # AMUD Dashboard
 
 [![GitHub Release](https://img.shields.io/github/v/release/boubli/AMUD-Dashboard?style=flat-square)](https://github.com/boubli/AMUD-Dashboard/releases/latest)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tradmss/amud-dashboard?style=flat-square)](https://hub.docker.com/r/tradmss/amud-dashboard)
+[![Unraid CA — Dashboard](https://img.shields.io/badge/Unraid%20CA-Dashboard-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+[![Unraid CA — Agent](https://img.shields.io/badge/Unraid%20CA-Agent-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
 
 [English](../README.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Русский](README.ru.md) | [中文](README.zh.md) | [日本語](README.ja.md) | [हिन्दी](README.hi.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 
@@ -136,11 +139,12 @@ volumes:
 
 ### Unraid (Community Applications)
 
-官方模板：**AMUD Dashboard** + **AMUD Agent**（两个容器，共享套接字路径）。
+从 Unraid 的 Apps 标签页安装**两个**应用（它们需要互相通信）：
 
-1. 模板发布后，从 **Apps** 标签页安装这两个容器。
-2. 在两个容器上使用**相同**的 `AMUD_AGENT_SECRET`。
-3. 完整指南：[Unraid 安装文档](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
+- [AMUD Dashboard](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+- [AMUD Agent](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
+
+两个容器使用**相同**的 Agent Secret。指南：[Unraid 安装文档](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
 
 **首次启动权限错误？** 若日志出现 `.amud-secrets-key: Permission denied`，请更新到 **v1.7.2+** 并重建容器，或查看[故障排除](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied)与 [appdata 权限](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid#permission-errors-on-appdata)。
 

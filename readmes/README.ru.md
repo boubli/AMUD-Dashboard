@@ -5,6 +5,9 @@
 # AMUD Dashboard
 
 [![GitHub Release](https://img.shields.io/github/v/release/boubli/AMUD-Dashboard?style=flat-square)](https://github.com/boubli/AMUD-Dashboard/releases/latest)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tradmss/amud-dashboard?style=flat-square)](https://hub.docker.com/r/tradmss/amud-dashboard)
+[![Unraid CA — Dashboard](https://img.shields.io/badge/Unraid%20CA-Dashboard-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+[![Unraid CA — Agent](https://img.shields.io/badge/Unraid%20CA-Agent-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
 
 [English](../README.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Русский](README.ru.md) | [中文](README.zh.md) | [日本語](README.ja.md) | [हिन्दी](README.hi.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 
@@ -136,11 +139,12 @@ volumes:
 
 ### Unraid (Community Applications)
 
-Официальные шаблоны: **AMUD Dashboard** + **AMUD Agent** (два контейнера, общий путь к сокету).
+Установите **оба** приложения во вкладке Apps Unraid (им нужно общаться друг с другом):
 
-1. Установите оба контейнера из вкладки **Apps** после публикации шаблонов.
-2. Используйте **один и тот же** `AMUD_AGENT_SECRET` в обоих контейнерах.
-3. Полное руководство: [Документация по установке в Unraid](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
+- [AMUD Dashboard](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+- [AMUD Agent](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
+
+Используйте **один и тот же** Agent Secret на обоих. Руководство: [Документация по установке в Unraid](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
 
 **Ошибка прав при первом запуске?** Если в логе `.amud-secrets-key: Permission denied`, обновитесь до **v1.7.2+** и пересоздайте контейнер или см. [устранение неполадок](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied) и [права appdata](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid#permission-errors-on-appdata).
 

@@ -5,6 +5,9 @@
 # AMUD Dashboard
 
 [![GitHub Release](https://img.shields.io/github/v/release/boubli/AMUD-Dashboard?style=flat-square)](https://github.com/boubli/AMUD-Dashboard/releases/latest)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tradmss/amud-dashboard?style=flat-square)](https://hub.docker.com/r/tradmss/amud-dashboard)
+[![Unraid CA — Dashboard](https://img.shields.io/badge/Unraid%20CA-Dashboard-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+[![Unraid CA — Agent](https://img.shields.io/badge/Unraid%20CA-Agent-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
 
 [English](../README.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Русский](README.ru.md) | [中文](README.zh.md) | [日本語](README.ja.md) | [हिन्दी](README.hi.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 
@@ -136,11 +139,12 @@ volumes:
 
 ### Unraid (Community Applications)
 
-공식 템플릿: **AMUD Dashboard** + **AMUD Agent** (두 개의 컨테이너, 소켓 경로 공유).
+Unraid Apps 탭에서 **두** 앱을 모두 설치하세요 (서로 통신해야 합니다):
 
-1. 템플릿이 게시된 후 **Apps** 탭에서 두 컨테이너를 모두 설치합니다.
-2. 두 컨테이너 모두에 **동일한** `AMUD_AGENT_SECRET`을 사용합니다.
-3. 전체 가이드: [Unraid 설치 문서](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
+- [AMUD Dashboard](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+- [AMUD Agent](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
+
+둘 다 **같은** Agent Secret을 사용하세요. 가이드: [Unraid 설치 문서](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
 
 **첫 부팅 권한 오류?** 로그에 `.amud-secrets-key: Permission denied`가 보이면 **v1.7.2+**로 업데이트 후 컨테이너를 재생성하거나 [문제 해결](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied) 및 [appdata 권한](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid#permission-errors-on-appdata)을 참고하세요.
 

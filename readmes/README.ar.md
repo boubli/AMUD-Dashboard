@@ -5,6 +5,9 @@
 # AMUD Dashboard
 
 [![GitHub Release](https://img.shields.io/github/v/release/boubli/AMUD-Dashboard?style=flat-square)](https://github.com/boubli/AMUD-Dashboard/releases/latest)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tradmss/amud-dashboard?style=flat-square)](https://hub.docker.com/r/tradmss/amud-dashboard)
+[![Unraid CA — Dashboard](https://img.shields.io/badge/Unraid%20CA-Dashboard-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+[![Unraid CA — Agent](https://img.shields.io/badge/Unraid%20CA-Agent-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
 
 [English](../README.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Русский](README.ru.md) | [中文](README.zh.md) | [日本語](README.ja.md) | [हिन्दी](README.hi.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 
@@ -136,11 +139,12 @@ volumes:
 
 ### Unraid (تطبيقات المجتمع)
 
-القوالب الرسمية: **AMUD Dashboard** + **AMUD Agent** (حاويتان، مسار مقبس مشترك).
+ثبّت **التطبيقين** من تبويب Apps في Unraid (يحتاجان للتواصل مع بعضهما):
 
-1. قم بتثبيت كليهما من علامة التبويب **Apps** بعد نشر القوالب.
-2. استخدم نفس `AMUD_AGENT_SECRET` في كلتا الحاويتين.
-3. الدليل الكامل: [مستندات التثبيت على Unraid](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
+- [AMUD Dashboard](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+- [AMUD Agent](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
+
+استخدم نفس Agent Secret في كليهما. الدليل: [مستندات التثبيت على Unraid](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
 
 **خطأ صلاحيات عند أول تشغيل؟** إذا ظهر في السجل `.amud-secrets-key: Permission denied`، حدّث إلى **v1.7.2+** وأعد إنشاء الحاوية، أو راجع [استكشاف الأخطاء](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied) و[صلاحيات appdata](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid#permission-errors-on-appdata).
 

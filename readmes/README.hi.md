@@ -5,6 +5,9 @@
 # AMUD Dashboard
 
 [![GitHub Release](https://img.shields.io/github/v/release/boubli/AMUD-Dashboard?style=flat-square)](https://github.com/boubli/AMUD-Dashboard/releases/latest)
+[![Docker Pulls](https://img.shields.io/docker/pulls/tradmss/amud-dashboard?style=flat-square)](https://hub.docker.com/r/tradmss/amud-dashboard)
+[![Unraid CA — Dashboard](https://img.shields.io/badge/Unraid%20CA-Dashboard-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+[![Unraid CA — Agent](https://img.shields.io/badge/Unraid%20CA-Agent-f15a22?style=flat-square)](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
 
 [English](../README.md) | [Español](README.es.md) | [Português](README.pt.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Italiano](README.it.md) | [Русский](README.ru.md) | [中文](README.zh.md) | [日本語](README.ja.md) | [हिन्दी](README.hi.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 
@@ -136,11 +139,12 @@ volumes:
 
 ### Unraid (Community Applications)
 
-आधिकारिक टेम्पलेट: **AMUD Dashboard** + **AMUD Agent** (दो कंटेनर, साझा सॉकेट पथ)।
+Unraid के Apps टैब से **दोनों** ऐप्स इंस्टॉल करें (उन्हें एक-दूसरे से बात करनी होती है):
 
-1. टेम्पलेट प्रकाशित होने के बाद **Apps** टैब से दोनों को स्थापित करें।
-2. दोनों कंटेनरों पर **समान** `AMUD_AGENT_SECRET` का उपयोग करें।
-3. संपूर्ण गाइड: [Unraid स्थापना दस्तावेज़](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
+- [AMUD Dashboard](https://ca.unraid.net/apps/amud-dashboard-1kdo2c91lbzwj1?q=amud)
+- [AMUD Agent](https://ca.unraid.net/apps/amud-agent-1h08djw0cqqurs?q=amud)
+
+दोनों पर **समान** Agent Secret इस्तेमाल करें। गाइड: [Unraid स्थापना दस्तावेज़](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid)
 
 **पहले बूट पर अनुमति त्रुटि?** यदि लॉग में `.amud-secrets-key: Permission denied` दिखे, **v1.7.2+** पर अपडेट करें और कंटेनर पुनः बनाएं, या [समस्या निवारण](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied) और [appdata अनुमतियाँ](https://boubli.github.io/AMUD-Dashboard/docs/installation/unraid#permission-errors-on-appdata) देखें।
 
