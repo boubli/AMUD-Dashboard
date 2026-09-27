@@ -6,6 +6,7 @@ CURL_SECURE=(--proto '=https' --tlsv1.2)
 
 amud_curl() {
   curl "${CURL_SECURE[@]}" "$@"
+  return $?
 }
 
 amud_fetch_latest_tag() {
@@ -17,6 +18,7 @@ amud_fetch_latest_tag() {
     tag="v1.0.0"
   fi
   printf '%s' "$tag"
+  return 0
 }
 
 amud_download_release_asset() {
@@ -26,6 +28,7 @@ amud_download_release_asset() {
   local dest="$4"
   amud_curl -L -sS -f -o "$dest" \
     "https://github.com/${repo}/releases/download/${tag}/${name}"
+  return $?
 }
 
 amud_verify_release_asset() {

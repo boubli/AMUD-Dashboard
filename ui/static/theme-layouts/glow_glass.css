@@ -5,6 +5,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    position: sticky;
+    top: 0.75rem;
+    z-index: 40;
 }
 
 [data-ui-profile="glow_glass"] .topbar-inner {
@@ -52,6 +55,8 @@
 
 [data-ui-profile="glow_glass"] .bento-grid {
     gap: 1.25rem;
+    position: relative;
+    z-index: 1;
 }
 
 [data-ui-profile="glow_glass"] .app-card.glass-panel {
@@ -69,22 +74,11 @@
     font-size: 0.68rem;
 }
 
-[data-ui-profile="glow_glass"] .topbar {
-    position: sticky;
-    top: 0.75rem;
-    z-index: 40;
-}
-
 [data-ui-profile="glow_glass"] .telemetry-row .telemetry-title {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-size: 0.68rem;
     opacity: 0.85;
-}
-
-[data-ui-profile="glow_glass"] .bento-grid {
-    position: relative;
-    z-index: 1;
 }
 
 [data-ui-profile="glow_glass"] .dashboard-footer .version-badge {
@@ -97,9 +91,6 @@
     [data-ui-profile="glow_glass"] .topbar {
         border-radius: 20px;
         flex-wrap: wrap;
-    }
-
-    [data-ui-profile="glow_glass"] .topbar {
         top: 0.35rem;
     }
 }

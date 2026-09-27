@@ -80,7 +80,7 @@
                     <i data-lucide="menu"></i>
                 </button>
 
-                <div id="topbar-overflow-menu" class="topbar-overflow" :class="{ 'is-open': topbarMenuOpen }" @click="topbarMenuOpen = false" @keydown.enter="topbarMenuOpen = false" @keydown.space.prevent="topbarMenuOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0">
+                <div id="topbar-overflow-menu" class="topbar-overflow" :class="{ 'is-open': topbarMenuOpen }" @click="topbarMenuOpen = false">
                 <!-- FEEDS_NAV -->
                 <!-- AUTH_BUTTONS -->
                 </div>
@@ -261,7 +261,7 @@
 
 
     <!-- Add Application Modal -->
-    <div class="modal-backdrop" x-show="addAppModalOpen" x-transition.opacity @click="addAppModalOpen = false" @keydown.enter="addAppModalOpen = false" @keydown.space.prevent="addAppModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none;"></div>
+    <button type="button" class="modal-backdrop" x-show="addAppModalOpen" x-transition.opacity @click="addAppModalOpen = false" aria-label="Close dialog" style="display: none;"></button>
     <div class="modal" x-show="addAppModalOpen" x-transition style="display: none;">
         <div class="modal-header">
             <div>
@@ -558,7 +558,7 @@
     </div>
 
     <!-- Edit Application Modal -->
-    <div class="modal-backdrop" x-show="editAppModalOpen" x-transition.opacity @click="editAppModalOpen = false" @keydown.enter="editAppModalOpen = false" @keydown.space.prevent="editAppModalOpen = false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" tabindex="0" aria-label="Close dialog" style="display: none;"></div>
+    <button type="button" class="modal-backdrop" x-show="editAppModalOpen" x-transition.opacity @click="editAppModalOpen = false" aria-label="Close dialog" style="display: none;"></button>
     <div class="modal" x-show="editAppModalOpen" x-transition style="display: none;">
         <div class="modal-header">
             <div>

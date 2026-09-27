@@ -1565,6 +1565,12 @@ body::-webkit-scrollbar-button {
     background: rgba(1, 4, 10, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .settings-drawer {
@@ -1660,6 +1666,10 @@ body::-webkit-scrollbar-button {
     align-items: center;
     gap: 0.4rem;
     margin-top: 0.35rem;
+    color: inherit;
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .upload-zone:hover {
@@ -1739,6 +1749,12 @@ body::-webkit-scrollbar-button {
     background: rgba(1, 4, 10, 0.7);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 .modal {

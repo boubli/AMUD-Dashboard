@@ -5,6 +5,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    position: sticky;
+    top: 0.75rem;
+    z-index: 40;
 }
 
 [data-ui-profile="neumorphism"] .topbar-inner {
@@ -47,6 +50,8 @@
 
 [data-ui-profile="neumorphism"] .bento-grid {
     gap: 1.35rem;
+    position: relative;
+    z-index: 1;
 }
 
 [data-ui-profile="neumorphism"] .app-card.glass-panel {
@@ -54,22 +59,11 @@
     padding: 1.15rem 1.2rem;
 }
 
-[data-ui-profile="neumorphism"] .topbar {
-    position: sticky;
-    top: 0.75rem;
-    z-index: 40;
-}
-
 [data-ui-profile="neumorphism"] .telemetry-row .telemetry-title {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: 0.68rem;
     opacity: 0.8;
-}
-
-[data-ui-profile="neumorphism"] .bento-grid {
-    position: relative;
-    z-index: 1;
 }
 
 [data-ui-profile="neumorphism"] .dashboard-footer .version-badge {
@@ -85,9 +79,6 @@
     [data-ui-profile="neumorphism"] .topbar {
         border-radius: 18px;
         flex-wrap: wrap;
-    }
-
-    [data-ui-profile="neumorphism"] .topbar {
         top: 0.35rem;
     }
 }
