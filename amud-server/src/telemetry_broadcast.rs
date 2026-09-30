@@ -21,6 +21,7 @@ fn empty_full_telemetry() -> FullTelemetry {
         agent_connected: false,
         smart_home: None,
         nodes: HashMap::new(),
+        nodes_meta: HashMap::new(),
     }
 }
 
@@ -98,6 +99,7 @@ impl WsTelemetryBundle {
 
         let network = system.network.clone().unwrap_or_default();
         let nodes = read_rwlock(&state.telemetry_by_node);
+        let nodes_meta = read_rwlock(&state.nodes_meta);
 
         let guest_app_statuses: HashMap<String, AppStatus> = app_statuses
             .iter()
@@ -129,6 +131,7 @@ impl WsTelemetryBundle {
             agent_connected,
             smart_home: Some(smart_home),
             nodes,
+            nodes_meta,
         };
 
         if !build_guest {
@@ -148,6 +151,7 @@ impl WsTelemetryBundle {
             agent_connected,
             smart_home: None,
             nodes: HashMap::new(),
+            nodes_meta: HashMap::new(),
         };
 
         let guest_redacted = FullTelemetry {
@@ -161,6 +165,7 @@ impl WsTelemetryBundle {
             agent_connected,
             smart_home: None,
             nodes: HashMap::new(),
+            nodes_meta: HashMap::new(),
         };
 
         let mut buf = String::with_capacity(8192);
@@ -246,7 +251,8 @@ mod tests {
             agent_connected: Arc::new(RwLock::new(true)),
             media_streams: Arc::new(RwLock::new(HashMap::new())),
             app_statuses: Arc::new(RwLock::new(app_statuses)),
-            agent_command_tx: Arc::new(Mutex::new(None)),
+            agent_sessions: Arc::new(Mutex::new(HashMap::new())),
+            nodes_meta: Arc::new(RwLock::new(HashMap::new())),
             next_agent_conn_id: Arc::new(AtomicU64::new(1)),
             pve_test_response: Arc::new(RwLock::new(None)),
             docker_discover_response: Arc::new(RwLock::new(None)),

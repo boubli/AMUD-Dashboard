@@ -5,6 +5,20 @@ title: Changelog
 
 # Changelog
 
+## v1.9.4 — Multi-node agents
+
+**2026-09-30**
+
+### Added
+- **Multi-node agents** — one `amud-server`, many `amud-agent` hosts; sessions keyed by `node_tag`
+- **Remote TCP** — `AMUD_AGENT_TCP_LISTEN` on the server; `AMUD_SERVER_ADDR` + required `AMUD_NODE_TAG` on remote agents (UDS remains for co-located)
+- **Optional TLS** — `AMUD_AGENT_TLS` with cert/key (server) and CA (agent); plain TCP kept for VPN/LAN
+- **Nodes strip** — select a host for CPU/RAM/GPU/disk cards; app controls route to the correct agent
+- **Capability profiles** — `host` / `docker` / `proxmox` plus optional `AMUD_PLATFORM` badge
+- Docs: [Remote agents / multi-node](./installation/remote-agents)
+
+---
+
 ## v1.9.3 — Clock timezone/format + custom search engines
 
 **2026-09-13** · [Release notes](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.3)

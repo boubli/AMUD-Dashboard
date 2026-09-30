@@ -279,3 +279,9 @@ After upgrading:
 1. **Hard-refresh the browser** (`Ctrl+Shift+R`) or [clear the PWA cache](../troubleshooting#pwa--browser-cache-issues).
 2. If you use HTTPS via a reverse proxy, set `AMUD_SECURE_COOKIES=1` on the dashboard container — see [Security](../security.md).
 3. Confirm both `amud_app` and `amud_agent` containers are healthy: `docker compose ps`.
+
+---
+
+## Additional nodes (remote agents)
+
+To monitor other Docker hosts while keeping a single AMUD server, run **agent-only** containers elsewhere with `AMUD_SERVER_ADDR`, a unique `AMUD_NODE_TAG`, and the same `AMUD_AGENT_SECRET`. Enable `AMUD_AGENT_TCP_LISTEN` on the server. See [Remote agents / multi-node](./remote-agents).

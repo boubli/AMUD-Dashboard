@@ -167,6 +167,86 @@
         }
     }
 
+    let selectedNodeTag = localStorage.getItem('amud_selected_node') || '';
+
+    function resolveHostTelemetry(data) {
+        const nodes = data.nodes || {};
+        const tags = Object.keys(nodes);
+        if (tags.length === 0) return data.system;
+        if (selectedNodeTag && nodes[selectedNodeTag]) return nodes[selectedNodeTag];
+        if (nodes.Local) return nodes.Local;
+        if (data.system && data.system.node_tag && nodes[data.system.node_tag]) {
+            return nodes[data.system.node_tag];
+        }
+        return nodes[tags[0]] || data.system;
+    }
+
+    function renderNodesStrip(data) {
+        const strip = document.getElementById('nodes-strip');
+        const list = document.getElementById('nodes-list');
+        const summary = document.getElementById('nodes-summary');
+        if (!strip || !list) return;
+
+        const nodes = data.nodes || {};
+        const meta = data.nodes_meta || {};
+        const tags = Object.keys(nodes).sort((a, b) => a.localeCompare(b));
+        if (tags.length <= 1) {
+            strip.hidden = tags.length === 0;
+            if (tags.length === 1) {
+                selectedNodeTag = tags[0];
+                strip.hidden = false;
+            } else {
+                return;
+            }
+        } else {
+            strip.hidden = false;
+        }
+
+        if (selectedNodeTag && !nodes[selectedNodeTag]) {
+            selectedNodeTag = tags.includes('Local') ? 'Local' : tags[0];
+            localStorage.setItem('amud_selected_node', selectedNodeTag);
+        }
+        if (!selectedNodeTag && tags.length) {
+            selectedNodeTag = tags.includes('Local') ? 'Local' : tags[0];
+        }
+
+        let online = 0;
+        let worstCpu = 0;
+        let worstRam = 0;
+        list.innerHTML = '';
+        tags.forEach((tag) => {
+            const tel = nodes[tag] || {};
+            const m = meta[tag] || {};
+            const connected = m.connected !== false;
+            if (connected) online += 1;
+            worstCpu = Math.max(worstCpu, tel.cpu_usage || 0);
+            worstRam = Math.max(worstRam, tel.ram_usage || 0);
+            const caps = Array.isArray(m.capabilities) ? m.capabilities : (tel.capabilities || []);
+            const platform = m.platform || tel.platform || '';
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'node-chip' + (tag === selectedNodeTag ? ' is-selected' : '') + (connected ? '' : ' is-offline');
+            btn.setAttribute('role', 'option');
+            btn.setAttribute('aria-selected', tag === selectedNodeTag ? 'true' : 'false');
+            btn.dataset.nodeTag = tag;
+            const capLabel = caps.filter((c) => c !== 'host').join(' · ') || 'host';
+            const plat = platform ? ` · ${platform}` : '';
+            btn.innerHTML = `<span class="node-chip-name">${tag}</span>`
+                + `<span class="node-chip-stats">${tel.cpu_usage ?? 0}% CPU · ${tel.ram_usage ?? 0}% RAM</span>`
+                + `<span class="node-chip-caps">${capLabel}${plat}</span>`;
+            btn.addEventListener('click', () => {
+                selectedNodeTag = tag;
+                localStorage.setItem('amud_selected_node', tag);
+                updateHostTelemetry(tel);
+                renderNodesStrip(data);
+            });
+            list.appendChild(btn);
+        });
+        if (summary) {
+            summary.textContent = `${online}/${tags.length} online · peak CPU ${worstCpu}% · peak RAM ${worstRam}%`;
+        }
+    }
+
     function updateHostTelemetry(sys) {
         if (!sys) return;
         setDashboardText('val-pve-cpu', `${sys.cpu_usage ?? 0}%`);
@@ -386,17 +466,18 @@
         try {
             const data = JSON.parse(event.data);
 
-            if (data.system) {
-                const sys = data.system;
+            if (data.system || (data.nodes && Object.keys(data.nodes).length)) {
+                renderNodesStrip(data);
+                const sys = resolveHostTelemetry(data);
                 updateHostTelemetry(sys);
 
                 document.querySelectorAll('.app-card').forEach(card => {
                     const nodeTag = card.getAttribute('data-node-tag') || 'Local';
-                    const nodeTel = (data.nodes && data.nodes[nodeTag]) ? data.nodes[nodeTag] : sys;
+                    const nodeTel = (data.nodes && data.nodes[nodeTag]) ? data.nodes[nodeTag] : (data.system || sys);
                     const containers = (nodeTel.lxc_containers && nodeTel.lxc_containers.length > 0)
                         ? nodeTel.lxc_containers
-                        : ((sys.lxc_containers && sys.lxc_containers.length > 0) ? sys.lxc_containers : []);
-                    if (containers.length > 0 && nodeTag === (sys.node_tag || 'Local')) {
+                        : (((data.system || {}).lxc_containers && data.system.lxc_containers.length > 0) ? data.system.lxc_containers : []);
+                    if (containers.length > 0 && (nodeTag === selectedNodeTag || nodeTag === ((data.system || {}).node_tag || 'Local'))) {
                         updateStreamStatusBadges(containers);
                     }
                     const match = findContainerByNames(containers, containerNamesForCard(card));

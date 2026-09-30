@@ -52,6 +52,12 @@ pub struct AgentTelemetry {
     /// Host label for multi-node agent deployments (matches app `node_tag`).
     #[serde(default)]
     pub node_tag: String,
+    /// Capability profiles: `host`, `docker`, `proxmox`.
+    #[serde(default)]
+    pub capabilities: Vec<String>,
+    /// Soft platform label: `proxmox`, `unraid`, `casaos`, `docker`, or empty.
+    #[serde(default)]
+    pub platform: String,
 }
 
 #[derive(Clone, Serialize, Deserialize, Default)]

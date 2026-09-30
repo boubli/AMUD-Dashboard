@@ -241,15 +241,7 @@ pub async fn test_proxmox_handler(
             );
         })
         .await;
-        let config_payload = crate::agent::agent_config_for_state(&state, Some(form_token.trim()));
-        if let Ok(mut serialized) = serde_json::to_vec(&config_payload) {
-            serialized.push(b'\n');
-            if let Some(tx) = &*state.agent_command_tx.lock().unwrap() {
-                let _ = tx
-                    .tx
-                    .send(String::from_utf8_lossy(&serialized).into_owned());
-            }
-        }
+        crate::agent::push_agent_config(&state, Some(form_token.trim()));
         tokio::time::sleep(std::time::Duration::from_millis(200)).await;
     }
 
@@ -264,8 +256,9 @@ pub async fn test_proxmox_handler(
     if let Ok(mut serialized) = serde_json::to_vec(&cmd) {
         serialized.push(b'\n');
 
+        let node_tag = form.get("node_tag").map(|s| s.as_str());
         let sent = {
-            if let Some(tx) = &*state.agent_command_tx.lock().unwrap() {
+            if let Some(tx) = crate::agent::agent_session_for_or_any(&state, node_tag) {
                 tx.tx
                     .send(String::from_utf8_lossy(&serialized).into_owned())
                     .is_ok()

@@ -471,7 +471,8 @@ pub async fn run() {
     let agent_connected = Arc::new(RwLock::new(false));
     let media_streams = Arc::new(RwLock::new(HashMap::new()));
     let app_statuses = Arc::new(RwLock::new(HashMap::new()));
-    let agent_command_tx = Arc::new(Mutex::new(None));
+    let agent_sessions = Arc::new(Mutex::new(HashMap::new()));
+    let nodes_meta = Arc::new(RwLock::new(HashMap::new()));
     let pve_test_response = Arc::new(RwLock::new(None));
     let docker_discover_response = Arc::new(RwLock::new(None));
     let telemetry_discover_response = Arc::new(RwLock::new(None));
@@ -511,7 +512,8 @@ pub async fn run() {
         agent_connected: agent_connected.clone(),
         media_streams: media_streams.clone(),
         app_statuses: app_statuses.clone(),
-        agent_command_tx: agent_command_tx.clone(),
+        agent_sessions: agent_sessions.clone(),
+        nodes_meta: nodes_meta.clone(),
         next_agent_conn_id: Arc::new(std::sync::atomic::AtomicU64::new(1)),
         pve_test_response: pve_test_response.clone(),
         docker_discover_response: docker_discover_response.clone(),

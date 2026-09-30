@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/amud-logo-github.png" alt="AMUD Logo" width="300" />
 </div>
 
@@ -13,17 +13,23 @@
 
 **[Registro delle modifiche](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Galleria dei Temi](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Tabella di marcia](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Documentazione](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### Novità in v1.9.4
+
+- **Multi-node agents** — un server AMUD, agent su ogni host Proxmox / Unraid / CasaOS / Docker ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
+- **Nodes strip** — scegli l’host per CPU/RAM; i controlli seguono il `node_tag`
+- **TCP + TLS opzionale** — agent remoti via VPN o TLS; UDS per install locale
+
 ### Novità in v1.9.3
 
-- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
-- **Custom search engines** — Add your own web search engines (#17)
-- **v1.9.2** — Docs currency / 41 themes
+- **Clock timezone & format** — Fuso IANA + 12h/24h
+- **Custom search engines** — Motori di ricerca personalizzati (#17)
+- **v1.9.2** — Docs / 41 temi
 
 Cronologia completa: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
-### Stato release
+### Stato delle versioni
 
-Consigliato: **1.9.3**. Dettagli e tag ritirati: **[README inglese](../README.md)** (sezione Release status).
+Consigliato: **1.9.4**. Dettagli e tag ritirati: **[README inglese](../README.md)** (sezione Release status).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

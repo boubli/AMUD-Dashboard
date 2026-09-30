@@ -13,6 +13,7 @@ Items move between **Now**, **Next**, and **Later** as reality hits. Recently sh
 
 ## Recently shipped (v1.9.x / late v1.8.x)
 
+- **v1.9.4** — Multi-node agents (one server, many hosts; TCP/TLS or VPN; Nodes strip) — [Remote agents](./installation/remote-agents)
 - **v1.9.3** — Clock timezone/format + custom web search engines ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17))
 - **v1.9.2** — Docs currency: Theme Gallery + roadmap + README surfaces synced to **41** themes; release-notes hygiene
 - **v1.9.1** — **Crimson Flare** theme (crimson light / obsidian dark, flare wallpaper, icon pack)
@@ -42,7 +43,7 @@ Older releases (v1.8.0–v1.8.8, v1.7.x, v1.6.x, …): see the full [Changelog](
 
 ## Later (ideas, not commitments)
 
-- **Multi-node agent UI** — per-app `node_tag` shipped in v1.6.0; later = aggregate telemetry from several agents in one dashboard view
+- **Native Unraid / CasaOS APIs** — beyond Docker + host capability profiles
 - **API tokens** — selectable scopes already ship when creating tokens; expand further for telemetry/feeds/webhooks as needed
 - **Per-integration setup wizards** — guided Pi-hole, *arr, and DNS blocker configuration in Settings
 - **PWA offline polish** — richer offline shell and cache strategy beyond static asset precache

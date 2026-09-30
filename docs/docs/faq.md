@@ -63,6 +63,12 @@ On **ARM64** (Raspberry Pi, Oracle Ampere, etc.), use [native install](/docs/ins
 
 ---
 
+## Can I monitor several hosts with one AMUD server?
+
+**Yes (v1.9.4+).** Run one `amud-server`, install `amud-agent` on each Proxmox / Unraid / CasaOS / Docker host with a unique `AMUD_NODE_TAG`, and point remotes at the server with `AMUD_SERVER_ADDR`. Enable `AMUD_AGENT_TCP_LISTEN` on the server (prefer VPN, or TLS). Set each app’s **Node tag** to match. Full guide: [Remote agents / multi-node](/docs/installation/remote-agents).
+
+---
+
 ## Why are my app cards stuck on CHECKING...?
 
 Host CPU/RAM works but LXC badges show **CHECKING...**? The Proxmox API token is missing or misconfigured.

@@ -139,6 +139,15 @@
             </div>
         </div>
 
+        <!-- Multi-node agent picker -->
+        <section class="nodes-strip" id="nodes-strip" hidden aria-label="Homelab nodes">
+            <div class="nodes-strip-header">
+                <span class="nodes-strip-title">Nodes</span>
+                <span class="nodes-strip-summary" id="nodes-summary">—</span>
+            </div>
+            <div class="nodes-strip-list" id="nodes-list" role="listbox" aria-label="Select node"></div>
+        </section>
+
         <!-- Top Row: Telemetry quick stats -->
         <section class="telemetry-row" id="telemetry-section">
             <div class="glass-panel telemetry-card" id="pve-card">
@@ -1090,6 +1099,8 @@
             const id = ctrlContainer.getAttribute('data-id');
             const provider = ctrlContainer.getAttribute('data-provider');
             if (!id || !provider) return;
+            const card = button.closest('.app-card');
+            const nodeTag = (card && card.getAttribute('data-node-tag')) || 'Local';
             
             // Add loading/disabled state to the controls
             ctrlContainer.classList.add('loading');
@@ -1103,6 +1114,7 @@
             formData.append('provider', provider);
             formData.append('id', id);
             formData.append('action', action);
+            formData.append('node_tag', nodeTag);
             formData.append('csrf_token', amudCsrfToken());
             
             fetch('/apps/action', {

@@ -13,6 +13,12 @@
 
 **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Theme Gallery](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Roadmap](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Docs](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### What's new in v1.9.4
+
+- **Multi-node agents** — one AMUD server, agents on every Proxmox / Unraid / CasaOS / Docker host ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
+- **Nodes strip** — pick a host for live CPU/RAM; container controls route by `node_tag`
+- **TCP + optional TLS** — remote agents over VPN or TLS; UDS stays for co-located installs
+
 ### What's new in v1.9.3
 
 - **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h (Settings → Appearance)
@@ -21,21 +27,21 @@
 
 Full history: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
-### Release status (2026-09-13)
+### Release status (2026-09-30)
 
 Last **5** validated releases (full history: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**):
 
-- `v1.9.3` (current latest recommended)
+- `v1.9.4` (current latest recommended)
+- `v1.9.3`
 - `v1.9.2`
 - `v1.9.1`
 - `v1.9.0`
-- `v1.8.13`
 
 **Do not use:** `v1.8.6`, `v1.8.5` (layout), `v1.5.5.4`, `v1.5.6.1`, `v1.6.1` (withdrawn or broken).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 
-**Unify your homelab.** A fast, Rust-powered, zero-YAML dashboard with live Proxmox & Docker telemetry, container controls, and integrations for popular self-hosted services — all from the UI.
+**Unify your homelab.** A fast, Rust-powered, zero-YAML dashboard with live Proxmox & Docker telemetry, container controls, and integrations for popular self-hosted services — all from the UI. Run **one server** and optional **agents on every host** (multi-node).
 
 Unlike legacy dashboards (Heimdall, Homepage, Homarr) that run on heavy runtimes (PHP-FPM, Node.js) and rely on complex nested YAML configuration files, AMUD is written in compiled Rust and persisted entirely in SQLite. Combined, the server and telemetry agent idle at **30–50 MB of RAM** (peak ~150 MB with a full integration grid) with sub-millisecond route execution.
 
@@ -44,16 +50,18 @@ Unlike legacy dashboards (Heimdall, Homepage, Homarr) that run on heavy runtimes
 ## Architecture & Design Decisions
 
 AMUD Dashboard is split into two native binaries:
-1. **`amud-server`**: Axum-based web server serving server-rendered HTML (templated via Alpine.js) and managing state via SQLite.
-2. **`amud-agent`**: Standalone daemon installed on the homelab host. It queries host metrics, Proxmox VE containers, and Docker runtimes, streaming raw JSON payloads back to the server via Unix Domain Sockets (UDS) or TCP.
+1. **`amud-server`**: Axum-based web server serving server-rendered HTML (templated via Alpine.js) and managing state via SQLite. **One server** can accept many agents.
+2. **`amud-agent`**: Standalone daemon on each homelab host (Proxmox, Unraid, CasaOS, Docker, …). It streams host + container telemetry over UDS (local) or TCP/TLS (remote). See [Remote agents / multi-node](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents).
 
 ```mermaid
 graph TD
     User[Web Browser] -->|HTML / WebSockets| Server[amud-server]
     Server -->|SQLite WAL| DB[(amud.db)]
-    Agent[amud-agent] -->|JSON over UNIX Socket| Server
-    Agent -->|Direct HTTPS REST API| PVE[Proxmox VE API]
-    Agent -->|Unix Domain Socket| Docker[Docker Daemon]
+    AgentLocal[amud-agent Local] -->|UDS| Server
+    AgentRemote[amud-agent Remote] -->|TCP or TLS| Server
+    AgentLocal -->|HTTPS REST| PVE[Proxmox VE API]
+    AgentLocal -->|Unix Socket| Docker[Docker Daemon]
+    AgentRemote -->|HTTPS REST| PVE2[Other PVE / Docker]
 ```
 
 ### Technical Stack Justifications

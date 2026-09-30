@@ -318,6 +318,76 @@ body::-webkit-scrollbar-button {
     color: var(--text-secondary);
 }
 
+/* Multi-node agent strip */
+.nodes-strip {
+    margin: 0 0 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--bento-radius, 14px);
+    background: color-mix(in srgb, var(--glass-bg, rgba(20, 24, 32, 0.55)) 88%, transparent);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nodes-strip-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+}
+.nodes-strip-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.nodes-strip-summary {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+.nodes-strip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+.node-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+    min-width: 9.5rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.18);
+    color: var(--text-primary);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.node-chip:hover {
+    border-color: color-mix(in srgb, var(--accent-color) 55%, transparent);
+}
+.node-chip.is-selected {
+    border-color: var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color) 18%, transparent);
+}
+.node-chip.is-offline {
+    opacity: 0.55;
+}
+.node-chip-name {
+    font-weight: 650;
+    font-size: 0.88rem;
+}
+.node-chip-stats {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+}
+.node-chip-caps {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-transform: lowercase;
+}
+
 /* Row 1: Telemetry micro-bars */
 .telemetry-row {
     display: grid;

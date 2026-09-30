@@ -1148,8 +1148,27 @@
                                 <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.35rem;">How long after the last viewer leaves before pollers enter deep idle.</p>
                             </div>
                             <div class="form-group" style="margin-top:1rem;">
-                                <label for="setting-agent-node-tag">Agent node tag</label>
+                                <label for="setting-agent-node-tag">Default local agent node tag</label>
                                 <input type="text" id="setting-agent-node-tag" name="agent_node_tag" class="form-control" value="{{agent_node_tag}}" placeholder="Local">
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.35rem;">Used when the co-located agent has no <code>AMUD_NODE_TAG</code>. Remote agents must set a unique <code>AMUD_NODE_TAG</code> per host.</p>
+                            </div>
+                            <div class="settings-block" style="margin-top:1.25rem;">
+                                <h3><i data-lucide="network" style="color:var(--accent-color);"></i> Remote agents</h3>
+                                <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 0.75rem;">Run one AMUD server; install <code>amud-agent</code> on every Proxmox / Unraid / CasaOS / Docker host. Prefer VPN (Tailscale/WireGuard) with plain TCP, or enable TLS.</p>
+                                <pre class="form-control" style="white-space:pre-wrap; font-size:0.75rem; line-height:1.45; padding:0.85rem;"># On the AMUD server (listen for remote agents)
+AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050
+# Optional TLS (do not expose plain TCP to the public internet)
+# AMUD_AGENT_TLS=1
+# AMUD_AGENT_TLS_CERT=/path/to/cert.pem
+# AMUD_AGENT_TLS_KEY=/path/to/key.pem
+
+# On each remote host
+AMUD_SERVER_ADDR=amud.lan:8050
+AMUD_NODE_TAG=unraid-1
+AMUD_AGENT_SECRET=same-as-server
+AMUD_PLATFORM=unraid
+# AMUD_AGENT_TLS=1
+# AMUD_AGENT_TLS_CA=/path/to/ca.pem</pre>
                             </div>
                         </div>
 

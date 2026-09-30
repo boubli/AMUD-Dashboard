@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/amud-logo-github.png" alt="AMUD Logo" width="300" />
 </div>
 
@@ -13,17 +13,23 @@
 
 **[変更履歴](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[ブログ](https://boubli.github.io/AMUD-Dashboard/blog)** · **[テーマギャラリー](https://boubli.github.io/AMUD-Dashboard/themes)** · **[ロードマップ](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[ドキュメント](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### v1.9.4 の新機能
+
+- **Multi-node agents** — AMUD サーバーは 1 台、各 Proxmox / Unraid / CasaOS / Docker ホストに agent（[Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents)）
+- **Nodes strip** — ホストを選んで CPU/RAM 表示；操作は `node_tag` で振り分け
+- **TCP + 任意 TLS** — リモート agent は VPN または TLS；ローカルは UDS
+
 ### v1.9.3 の新機能
 
-- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
-- **Custom search engines** — Add your own web search engines (#17)
-- **v1.9.2** — Docs currency / 41 themes
+- **Clock timezone & format** — IANA タイムゾーン + 12h/24h
+- **Custom search engines** — カスタム検索エンジン (#17)
+- **v1.9.2** — Docs / 41 テーマ
 
-履歴: **[変更履歴](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
+履歴の全体: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### リリース状況
 
-推奨バージョン: **1.9.3**。詳細は **[英語 README](../README.md)**（Release status）を参照。
+推奨バージョン: **1.9.4**。詳細は **[英語 README](../README.md)**（Release status）を参照。
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

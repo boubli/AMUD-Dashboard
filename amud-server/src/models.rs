@@ -11,6 +11,17 @@ pub struct AgentCommandHandle {
     pub tx: tokio::sync::mpsc::UnboundedSender<String>,
 }
 
+/// Per-node connection metadata for the multi-node dashboard.
+#[derive(Clone, Serialize, Deserialize, Default)]
+pub struct NodeMeta {
+    pub connected: bool,
+    pub last_seen: u64,
+    #[serde(default)]
+    pub capabilities: Vec<String>,
+    #[serde(default)]
+    pub platform: String,
+}
+
 #[derive(Clone, Serialize, Deserialize)]
 pub struct App {
     pub(crate) id: i64,
@@ -105,6 +116,8 @@ pub struct FullTelemetry {
     pub(crate) smart_home: Option<crate::smart_home::SmartHomeTelemetry>,
     #[serde(skip_serializing_if = "HashMap::is_empty")]
     pub(crate) nodes: HashMap<String, AgentTelemetry>,
+    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    pub(crate) nodes_meta: HashMap<String, NodeMeta>,
 }
 
 #[derive(Clone, Serialize, Deserialize)]
@@ -167,7 +180,10 @@ pub struct AppState {
     pub agent_connected: Arc<RwLock<bool>>,
     pub media_streams: Arc<RwLock<HashMap<String, MediaStream>>>,
     pub app_statuses: Arc<RwLock<HashMap<String, AppStatus>>>,
-    pub agent_command_tx: Arc<Mutex<Option<AgentCommandHandle>>>,
+    /// Active agent command channels keyed by `node_tag`.
+    pub agent_sessions: Arc<Mutex<HashMap<String, AgentCommandHandle>>>,
+    /// Live connection metadata per node (capabilities, platform, last_seen).
+    pub nodes_meta: Arc<RwLock<HashMap<String, NodeMeta>>>,
     pub next_agent_conn_id: Arc<AtomicU64>,
     pub pve_test_response: Arc<RwLock<Option<PveTestResult>>>,
     pub docker_discover_response: Arc<RwLock<Option<serde_json::Value>>>,

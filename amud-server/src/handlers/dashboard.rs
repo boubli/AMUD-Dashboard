@@ -183,12 +183,7 @@ async fn render_page(
             // Last known in-memory state, embedded into the SSR HTML so a page
             // reload shows statuses/metrics instantly instead of placeholders.
             let known_statuses = state.app_statuses.read().unwrap().clone();
-            let known_containers = state
-                .latest_telemetry
-                .read()
-                .unwrap()
-                .lxc_containers
-                .clone();
+            let known_by_node = state.telemetry_by_node.read().unwrap().clone();
             render_apps_grid(
                 &apps,
                 is_admin,
@@ -197,7 +192,7 @@ async fn render_page(
                 &logo_manifest,
                 iframe_embeds_enabled,
                 &known_statuses,
-                &known_containers,
+                &known_by_node,
                 active_theme_id.as_str(),
             )
         }
@@ -1069,7 +1064,7 @@ fn render_apps_grid(
     logo_manifest: &HashMap<String, String>,
     iframe_embeds_enabled: bool,
     known_statuses: &HashMap<String, crate::models::AppStatus>,
-    known_containers: &[crate::models::LxcContainer],
+    known_by_node: &HashMap<String, crate::models::AgentTelemetry>,
     theme_id: &str,
 ) -> String {
     if apps.is_empty() {
@@ -1114,6 +1109,15 @@ fn render_apps_grid(
         // Instant status: pre-fill the badge from the server's last known
         // container state or URL health check, so a reload never shows an
         // empty CHECKING... badge when data already exists in memory.
+        let node_key = if app.node_tag.trim().is_empty() {
+            "Local"
+        } else {
+            app.node_tag.trim()
+        };
+        let known_containers = known_by_node
+            .get(node_key)
+            .map(|t| t.lxc_containers.as_slice())
+            .unwrap_or(&[]);
         let container_match = find_container_for_tokens(known_containers, &alias_tokens);
         let url_status = known_statuses
             .get(&app.name)

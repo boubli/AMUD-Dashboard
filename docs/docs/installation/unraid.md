@@ -215,3 +215,9 @@ Please use the right channel so reports are tracked and fixed in releases:
 | [Documentation](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting) | Self-service fixes (permissions, WebSockets, agent socket) |
 
 Unraid forum threads are welcome for visibility, but **open a GitHub Issue** for anything that needs a code or docs fix so it is not lost in the thread.
+
+---
+
+## Additional Unraid / remote hosts
+
+Install only the **AMUD Agent** on other machines. Point `AMUD_SERVER_ADDR` at your AMUD dashboard host, set a unique `AMUD_NODE_TAG`, and reuse the agent secret. On the dashboard set `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050`. Prefer VPN or TLS — see [Remote agents / multi-node](./remote-agents).

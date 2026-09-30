@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/amud-logo-github.png" alt="AMUD Logo" width="300" />
 </div>
 
@@ -13,17 +13,23 @@
 
 **[Journal des modifications](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Galerie de thèmes](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Feuille de route](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Docs](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### Nouveautés de la v1.9.4
+
+- **Multi-node agents** — un serveur AMUD, des agents sur chaque hôte Proxmox / Unraid / CasaOS / Docker ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
+- **Nodes strip** — choisir l’hôte pour CPU/RAM ; les contrôles suivent le `node_tag`
+- **TCP + TLS optionnel** — agents distants via VPN ou TLS ; UDS pour l’install locale
+
 ### Nouveautés de la v1.9.3
 
-- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
-- **Custom search engines** — Add your own web search engines (#17)
-- **v1.9.2** — Docs currency / 41 themes
+- **Clock timezone & format** — Fuseau IANA + format 12h/24h
+- **Custom search engines** — Moteurs de recherche personnalisés (#17)
+- **v1.9.2** — Docs / 41 thèmes
 
-Historique complet : **[Journal des modifications](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
+Historique complet : **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### État des versions
 
-Dernière version recommandée : **1.9.3**. Détails et versions à éviter : **[README anglais](../README.md)** (section Release status).
+Dernière version recommandée : **1.9.4**. Détails et versions à éviter : **[README anglais](../README.md)** (section Release status).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/amud-logo-github.png" alt="AMUD Logo" width="300" />
 </div>
 
@@ -13,17 +13,23 @@
 
 **[更新日志](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[博客](https://boubli.github.io/AMUD-Dashboard/blog)** · **[主题画廊](https://boubli.github.io/AMUD-Dashboard/themes)** · **[路线图](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[文档](https://boubli.github.io/AMUD-Dashboard/)** · **[常见问题](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### v1.9.4 新特性
+
+- **Multi-node agents** — 一台 AMUD 服务器，在每台 Proxmox / Unraid / CasaOS / Docker 主机上安装 agent（[Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents)）
+- **Nodes strip** — 选择主机查看 CPU/RAM；容器控制按 `node_tag` 路由
+- **TCP + 可选 TLS** — 远程 agent 走 VPN 或 TLS；本机仍可用 UDS
+
 ### v1.9.3 新特性
 
-- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
-- **Custom search engines** — Add your own web search engines (#17)
-- **v1.9.2** — Docs currency / 41 themes
+- **Clock timezone & format** — IANA 时区 + 12h/24h
+- **Custom search engines** — 自定义搜索引擎 (#17)
+- **v1.9.2** — Docs / 41 主题
 
-完整历史：**[更新日志](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
+完整历史：**[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
-### 版本状态
+### 发布状态
 
-当前推荐：**1.9.3**。详情与已撤回版本：见 **[英文 README](../README.md)**（Release status 部分）。
+当前推荐：**1.9.4**。详情与已撤回版本：见 **[英文 README](../README.md)**（Release status 部分）。
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

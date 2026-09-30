@@ -257,3 +257,9 @@ After the upgrade completes:
 3. Review [Security](../security.md) if you serve AMUD over HTTPS (`AMUD_SECURE_COOKIES=1`).
 
 For a broken or partial update, see [Update or Release Recovery](../troubleshooting#update-or-release-recovery).
+
+---
+
+## Multiple Proxmox nodes
+
+Install `amud-agent` on each PVE host with a unique `AMUD_NODE_TAG` and `AMUD_SERVER_ADDR` aimed at the single AMUD server. See [Remote agents / multi-node](./remote-agents).

@@ -250,3 +250,9 @@ After upgrading:
 
 1. **Hard-refresh the browser** (`Ctrl+Shift+R`) or [clear the PWA cache](../troubleshooting#pwa--browser-cache-issues).
 2. Set `AMUD_SECURE_COOKIES=1` when serving over HTTPS — see [Security](../security.md).
+
+---
+
+## Additional hosts (agent only)
+
+On secondary machines, install `amud-agent` with `AMUD_SERVER_ADDR`, `AMUD_NODE_TAG`, and the shared secret — no local `amud-server`. Full guide: [Remote agents / multi-node](./remote-agents).

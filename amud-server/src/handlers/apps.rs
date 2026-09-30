@@ -416,6 +416,11 @@ pub async fn app_action_handler(
     let provider = form.get("provider").cloned().unwrap_or_default();
     let id = form.get("id").cloned().unwrap_or_default();
     let action = form.get("action").cloned().unwrap_or_default();
+    let node_tag = form
+        .get("node_tag")
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .unwrap_or_else(|| "Local".to_string());
 
     if provider.is_empty() || id.is_empty() || action.is_empty() {
         return Response::builder()
@@ -460,14 +465,16 @@ pub async fn app_action_handler(
     };
     cmd.push(b'\n');
 
-    let agent_connected = *state.agent_connected.read().unwrap();
-    let command_tx = state.agent_command_tx.lock().unwrap().clone();
+    let command_tx = crate::agent::agent_session_for(&state, &node_tag);
 
-    if !agent_connected {
+    if command_tx.is_none() {
+        let body = serde_json::json!({
+            "error": format!("Agent for node '{node_tag}' is not connected")
+        });
         return Response::builder()
             .status(StatusCode::SERVICE_UNAVAILABLE)
             .header("Content-Type", "application/json")
-            .body(Body::from(r#"{"error":"Agent not connected"}"#))
+            .body(Body::from(serde_json::to_string(&body).unwrap()))
             .unwrap();
     }
 

@@ -4,11 +4,11 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 mod http_clients;
 
 use amud_protocol::{
-    agent_auth_proof, AuthProofMessage, ChallengeMessage, ConfigRequest, DiskMountTelemetry,
-    LxcContainer, NetworkTelemetry,
+    agent_auth_proof, AgentHelloMessage, AgentHelloPayload, AuthProofMessage, ChallengeMessage,
+    ConfigRequest, DiskMountTelemetry, LxcContainer, NetworkTelemetry,
 };
 use serde::Serialize;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, OnceLock, RwLock};
 use std::thread::sleep;
@@ -248,6 +248,31 @@ fn agent_node_tag() -> String {
     } else {
         cfg.node_tag.clone()
     }
+}
+
+fn agent_platform_label() -> String {
+    std::env::var("AMUD_PLATFORM")
+        .ok()
+        .map(|s| s.trim().to_ascii_lowercase())
+        .filter(|s| matches!(s.as_str(), "proxmox" | "unraid" | "casaos" | "docker" | "other"))
+        .unwrap_or_default()
+}
+
+fn agent_capabilities() -> Vec<String> {
+    let mut caps = vec!["host".to_string()];
+    #[cfg(unix)]
+    if docker_enabled() {
+        caps.push("docker".to_string());
+    }
+    if !get_pve_api_token().is_empty() || pve_token_from_env().is_some() {
+        caps.push("proxmox".to_string());
+    } else if std::env::var("AMUD_PLATFORM")
+        .map(|s| s.eq_ignore_ascii_case("proxmox"))
+        .unwrap_or(false)
+    {
+        caps.push("proxmox".to_string());
+    }
+    caps
 }
 
 fn reset_network_baseline() {
@@ -574,6 +599,7 @@ fn build_network_snapshot(content: &str, cfg: &TelemetryConfig) -> (NetworkSnaps
 
 fn main() {
     println!("AMUD-Agent telemetry client starting up...");
+    let _ = rustls::crypto::ring::default_provider().install_default();
 
     if std::env::var("AMUD_AGENT_SECRET")
         .unwrap_or_default()
@@ -604,26 +630,246 @@ fn main() {
     }
 }
 
-#[cfg(unix)]
-type StreamType = std::os::unix::net::UnixStream;
-
-#[cfg(windows)]
-type StreamType = std::net::TcpStream;
-
-#[cfg(unix)]
-fn establish_connection() -> Result<StreamType, std::io::Error> {
-    let path =
-        std::env::var("AMUD_SOCKET_PATH").unwrap_or_else(|_| "/opt/amud/run/amud.sock".to_string());
-
-    println!("Connecting via UDS to {}", path);
-    std::os::unix::net::UnixStream::connect(&path)
+struct SharedTlsStream {
+    inner: Arc<Mutex<rustls::StreamOwned<rustls::ClientConnection, std::net::TcpStream>>>,
 }
 
-#[cfg(windows)]
-fn establish_connection() -> Result<StreamType, std::io::Error> {
-    let addr = std::env::var("AMUD_TCP_ADDR").unwrap_or_else(|_| "127.0.0.1:8050".to_string());
-    println!("Connecting via TCP to {}", addr);
-    std::net::TcpStream::connect(addr)
+impl SharedTlsStream {
+    fn try_clone(&self) -> Self {
+        Self {
+            inner: Arc::clone(&self.inner),
+        }
+    }
+}
+
+impl Read for SharedTlsStream {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        self.inner.lock().unwrap().read(buf)
+    }
+}
+
+impl Write for SharedTlsStream {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        self.inner.lock().unwrap().write(buf)
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        self.inner.lock().unwrap().flush()
+    }
+}
+
+enum AgentIpcStream {
+    #[cfg(unix)]
+    Unix(std::os::unix::net::UnixStream),
+    Tcp(std::net::TcpStream),
+    Tls(SharedTlsStream),
+}
+
+impl AgentIpcStream {
+    fn try_clone(&self) -> std::io::Result<Self> {
+        match self {
+            #[cfg(unix)]
+            Self::Unix(s) => Ok(Self::Unix(s.try_clone()?)),
+            Self::Tcp(s) => Ok(Self::Tcp(s.try_clone()?)),
+            Self::Tls(s) => Ok(Self::Tls(s.try_clone())),
+        }
+    }
+}
+
+impl Read for AgentIpcStream {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        match self {
+            #[cfg(unix)]
+            Self::Unix(s) => s.read(buf),
+            Self::Tcp(s) => s.read(buf),
+            Self::Tls(s) => s.read(buf),
+        }
+    }
+}
+
+impl Write for AgentIpcStream {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        match self {
+            #[cfg(unix)]
+            Self::Unix(s) => s.write(buf),
+            Self::Tcp(s) => s.write(buf),
+            Self::Tls(s) => s.write(buf),
+        }
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        match self {
+            #[cfg(unix)]
+            Self::Unix(s) => s.flush(),
+            Self::Tcp(s) => s.flush(),
+            Self::Tls(s) => s.flush(),
+        }
+    }
+}
+
+fn agent_tls_enabled() -> bool {
+    matches!(
+        std::env::var("AMUD_AGENT_TLS")
+            .ok()
+            .as_deref()
+            .map(str::trim)
+            .map(str::to_ascii_lowercase)
+            .as_deref(),
+        Some("1") | Some("true") | Some("yes")
+    )
+}
+
+fn wrap_tcp_maybe_tls(tcp: std::net::TcpStream, server_name: &str) -> std::io::Result<AgentIpcStream> {
+    if !agent_tls_enabled() {
+        return Ok(AgentIpcStream::Tcp(tcp));
+    }
+
+    let mut root_store = rustls::RootCertStore::empty();
+    let insecure = matches!(
+        std::env::var("AMUD_AGENT_TLS_INSECURE")
+            .ok()
+            .as_deref()
+            .map(str::trim)
+            .map(str::to_ascii_lowercase)
+            .as_deref(),
+        Some("1") | Some("true") | Some("yes")
+    );
+
+    if let Ok(ca_path) = std::env::var("AMUD_AGENT_TLS_CA") {
+        let ca_bytes = std::fs::read(ca_path.trim())?;
+        let mut reader = std::io::Cursor::new(ca_bytes);
+        for cert in rustls_pemfile::certs(&mut reader).flatten() {
+            let _ = root_store.add(cert);
+        }
+    } else if !insecure {
+        return Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "AMUD_AGENT_TLS=1 requires AMUD_AGENT_TLS_CA (or AMUD_AGENT_TLS_INSECURE=1 for lab only)",
+        ));
+    }
+
+    let config = if insecure {
+        eprintln!(
+            "WARNING: AMUD_AGENT_TLS_INSECURE=1 — TLS certificate verification disabled (lab only)."
+        );
+        rustls::ClientConfig::builder()
+            .dangerous()
+            .with_custom_certificate_verifier(Arc::new(NoCertVerifier))
+            .with_no_client_auth()
+    } else {
+        rustls::ClientConfig::builder()
+            .with_root_certificates(root_store)
+            .with_no_client_auth()
+    };
+
+    let name = rustls::pki_types::ServerName::try_from(server_name.to_string()).map_err(|e| {
+        std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            format!("Invalid TLS server name '{server_name}': {e}"),
+        )
+    })?;
+    let conn = rustls::ClientConnection::new(Arc::new(config), name).map_err(|e| {
+        std::io::Error::new(
+            std::io::ErrorKind::Other,
+            format!("TLS client setup failed: {e}"),
+        )
+    })?;
+    let tls = rustls::StreamOwned::new(conn, tcp);
+    Ok(AgentIpcStream::Tls(SharedTlsStream {
+        inner: Arc::new(Mutex::new(tls)),
+    }))
+}
+
+#[derive(Debug)]
+struct NoCertVerifier;
+
+impl rustls::client::danger::ServerCertVerifier for NoCertVerifier {
+    fn verify_server_cert(
+        &self,
+        _end_entity: &rustls::pki_types::CertificateDer<'_>,
+        _intermediates: &[rustls::pki_types::CertificateDer<'_>],
+        _server_name: &rustls::pki_types::ServerName<'_>,
+        _ocsp_response: &[u8],
+        _now: rustls::pki_types::UnixTime,
+    ) -> Result<rustls::client::danger::ServerCertVerified, rustls::Error> {
+        Ok(rustls::client::danger::ServerCertVerified::assertion())
+    }
+
+    fn verify_tls12_signature(
+        &self,
+        _message: &[u8],
+        _cert: &rustls::pki_types::CertificateDer<'_>,
+        _dss: &rustls::DigitallySignedStruct,
+    ) -> Result<rustls::client::danger::HandshakeSignatureValid, rustls::Error> {
+        Ok(rustls::client::danger::HandshakeSignatureValid::assertion())
+    }
+
+    fn verify_tls13_signature(
+        &self,
+        _message: &[u8],
+        _cert: &rustls::pki_types::CertificateDer<'_>,
+        _dss: &rustls::DigitallySignedStruct,
+    ) -> Result<rustls::client::danger::HandshakeSignatureValid, rustls::Error> {
+        Ok(rustls::client::danger::HandshakeSignatureValid::assertion())
+    }
+
+    fn supported_verify_schemes(&self) -> Vec<rustls::SignatureScheme> {
+        rustls::crypto::ring::default_provider()
+            .signature_verification_algorithms
+            .supported_schemes()
+    }
+}
+
+fn establish_connection() -> Result<AgentIpcStream, std::io::Error> {
+    // Remote TCP (any OS): AMUD_SERVER_ADDR=host:port
+    if let Ok(addr) = std::env::var("AMUD_SERVER_ADDR") {
+        let addr = addr.trim().to_string();
+        if !addr.is_empty() {
+            let tag = std::env::var("AMUD_NODE_TAG").unwrap_or_default();
+            if tag.trim().is_empty() {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidInput,
+                    "AMUD_NODE_TAG is required when using AMUD_SERVER_ADDR (remote agent)",
+                ));
+            }
+            println!("Connecting via TCP to {addr}");
+            let tcp = std::net::TcpStream::connect(&addr)?;
+            let host = addr
+                .rsplit_once(':')
+                .map(|(h, _)| h)
+                .unwrap_or(addr.as_str())
+                .trim_start_matches('[')
+                .trim_end_matches(']');
+            return wrap_tcp_maybe_tls(tcp, host);
+        }
+    }
+
+    #[cfg(unix)]
+    {
+        let path = std::env::var("AMUD_SOCKET_PATH")
+            .unwrap_or_else(|_| "/opt/amud/run/amud.sock".to_string());
+        println!("Connecting via UDS to {path}");
+        let sock = std::os::unix::net::UnixStream::connect(&path)?;
+        Ok(AgentIpcStream::Unix(sock))
+    }
+
+    #[cfg(windows)]
+    {
+        let addr = std::env::var("AMUD_TCP_ADDR").unwrap_or_else(|_| "127.0.0.1:8050".to_string());
+        println!("Connecting via TCP to {addr}");
+        let tcp = std::net::TcpStream::connect(&addr)?;
+        let host = addr
+            .rsplit_once(':')
+            .map(|(h, _)| h)
+            .unwrap_or("localhost");
+        wrap_tcp_maybe_tls(tcp, host)
+    }
+
+    #[cfg(not(any(unix, windows)))]
+    {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::Unsupported,
+            "Unsupported platform for AMUD agent IPC",
+        ))
+    }
 }
 
 static AGENT_RT: OnceLock<tokio::runtime::Runtime> = OnceLock::new();
@@ -1135,13 +1381,17 @@ struct AgentTelemetryTick<'a> {
     telemetry_scope: String,
     disk_volumes: &'a [DiskMountTelemetry],
     node_tag: String,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    capabilities: Vec<String>,
+    #[serde(skip_serializing_if = "String::is_empty")]
+    platform: String,
 }
 
 fn slice_is_empty<T>(slice: &&[T]) -> bool {
     slice.is_empty()
 }
 
-fn run_telemetry_loop(mut stream: StreamType) -> Result<(), std::io::Error> {
+fn run_telemetry_loop(mut stream: AgentIpcStream) -> Result<(), std::io::Error> {
     let mut sys = System::new();
 
     let agent_secret = std::env::var("AMUD_AGENT_SECRET").unwrap_or_default();
@@ -1154,7 +1404,7 @@ fn run_telemetry_loop(mut stream: StreamType) -> Result<(), std::io::Error> {
 
     // Server sends a challenge first; respond with SHA-256(secret || nonce) — secret never on the wire.
     {
-        use std::io::{BufRead, BufReader, Write};
+        use std::io::{BufRead, BufReader};
         let mut reader = BufReader::new(stream.try_clone()?);
         let mut challenge_line = String::new();
         reader.read_line(&mut challenge_line)?;
@@ -1171,6 +1421,22 @@ fn run_telemetry_loop(mut stream: StreamType) -> Result<(), std::io::Error> {
         let proof = agent_auth_proof(&agent_secret, &nonce);
         let auth = AuthProofMessage { auth: proof };
         if let Ok(mut serialized) = serde_json::to_vec(&auth) {
+            serialized.push(b'\n');
+            stream.write_all(&serialized)?;
+            stream.flush()?;
+        }
+    }
+
+    // Register this agent under its node_tag before config/telemetry.
+    {
+        let hello = AgentHelloMessage {
+            hello: AgentHelloPayload {
+                node_tag: agent_node_tag(),
+                capabilities: agent_capabilities(),
+                platform: agent_platform_label(),
+            },
+        };
+        if let Ok(mut serialized) = serde_json::to_vec(&hello) {
             serialized.push(b'\n');
             stream.write_all(&serialized)?;
             stream.flush()?;
@@ -1449,6 +1715,8 @@ fn run_telemetry_loop(mut stream: StreamType) -> Result<(), std::io::Error> {
             telemetry_scope,
             disk_volumes: &disk_volumes,
             node_tag: agent_node_tag(),
+            capabilities: agent_capabilities(),
+            platform: agent_platform_label(),
         };
 
         telemetry_buf.clear();
@@ -1463,7 +1731,7 @@ fn run_telemetry_loop(mut stream: StreamType) -> Result<(), std::io::Error> {
 }
 
 fn send_action_result(
-    response_stream: &mut StreamType,
+    response_stream: &mut AgentIpcStream,
     request_id: &str,
     success: bool,
     error: Option<String>,
@@ -1592,7 +1860,7 @@ fn discover_docker_apps() -> Vec<serde_json::Value> {
     Vec::new()
 }
 
-fn execute_command_from_server(line: &str, response_stream: &mut StreamType) {
+fn execute_command_from_server(line: &str, response_stream: &mut AgentIpcStream) {
     if let Ok(val) = serde_json::from_str::<serde_json::Value>(line) {
         if let Some(config) = val.get("config") {
             apply_telemetry_config(config);

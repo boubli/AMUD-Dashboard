@@ -13,9 +13,10 @@ pub async fn discover_docker_handler(
     }
 
     *state.docker_discover_response.write().unwrap() = None;
+    let node_tag = form.get("node_tag").map(|s| s.as_str());
     let cmd = serde_json::json!({ "action": "discover_docker" });
     if let Ok(serialized) = serde_json::to_string(&cmd) {
-        if let Some(tx) = &*state.agent_command_tx.lock().unwrap() {
+        if let Some(tx) = crate::agent::agent_session_for_or_any(&state, node_tag) {
             let _ = tx.tx.send(format!("{serialized}\n"));
         }
     }
@@ -57,9 +58,10 @@ pub async fn telemetry_discover_handler(
     }
 
     *state.telemetry_discover_response.write().unwrap() = None;
+    let node_tag = form.get("node_tag").map(|s| s.as_str());
     let cmd = serde_json::json!({ "action": "telemetry_discover" });
     if let Ok(serialized) = serde_json::to_string(&cmd) {
-        if let Some(tx) = &*state.agent_command_tx.lock().unwrap() {
+        if let Some(tx) = crate::agent::agent_session_for_or_any(&state, node_tag) {
             let _ = tx.tx.send(format!("{serialized}\n"));
         }
     }

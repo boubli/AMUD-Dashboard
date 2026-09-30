@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/amud-logo-github.png" alt="AMUD Logo" width="300" />
 </div>
 
@@ -13,17 +13,23 @@
 
 **[बदलावों की सूची](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[ब्लॉग](https://boubli.github.io/AMUD-Dashboard/blog)** · **[थीम गैलरी](https://boubli.github.io/AMUD-Dashboard/themes)** · **[रोडमैप](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[दस्तावेज़](https://boubli.github.io/AMUD-Dashboard/)** · **[अक्सर पूछे जाने वाले सवाल](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### v1.9.4 में नया
+
+- **Multi-node agents** — एक AMUD सर्वर, हर Proxmox / Unraid / CasaOS / Docker होस्ट पर agent ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
+- **Nodes strip** — CPU/RAM के लिए होस्ट चुनें; नियंत्रण `node_tag` से रूट होते हैं
+- **TCP + वैकल्पिक TLS** — रिमोट agent VPN या TLS से; लोकल के लिए UDS
+
 ### v1.9.3 में नया
 
-- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h
-- **Custom search engines** — Add your own web search engines (#17)
-- **v1.9.2** — Docs currency / 41 themes
+- **Clock timezone & format** — IANA टाइमज़ोन + 12h/24h
+- **Custom search engines** — कस्टम सर्च इंजन (#17)
+- **v1.9.2** — Docs / 41 थीम
 
-पूरा इतिहास: **[चेंजलॉग](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
+पूरा इतिहास: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### रिलीज़ स्थिति
 
-अनुशंसित: **1.9.3**. विवरण: **[अंग्रेज़ी README](../README.md)** (Release status अनुभाग)।
+अनुशंसित: **1.9.4**. विवरण: **[अंग्रेज़ी README](../README.md)** (Release status अनुभाग)।
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

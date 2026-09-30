@@ -23,6 +23,21 @@ pub struct ConfigRequest {
     pub pve_token_configured: Option<bool>,
 }
 
+/// First authenticated line from the agent — registers the session under `node_tag`.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AgentHelloPayload {
+    pub node_tag: String,
+    #[serde(default)]
+    pub capabilities: Vec<String>,
+    #[serde(default)]
+    pub platform: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AgentHelloMessage {
+    pub hello: AgentHelloPayload,
+}
+
 /// SHA-256(secret ‖ nonce) — the raw secret never crosses the socket.
 pub fn agent_auth_proof(secret: &str, nonce: &str) -> String {
     let mut hasher = Sha256::new();

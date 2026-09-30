@@ -1,6 +1,6 @@
 [package]
 name = "amud-agent"
-version = "1.9.3"
+version = "1.9.4"
 edition = "2021"
 
 
@@ -15,6 +15,7 @@ hyper-util = { version = "0.1", features = ["client", "client-legacy", "http1", 
 http-body-util = "0.1"
 hyper-rustls = { version = "0.27", default-features = false, features = ["http1", "tls12", "ring"] }
 rustls = { version = "0.23", default-features = false, features = ["ring", "tls12", "std", "logging"] }
+rustls-pemfile = "2"
 mimalloc = { version = "0.1", default-features = false }
 
 [target.'cfg(unix)'.dependencies]
