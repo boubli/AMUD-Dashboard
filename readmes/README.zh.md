@@ -19,8 +19,6 @@
 - **Custom search engines** — Add your own web search engines (#17)
 - **v1.9.2** — Docs currency / 41 themes
 
-Coming **15 Oct 2026** — *Tittim Surprise* for the Queen (loyalty & chance unlocks on your dashboard).
-
 完整历史：**[更新日志](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
 ### 版本状态
