@@ -53,9 +53,17 @@ Agents report what they can see (no native Unraid/CasaOS APIs yet):
 
 Optional badge: `AMUD_PLATFORM=proxmox|unraid|casaos|docker`.
 
+## Typical path (Node 1 already installed)
+
+1. Enable `AMUD_AGENT_TCP_LISTEN` on Node 1
+2. On Node 2 install **agent only** (Docker / Unraid CA / native binary) with `AMUD_SERVER_ADDR` + unique `AMUD_NODE_TAG`
+3. Set each app’s **Node tag** in the UI
+
+Step-by-step: **[Add a second host (agent only)](./connect)**
+
 ## Next steps
 
-1. [Connect your first remote agent](./connect)
+1. [Add a second host — agent only](./connect)
 2. Choose [TCP vs TLS](./tcp-and-tls)
 3. See [platform recipes](./platforms)
 4. Learn [dashboard controls](./controls)

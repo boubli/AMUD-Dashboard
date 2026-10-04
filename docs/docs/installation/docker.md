@@ -284,4 +284,6 @@ After upgrading:
 
 ## Additional nodes (remote agents)
 
-To monitor other Docker hosts while keeping a single AMUD server, run **agent-only** containers elsewhere with `AMUD_SERVER_ADDR`, a unique `AMUD_NODE_TAG`, and the same `AMUD_AGENT_SECRET`. Enable `AMUD_AGENT_TCP_LISTEN` on the server. See [Multi-node agents](/docs/multi-node/overview).
+Dashboard on Node 1; other Docker hosts run **agent only** (`entrypoint: ["/app/amud-agent"]`) with `AMUD_SERVER_ADDR`, a unique `AMUD_NODE_TAG`, and the same `AMUD_AGENT_SECRET`. Enable `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050` on the server and publish port 8050.
+
+Compose example + Unraid/native steps: **[Add a second host (agent only)](/docs/multi-node/connect)**.

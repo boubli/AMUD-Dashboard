@@ -24,7 +24,7 @@ The agent talks to `https://localhost:8006` on **that** host. Multi-Proxmox = mu
 
 ## Unraid
 
-Agent container with Docker socket + unique tag:
+**Second Unraid box (agent only):** Apps → **AMUD-Agent** (not Dashboard). Same secret as Node 1; add `AMUD_SERVER_ADDR`, unique `AMUD_NODE_TAG`, `AMUD_PLATFORM=unraid`. Host network + Docker socket. Details: [Connect](./connect#b-unraid-community-applications).
 
 ```bash
 AMUD_SERVER_ADDR=amud.lan:8050

@@ -37,6 +37,23 @@ Image: `tradmss/amud-dashboard:latest` (or pin `tradmss/amud-dashboard:vX.Y.Z`)
 
 Hard-refresh your browser after updating if you use the PWA.
 
+### Add another host (agent only)
+
+Dashboard already on Node 1? On Node 2 install **only** `amud-agent` — no second `amud-server`.
+
+1. On Node 1: `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050` (publish port 8050).
+2. On Node 2: Docker / Unraid **AMUD-Agent** / native binary with:
+
+```bash
+AMUD_SERVER_ADDR=node1.lan:8050
+AMUD_NODE_TAG=node-2
+AMUD_AGENT_SECRET=same-as-server
+```
+
+3. In the UI, set each app’s **Node tag** to match.
+
+Full walkthrough: [Add a second host (agent only)](https://boubli.github.io/AMUD-Dashboard/docs/multi-node/connect)
+
 **Recommended:** `vX.Y.Z`
 
 **Binaries:** `amud-server`, `amud-agent` (amd64 + arm64), `ui.tar.gz`, and `SHA256SUMS` are attached below.

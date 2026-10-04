@@ -262,4 +262,4 @@ For a broken or partial update, see [Update or Release Recovery](../troubleshoot
 
 ## Multiple Proxmox nodes
 
-Install `amud-agent` on each PVE host with a unique `AMUD_NODE_TAG` and `AMUD_SERVER_ADDR` aimed at the single AMUD server. See [Multi-node agents](/docs/multi-node/overview).
+Install `amud-agent` only on each extra PVE host (no second dashboard) with a unique `AMUD_NODE_TAG` and `AMUD_SERVER_ADDR` aimed at the single AMUD server. Walkthrough: [Add a second host (agent only)](/docs/multi-node/connect).

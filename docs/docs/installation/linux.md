@@ -255,4 +255,6 @@ After upgrading:
 
 ## Additional hosts (agent only)
 
-On secondary machines, install `amud-agent` with `AMUD_SERVER_ADDR`, `AMUD_NODE_TAG`, and the shared secret — no local `amud-server`. Full guide: [Multi-node agents](/docs/multi-node/overview).
+Dashboard already on Node 1? On Node 2 install **only** `amud-agent` (binary + systemd, or Docker) with `AMUD_SERVER_ADDR`, a unique `AMUD_NODE_TAG`, and the same `AMUD_AGENT_SECRET`. Do not run a second `amud-server`.
+
+Full walkthrough (Native / Docker / Unraid): **[Add a second host (agent only)](/docs/multi-node/connect)**.

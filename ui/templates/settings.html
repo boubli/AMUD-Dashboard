@@ -1069,8 +1069,8 @@ AMUD_AGENT_SECRET=your-long-shared-secret</pre>
                             </div>
 
                             <div style="margin-top:1.25rem;">
-                                <h4 style="margin:0 0 0.4rem; font-size:0.9rem;">Remote agent (each other host)</h4>
-                                <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 0.65rem;">Agent-only — do not run a second <code>amud-server</code>. Set a unique <code>AMUD_NODE_TAG</code>, then set each dashboard app’s <strong>Node tag</strong> to match.</p>
+                                <h4 style="margin:0 0 0.4rem; font-size:0.9rem;">Remote agent (Node 2+ — agent only)</h4>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 0.65rem;">Install <strong>amud-agent only</strong> on the other host (Docker / Unraid CA / native binary) — do not run a second dashboard. Set a unique <code>AMUD_NODE_TAG</code>, then set each app’s <strong>Node tag</strong> to match. Full steps: <a href="https://boubli.github.io/AMUD-Dashboard/docs/multi-node/connect" target="_blank" rel="noopener noreferrer">Add a second host</a>.</p>
                                 <pre class="agents-snippet" x-ref="snippetRemoteAgent">AMUD_SERVER_ADDR=amud.lan:8050
 AMUD_NODE_TAG=unraid-1
 AMUD_AGENT_SECRET=same-as-server

@@ -7,6 +7,9 @@ title: Changelog
 
 ## Unreleased
 
+### Changed
+- **Docs** — [Add a second host (agent only)](./multi-node/connect): Node 1 dashboard → Node 2 agent-only (Docker / Unraid CA / native / Proxmox)
+
 ---
 
 ## v1.9.5 — Nodes polish, theme icons, Add App CTA

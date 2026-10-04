@@ -218,6 +218,13 @@ Unraid forum threads are welcome for visibility, but **open a GitHub Issue** for
 
 ---
 
-## Additional Unraid / remote hosts
+## Additional Unraid / remote hosts (agent only)
 
-Install only the **AMUD Agent** on other machines. Point `AMUD_SERVER_ADDR` at your AMUD dashboard host, set a unique `AMUD_NODE_TAG`, and reuse the agent secret. On the dashboard set `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050`. Prefer VPN or TLS — see [Multi-node agents](/docs/multi-node/overview).
+Dashboard on Node 1, another Unraid (or any host) as Node 2:
+
+1. On Node 1 (AMUD-Dashboard): set `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050` and recreate.
+2. On Node 2: Apps → install **AMUD-Agent** only (not a second dashboard).
+3. Same **Agent Secret** as Node 1; add `AMUD_SERVER_ADDR=<node1>:8050`, unique `AMUD_NODE_TAG`, optional `AMUD_PLATFORM=unraid`.
+4. Keep **host** network + Docker socket. No shared appdata socket folder with Node 1 is required for remote TCP.
+
+Step-by-step: **[Add a second host (agent only)](/docs/multi-node/connect)**. Prefer VPN or TLS — see [Multi-node overview](/docs/multi-node/overview).
