@@ -4,7 +4,6 @@
 (function (global) {
     'use strict';
 
-    var FROZEN_THEMES = { default: true, 'luxury-gold': true };
     var CHROME_SELECTOR = [
         '.topbar [data-lucide]',
         '.telemetry-bar-container [data-lucide]',
@@ -149,16 +148,15 @@
     }
 
     function loadIconPack(manifest, id) {
-        if (FROZEN_THEMES[id]) return Promise.resolve(null);
         var entry = themeEntry(manifest, id);
         if (!entry || !entry.iconPack) return Promise.resolve(null);
         var packUrl = resolveAssetUrl(manifest, entry.iconPack);
-        var key = cacheKey('pack:' + packUrl, id);
+        var key = cacheKey('pack:v2:' + packUrl, id);
         try {
             var cached = sessionStorage.getItem(key);
             if (cached) return Promise.resolve(JSON.parse(cached));
         } catch (e) { /* ignore */ }
-        return fetch(packUrl, { cache: 'force-cache' })
+        return fetch(packUrl, { cache: 'no-cache' })
             .then(function (res) {
                 if (!res.ok) throw new Error('pack');
                 return res.json();
@@ -169,6 +167,14 @@
             });
     }
 
+    function resolvePackIcon(pack, logicalName) {
+        if (!logicalName || !pack || !pack.icons) return null;
+        var aliases = pack.aliases || {};
+        var resolved = aliases[logicalName] || logicalName;
+        if (!pack.icons[resolved]) return null;
+        return { logical: logicalName, resolved: resolved, file: pack.icons[resolved] };
+    }
+
     function swapChromeIcons(manifest, pack) {
         if (!pack || !pack.icons) return Promise.resolve();
         var base = resolveAssetUrl(manifest, pack.base || '');
@@ -177,12 +183,13 @@
         nodes.forEach(function (el) {
             if (el.closest('.app-card')) return;
             var name = iconNameFromEl(el);
-            if (!name || !pack.icons[name]) return;
-            var file = pack.icons[name];
+            var mapped = resolvePackIcon(pack, name);
+            if (!mapped) return;
+            var file = mapped.file;
             var url = file.indexOf('http') === 0 ? file : base.replace(/\/$/, '') + '/' + file.replace(/^\//, '');
             tasks.push(
-                fetchSvg(url, themeId()).then(function (svg) {
-                    replaceIconNode(el, svg, name);
+                fetchSvg(url, themeId() + ':' + mapped.resolved).then(function (svg) {
+                    replaceIconNode(el, svg, mapped.logical);
                 }).catch(function () { /* keep lucide */ })
             );
         });

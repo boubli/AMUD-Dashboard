@@ -13,29 +13,29 @@
 
 **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Theme Gallery](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Roadmap](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Docs](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### What's new in v1.9.5
+
+- **Nodes polish** — strip hidden until 2+ agents; **Settings → Agents / Nodes** live table + env snippets
+- **Theme icon styles** — Settings/topbar icons change glyph/style with the theme (not only color)
+- **Add App CTA** — larger primary action vs Settings / Sign Out
+- **Upgrade docs** — Native / Proxmox, Docker, and Unraid steps in every release notes tag
+
 ### What's new in v1.9.4
 
-- **Multi-node agents** — one AMUD server, agents on every Proxmox / Unraid / CasaOS / Docker host ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
-- **Nodes strip** — pick a host for live CPU/RAM; container controls route by `node_tag`
+- **Multi-node agents** — one AMUD server, agents on every Proxmox / Unraid / CasaOS / Docker host ([Multi-node docs](https://boubli.github.io/AMUD-Dashboard/docs/multi-node/overview))
 - **TCP + optional TLS** — remote agents over VPN or TLS; UDS stays for co-located installs
-
-### What's new in v1.9.3
-
-- **Clock timezone & format** — Dashboard clock IANA timezone + 12h/24h (Settings → Appearance)
-- **Custom search engines** — Add your own web search engines alongside the built-ins ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17))
-- **v1.9.2** — Docs currency / **41** themes
 
 Full history: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**
 
-### Release status (2026-09-30)
+### Release status (2026-10-04)
 
 Last **5** validated releases (full history: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)**):
 
-- `v1.9.4` (current latest recommended)
+- `v1.9.5` (current latest recommended)
+- `v1.9.4`
 - `v1.9.3`
 - `v1.9.2`
 - `v1.9.1`
-- `v1.9.0`
 
 **Do not use:** `v1.8.6`, `v1.8.5` (layout), `v1.5.5.4`, `v1.5.6.1`, `v1.6.1` (withdrawn or broken).
 

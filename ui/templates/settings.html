@@ -179,6 +179,22 @@
             font-weight: 600;
         }
 
+        .nav-item i,
+        .nav-item svg,
+        .nav-item .amud-theme-icon,
+        .nav-item .amud-theme-icon svg {
+            width: 1.15rem;
+            height: 1.15rem;
+            flex-shrink: 0;
+            color: inherit;
+        }
+
+        .nav-item .amud-theme-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .settings-content-wrapper {
             max-width: 1000px;
             margin: 0 auto;
@@ -973,7 +989,108 @@
                     <!-- TAB: INFRASTRUCTURE -->
                     <div x-show="activeTab === 'infrastructure' || activeTab === 'integrations'" x-transition.opacity style="display:none;">
                         <h1 class="settings-page-title">Infrastructure</h1>
-                        <p class="settings-page-subtitle">Proxmox monitoring, Docker discovery, and imports from Homepage or Homarr. Per-app integrations (Jellyfin, Home Assistant, Radarr, …) are configured in Add/Edit App.</p>
+                        <p class="settings-page-subtitle">Proxmox monitoring, Docker discovery, multi-node agents, and imports from Homepage or Homarr. Per-app integrations (Jellyfin, Home Assistant, Radarr, …) are configured in Add/Edit App.</p>
+
+                        <div class="settings-block" id="agents-nodes-panel">
+                            <h3><i data-lucide="network" style="color:var(--accent-color);"></i> Agents / Nodes</h3>
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 1rem;">
+                                One AMUD server can collect telemetry from many hosts. The dashboard <strong>Nodes</strong> strip appears only when two or more agents are online.
+                                <a href="https://boubli.github.io/AMUD-Dashboard/docs/multi-node/overview" target="_blank" rel="noopener noreferrer" style="color:var(--accent-color);">Full multi-node docs →</a>
+                            </p>
+
+                            <div class="form-group" style="margin-bottom:1.25rem;">
+                                <label for="setting-agent-node-tag">Default local agent node tag</label>
+                                <input type="text" id="setting-agent-node-tag" name="agent_node_tag" class="form-control" value="{{agent_node_tag}}" placeholder="Local">
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.35rem;">Used when the co-located agent has no <code>AMUD_NODE_TAG</code>. Remote agents must set a unique <code>AMUD_NODE_TAG</code> per host.</p>
+                            </div>
+
+                            <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem; margin-bottom:0.65rem; flex-wrap:wrap;">
+                                <span style="font-size:0.8rem; color:var(--text-muted);" x-text="agentNodesLoading ? 'Refreshing…' : (agentNodesError || ('Last refresh: ' + (agentNodesUpdatedAt || '—')))"></span>
+                                <button type="button" class="btn btn-secondary" style="font-size:0.8rem; padding:0.35rem 0.75rem;" @click="loadAgentNodes()" :disabled="agentNodesLoading">
+                                    <i data-lucide="refresh-cw" style="width:0.85rem; height:0.85rem;"></i> Refresh
+                                </button>
+                            </div>
+
+                            <div class="agents-nodes-table-wrap" x-show="agentNodeRows.length > 0">
+                                <table class="agents-nodes-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tag</th>
+                                            <th>Status</th>
+                                            <th>Platform</th>
+                                            <th>Capabilities</th>
+                                            <th>CPU</th>
+                                            <th>RAM</th>
+                                            <th>Last seen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template x-for="row in agentNodeRows" :key="row.tag">
+                                            <tr>
+                                                <td><code x-text="row.tag"></code></td>
+                                                <td>
+                                                    <span class="pve-badge" :class="row.connected ? 'pve-badge--online' : 'pve-badge--offline'" x-text="row.connected ? 'Online' : 'Offline'"></span>
+                                                </td>
+                                                <td x-text="row.platform || '—'"></td>
+                                                <td style="font-size:0.78rem; color:var(--text-secondary);" x-text="row.capabilities"></td>
+                                                <td x-text="row.cpu"></td>
+                                                <td x-text="row.ram"></td>
+                                                <td style="font-size:0.78rem; color:var(--text-muted);" x-text="row.lastSeen"></td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p x-show="!agentNodesLoading && agentNodeRows.length === 0" style="font-size:0.85rem; color:var(--text-muted); margin:0.5rem 0 0;">
+                                No agent telemetry yet. Start <code>amud-agent</code> on this host (or a remote with <code>AMUD_SERVER_ADDR</code>).
+                            </p>
+                            <p x-show="agentNodeRows.length === 1" style="font-size:0.85rem; color:var(--text-muted); margin:0.75rem 0 0;">
+                                Only one agent is connected — the dashboard Nodes strip stays hidden until you add another host.
+                            </p>
+
+                            <div class="agents-transport-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1.5rem;">
+                                <div class="agents-transport-card">
+                                    <h4 style="margin:0 0 0.4rem; font-size:0.9rem;">VPN / plain TCP</h4>
+                                    <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 0.65rem;">Best for Tailscale / WireGuard / trusted LAN. Do not expose port 8050 to the public internet.</p>
+                                    <pre class="agents-snippet" x-ref="snippetServerTcp">AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050
+AMUD_AGENT_SECRET=your-long-shared-secret</pre>
+                                    <button type="button" class="btn btn-secondary" style="font-size:0.75rem; margin-top:0.45rem;" @click="copyAgentSnippet($refs.snippetServerTcp)">Copy server env</button>
+                                </div>
+                                <div class="agents-transport-card">
+                                    <h4 style="margin:0 0 0.4rem; font-size:0.9rem;">TLS (hardened)</h4>
+                                    <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 0.65rem;">Encrypt agent IPC. Requires PEM cert + key on the server and a CA on each agent.</p>
+                                    <pre class="agents-snippet" x-ref="snippetServerTls">AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050
+AMUD_AGENT_TLS=1
+AMUD_AGENT_TLS_CERT=/opt/amud/certs/agent.crt
+AMUD_AGENT_TLS_KEY=/opt/amud/certs/agent.key
+AMUD_AGENT_SECRET=your-long-shared-secret</pre>
+                                    <button type="button" class="btn btn-secondary" style="font-size:0.75rem; margin-top:0.45rem;" @click="copyAgentSnippet($refs.snippetServerTls)">Copy TLS server env</button>
+                                </div>
+                            </div>
+
+                            <div style="margin-top:1.25rem;">
+                                <h4 style="margin:0 0 0.4rem; font-size:0.9rem;">Remote agent (each other host)</h4>
+                                <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 0.65rem;">Agent-only — do not run a second <code>amud-server</code>. Set a unique <code>AMUD_NODE_TAG</code>, then set each dashboard app’s <strong>Node tag</strong> to match.</p>
+                                <pre class="agents-snippet" x-ref="snippetRemoteAgent">AMUD_SERVER_ADDR=amud.lan:8050
+AMUD_NODE_TAG=unraid-1
+AMUD_AGENT_SECRET=same-as-server
+AMUD_PLATFORM=unraid
+# Optional TLS:
+# AMUD_AGENT_TLS=1
+# AMUD_AGENT_TLS_CA=/path/to/ca.pem
+# Mount /var/run/docker.sock for Docker controls
+# PVE_API_TOKEN=user@pam!id=secret  (Proxmox hosts)</pre>
+                                <button type="button" class="btn btn-secondary" style="font-size:0.75rem; margin-top:0.45rem;" @click="copyAgentSnippet($refs.snippetRemoteAgent)">Copy remote agent env</button>
+                            </div>
+
+                            <div class="agents-platform-links" style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.25rem;">
+                                <a class="btn btn-secondary" style="font-size:0.75rem;" href="https://boubli.github.io/AMUD-Dashboard/docs/multi-node/platforms" target="_blank" rel="noopener noreferrer">Proxmox / Unraid / CasaOS / Docker</a>
+                                <a class="btn btn-secondary" style="font-size:0.75rem;" href="https://boubli.github.io/AMUD-Dashboard/docs/multi-node/tcp-and-tls" target="_blank" rel="noopener noreferrer">TCP &amp; TLS guide</a>
+                                <a class="btn btn-secondary" style="font-size:0.75rem;" href="https://boubli.github.io/AMUD-Dashboard/docs/multi-node/connect" target="_blank" rel="noopener noreferrer">Connect a node</a>
+                                <a class="btn btn-secondary" style="font-size:0.75rem;" href="https://boubli.github.io/AMUD-Dashboard/docs/multi-node/troubleshooting" target="_blank" rel="noopener noreferrer">Troubleshooting</a>
+                            </div>
+                            <p x-show="agentSnippetCopied" style="font-size:0.78rem; color:var(--accent-color); margin:0.65rem 0 0;" x-transition.opacity>Copied to clipboard.</p>
+                        </div>
 
                         <div class="settings-block">
                             <h3><i data-lucide="server" style="color:var(--accent-color);"></i> Proxmox VE</h3>
@@ -1147,29 +1264,10 @@
                                 <input type="number" id="setting-idle-grace" name="idle_grace_secs" class="form-control" value="{{idle_grace_secs}}" min="15" max="300">
                                 <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.35rem;">How long after the last viewer leaves before pollers enter deep idle.</p>
                             </div>
-                            <div class="form-group" style="margin-top:1rem;">
-                                <label for="setting-agent-node-tag">Default local agent node tag</label>
-                                <input type="text" id="setting-agent-node-tag" name="agent_node_tag" class="form-control" value="{{agent_node_tag}}" placeholder="Local">
-                                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:0.35rem;">Used when the co-located agent has no <code>AMUD_NODE_TAG</code>. Remote agents must set a unique <code>AMUD_NODE_TAG</code> per host.</p>
-                            </div>
-                            <div class="settings-block" style="margin-top:1.25rem;">
-                                <h3><i data-lucide="network" style="color:var(--accent-color);"></i> Remote agents</h3>
-                                <p style="font-size:0.85rem; color:var(--text-muted); margin:0 0 0.75rem;">Run one AMUD server; install <code>amud-agent</code> on every Proxmox / Unraid / CasaOS / Docker host. Prefer VPN (Tailscale/WireGuard) with plain TCP, or enable TLS.</p>
-                                <pre class="form-control" style="white-space:pre-wrap; font-size:0.75rem; line-height:1.45; padding:0.85rem;"># On the AMUD server (listen for remote agents)
-AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050
-# Optional TLS (do not expose plain TCP to the public internet)
-# AMUD_AGENT_TLS=1
-# AMUD_AGENT_TLS_CERT=/path/to/cert.pem
-# AMUD_AGENT_TLS_KEY=/path/to/key.pem
-
-# On each remote host
-AMUD_SERVER_ADDR=amud.lan:8050
-AMUD_NODE_TAG=unraid-1
-AMUD_AGENT_SECRET=same-as-server
-AMUD_PLATFORM=unraid
-# AMUD_AGENT_TLS=1
-# AMUD_AGENT_TLS_CA=/path/to/ca.pem</pre>
-                            </div>
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin:1rem 0 0;">
+                                Multi-node agents: manage live status, connection env, and docs under
+                                <button type="button" class="btn btn-secondary" style="font-size:0.78rem; padding:0.2rem 0.5rem; vertical-align:baseline;" @click="switchTab('infrastructure')">Infrastructure → Agents / Nodes</button>.
+                            </p>
                         </div>
 
                         <div class="settings-block">
@@ -2147,6 +2245,12 @@ AMUD_PLATFORM=unraid
                 systemVersion: null,
                 systemError: null,
                 checkingVersion: false,
+                agentNodeRows: [],
+                agentNodesLoading: false,
+                agentNodesError: null,
+                agentNodesUpdatedAt: '',
+                agentSnippetCopied: false,
+                _agentNodesTimer: null,
                 updatingSystem: false,
                 updateProgressStep: 0,
                 updateProgressError: null,
@@ -2213,6 +2317,9 @@ AMUD_PLATFORM=unraid
                     else if (this.activeTab === 'performance') {
                         this.loadSystemVersion();
                     }
+                    else if (this.activeTab === 'infrastructure' || this.activeTab === 'integrations') {
+                        this.startAgentNodesPolling();
+                    }
                 },
 
                 switchTab(tab) {
@@ -2237,6 +2344,113 @@ AMUD_PLATFORM=unraid
                     }
                     if (tab === 'performance') {
                         this.loadSystemVersion();
+                    }
+                    if (tab === 'infrastructure' || tab === 'integrations') {
+                        this.startAgentNodesPolling();
+                    } else {
+                        this.stopAgentNodesPolling();
+                    }
+                },
+
+                formatAgentLastSeen(epochSecs) {
+                    const n = Number(epochSecs);
+                    if (!n || n <= 0) return '—';
+                    const delta = Math.max(0, Math.floor(Date.now() / 1000) - n);
+                    if (delta < 10) return 'just now';
+                    if (delta < 60) return delta + 's ago';
+                    if (delta < 3600) return Math.floor(delta / 60) + 'm ago';
+                    if (delta < 86400) return Math.floor(delta / 3600) + 'h ago';
+                    return Math.floor(delta / 86400) + 'd ago';
+                },
+
+                loadAgentNodes() {
+                    this.agentNodesLoading = true;
+                    this.agentNodesError = null;
+                    fetch('/api/telemetry', { credentials: 'same-origin', cache: 'no-store' })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Failed to load agent telemetry');
+                            return res.json();
+                        })
+                        .then(data => {
+                            const nodes = data.nodes || {};
+                            const meta = data.nodes_meta || {};
+                            const tags = Object.keys(nodes).sort((a, b) => a.localeCompare(b));
+                            this.agentNodeRows = tags.map(tag => {
+                                const tel = nodes[tag] || {};
+                                const m = meta[tag] || {};
+                                const caps = Array.isArray(m.capabilities) && m.capabilities.length
+                                    ? m.capabilities
+                                    : (Array.isArray(tel.capabilities) ? tel.capabilities : []);
+                                return {
+                                    tag,
+                                    connected: typeof m.connected === 'boolean' ? m.connected : true,
+                                    platform: m.platform || tel.platform || '',
+                                    capabilities: caps.length ? caps.join(', ') : 'host',
+                                    cpu: (tel.cpu_usage ?? 0) + '%',
+                                    ram: (tel.ram_usage ?? 0) + '%',
+                                    lastSeen: this.formatAgentLastSeen(m.last_seen || 0),
+                                };
+                            });
+                            // Prefer meta-only offline nodes too
+                            Object.keys(meta).forEach(tag => {
+                                if (tags.includes(tag)) return;
+                                const m = meta[tag] || {};
+                                this.agentNodeRows.push({
+                                    tag,
+                                    connected: !!m.connected,
+                                    platform: m.platform || '',
+                                    capabilities: (m.capabilities || []).join(', ') || '—',
+                                    cpu: '—',
+                                    ram: '—',
+                                    lastSeen: this.formatAgentLastSeen(m.last_seen || 0),
+                                });
+                            });
+                            this.agentNodeRows.sort((a, b) => a.tag.localeCompare(b.tag));
+                            this.agentNodesUpdatedAt = new Date().toLocaleTimeString();
+                            this.$nextTick(() => { if (window.lucide) lucide.createIcons(); });
+                        })
+                        .catch(err => {
+                            this.agentNodesError = err.message || 'Failed to load nodes';
+                        })
+                        .finally(() => {
+                            this.agentNodesLoading = false;
+                        });
+                },
+
+                startAgentNodesPolling() {
+                    this.loadAgentNodes();
+                    this.stopAgentNodesPolling();
+                    this._agentNodesTimer = setInterval(() => {
+                        if (this.activeTab === 'infrastructure' || this.activeTab === 'integrations') {
+                            this.loadAgentNodes();
+                        }
+                    }, 8000);
+                },
+
+                stopAgentNodesPolling() {
+                    if (this._agentNodesTimer) {
+                        clearInterval(this._agentNodesTimer);
+                        this._agentNodesTimer = null;
+                    }
+                },
+
+                copyAgentSnippet(el) {
+                    const text = (el && el.textContent) ? el.textContent.trim() : '';
+                    if (!text) return;
+                    const done = () => {
+                        this.agentSnippetCopied = true;
+                        setTimeout(() => { this.agentSnippetCopied = false; }, 2000);
+                    };
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(done).catch(() => {
+                            const ta = document.createElement('textarea');
+                            ta.value = text;
+                            document.body.appendChild(ta);
+                            ta.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(ta);
+                            done();
+                        });
                     }
                 },
 

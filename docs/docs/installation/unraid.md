@@ -1,7 +1,7 @@
----
+﻿---
 sidebar_position: 6
 title: Unraid
-description: Install AMUD Dashboard on Unraid via Community Applications — dashboard + agent templates.
+description: Install AMUD Dashboard on Unraid via Community Applications â€” dashboard + agent templates.
 ---
 
 # Unraid Installation
@@ -18,13 +18,13 @@ AMUD ships as **two** Community Applications templates (dashboard + telemetry ag
 
 ---
 
-## Step 1 — Install from Community Applications
+## Step 1 â€” Install from Community Applications
 
 After the templates are published on CA (or while testing from the maintainer repository):
 
 1. Open the Unraid **Apps** tab.
 2. Search for **AMUD Dashboard** and click **Install**.
-3. Set a strong **Agent Secret** (long random string). **Copy it** — you need the same value on the agent.
+3. Set a strong **Agent Secret** (long random string). **Copy it** â€” you need the same value on the agent.
 4. Leave default paths unless you use a custom appdata layout:
    - App Data: `/mnt/user/appdata/amud-dashboard/data`
    - Agent Socket Dir: `/mnt/user/appdata/amud-dashboard/run`
@@ -38,16 +38,16 @@ After the templates are published on CA (or while testing from the maintainer re
 
 ---
 
-## Step 2 — First login
+## Step 2 â€” First login
 
 1. Open `http://YOUR_UNRAID_IP:8000` (or your reverse-proxy URL).
 2. On first boot, the server prints a one-time **admin password** in the container log:
-   - Unraid → **Docker** → **AMUD-Dashboard** → **Log**
+   - Unraid â†’ **Docker** â†’ **AMUD-Dashboard** â†’ **Log**
 3. Log in as `admin` with that password and change it under **Settings**.
 
 ---
 
-## Step 3 — Verify telemetry
+## Step 3 â€” Verify telemetry
 
 Within a few seconds of both containers running:
 
@@ -67,9 +67,9 @@ To customize which network interfaces or disk mounts appear on the dashboard, se
 
 ---
 
-## Step 3b — Host network and disk bind-mounts (v1.5.5.7+)
+## Step 3b â€” Host network and disk bind-mounts (v1.5.5.7+)
 
-**Why:** On Unraid, the AMUD Agent container used **bridge** networking by default. Bridge mode hides host interfaces (`br0`, `bond0`) and host disk paths (`/mnt/user`, `/mnt/cache`) from the agent. If you set host interface names in Settings but see **Bandwidth —** or **Disk 0.0 GB**, this is the usual cause.
+**Why:** On Unraid, the AMUD Agent container used **bridge** networking by default. Bridge mode hides host interfaces (`br0`, `bond0`) and host disk paths (`/mnt/user`, `/mnt/cache`) from the agent. If you set host interface names in Settings but see **Bandwidth â€”** or **Disk 0.0 GB**, this is the usual cause.
 
 The **AMUD Agent** CA template (v1.5.5.7+) uses **host** network and optional read-only bind-mounts:
 
@@ -84,7 +84,7 @@ The **AMUD Agent** CA template (v1.5.5.7+) uses **host** network and optional re
 1. **Force Update** both **AMUD-Dashboard** and **AMUD-Agent** to `v1.5.5.7` (or `latest`).
 2. Re-apply the agent template so **Network** is **host** and array/cache paths are mapped (or add them manually under **Extra Parameters** / path mappings).
 3. Hard-refresh the dashboard (`Ctrl+Shift+R`).
-4. Open **Settings → Privacy & Access → Host telemetry mapping** and click **Test host visibility**. You should see `Scope: host` and your Unraid interfaces/mounts listed.
+4. Open **Settings â†’ Privacy & Access â†’ Host telemetry mapping** and click **Test host visibility**. You should see `Scope: host` and your Unraid interfaces/mounts listed.
 
 **Example mapping (Inch-high / typical Unraid):**
 
@@ -115,14 +115,14 @@ Default CA paths:
 | `/mnt/user/appdata/amud-dashboard/data` | SQLite database, `.amud-secrets-key`, settings |
 | `/mnt/user/appdata/amud-dashboard/run` | Shared socket between dashboard and agent |
 
-**v1.7.2+ (recommended):** The dashboard image runs as **PUID 99 / PGID 100** inside the container (matches Unraid `nobody:users` appdata). After updating to the latest image, **recreate** the dashboard container — no SSH `chown` required on a fresh install.
+**v1.7.2+ (recommended):** The dashboard image runs as **PUID 99 / PGID 100** inside the container (matches Unraid `nobody:users` appdata). After updating to the latest image, **recreate** the dashboard container â€” no SSH `chown` required on a fresh install.
 
-**Fix 1 — Manual ownership (older images or custom paths)**
+**Fix 1 â€” Manual ownership (older images or custom paths)**
 
 If you cannot update yet, or use a custom appdata layout, align host ownership with the container user:
 
 ```bash
-# v1.7.2+ dashboard (PUID 99 — Unraid default)
+# v1.7.2+ dashboard (PUID 99 â€” Unraid default)
 chown -R 99:100 /mnt/user/appdata/amud-dashboard/data
 chown -R 99:100 /mnt/user/appdata/amud-dashboard/run
 chmod -R 755 /mnt/user/appdata/amud-dashboard/data
@@ -154,13 +154,13 @@ docker run --rm -v /mnt/user/appdata/amud-dashboard/data:/data alpine sh -c \
   "apk add --no-cache sqlite >/dev/null 2>&1 && sqlite3 /data/amud.db \"UPDATE users SET password_hash='HASH' WHERE username='admin';\""
 ```
 
-Restart the **AMUD-Dashboard** container, sign in, then change the password under **Settings → Security** so a fresh Argon2id hash is stored.
+Restart the **AMUD-Dashboard** container, sign in, then change the password under **Settings â†’ Security** so a fresh Argon2id hash is stored.
 
-See also [Troubleshooting — Reset admin password](../troubleshooting.md#reset-or-change-the-admin-password-from-cli).
+See also [Troubleshooting â€” Reset admin password](../troubleshooting.md#reset-or-change-the-admin-password-from-cli).
 
 ---
 
-**Fix 2 — Custom PUID/PGID**
+**Fix 2 â€” Custom PUID/PGID**
 
 The image defaults to UID **99** / GID **100**. If you use different values in the template, you must also set matching **Extra Parameters** on the dashboard container:
 
@@ -183,7 +183,7 @@ chown -R YOUR_PUID:YOUR_PGID /mnt/user/appdata/amud-dashboard/run
 ls -la /mnt/user/appdata/amud-dashboard/
 ```
 
-Both `data` and `run` should be owned by the same UID/GID the container uses. After fixing, open the UI — host telemetry should populate within a few seconds.
+Both `data` and `run` should be owned by the same UID/GID the container uses. After fixing, open the UI â€” host telemetry should populate within a few seconds.
 
 ---
 
@@ -196,11 +196,11 @@ AMUD uses WebSockets for live telemetry. If you put it behind Nginx Proxy Manage
 ## Updating
 
 1. Stop **AMUD-Agent**, then **AMUD-Dashboard** (optional but avoids a brief socket race).
-2. In **Apps**, click the container icon → **Force Update** (or set tag to `latest` and recreate).
+2. In **Apps**, click the container icon â†’ **Force Update** (or set tag to `latest` and recreate).
 3. Update **both** containers to the same image tag.
 4. Start dashboard, then agent.
 
-Your config lives in `/mnt/user/appdata/amud-dashboard/data` — back up that folder before major upgrades.
+Your config lives in `/mnt/user/appdata/amud-dashboard/data` â€” back up that folder before major upgrades.
 
 ---
 
@@ -210,7 +210,7 @@ Please use the right channel so reports are tracked and fixed in releases:
 
 | Channel | Use for |
 |---------|---------|
-| [**GitHub Issues**](https://github.com/boubli/AMUD-Dashboard/issues) | **Bugs**, install failures, feature requests — include Unraid version, container logs, and steps to reproduce |
+| [**GitHub Issues**](https://github.com/boubli/AMUD-Dashboard/issues) | **Bugs**, install failures, feature requests â€” include Unraid version, container logs, and steps to reproduce |
 | [GitHub Discussions](https://github.com/boubli/AMUD-Dashboard/discussions) | Questions, screenshots, general homelab chat |
 | [Documentation](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting) | Self-service fixes (permissions, WebSockets, agent socket) |
 
@@ -220,4 +220,4 @@ Unraid forum threads are welcome for visibility, but **open a GitHub Issue** for
 
 ## Additional Unraid / remote hosts
 
-Install only the **AMUD Agent** on other machines. Point `AMUD_SERVER_ADDR` at your AMUD dashboard host, set a unique `AMUD_NODE_TAG`, and reuse the agent secret. On the dashboard set `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050`. Prefer VPN or TLS — see [Remote agents / multi-node](./remote-agents).
+Install only the **AMUD Agent** on other machines. Point `AMUD_SERVER_ADDR` at your AMUD dashboard host, set a unique `AMUD_NODE_TAG`, and reuse the agent secret. On the dashboard set `AMUD_AGENT_TCP_LISTEN=0.0.0.0:8050`. Prefer VPN or TLS — see [Multi-node agents](/docs/multi-node/overview).

@@ -13,7 +13,7 @@
 
 **[変更履歴](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[ブログ](https://boubli.github.io/AMUD-Dashboard/blog)** · **[テーマギャラリー](https://boubli.github.io/AMUD-Dashboard/themes)** · **[ロードマップ](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[ドキュメント](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### v1.9.4 の新機能
+### v1.9.5 の新機能
 
 - **Multi-node agents** — AMUD サーバーは 1 台、各 Proxmox / Unraid / CasaOS / Docker ホストに agent（[Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents)）
 - **Nodes strip** — ホストを選んで CPU/RAM 表示；操作は `node_tag` で振り分け
@@ -29,7 +29,7 @@
 
 ### リリース状況
 
-推奨バージョン: **1.9.4**。詳細は **[英語 README](../README.md)**（Release status）を参照。
+推奨バージョン: **1.9.5**。詳細は **[英語 README](../README.md)**（Release status）を参照。
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

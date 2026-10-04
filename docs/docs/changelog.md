@@ -5,6 +5,26 @@ title: Changelog
 
 # Changelog
 
+## Unreleased
+
+---
+
+## v1.9.5 — Nodes polish, theme icons, Add App CTA
+
+**2026-10-04** · [Release notes](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.5)
+
+### Added
+- **Settings → Infrastructure → Agents / Nodes** — live node table, VPN/TLS copy snippets, docs links
+- **Multi-node docs** — multi-page [Multi-node agents](./multi-node/overview) section on GitHub Pages
+- **Theme icon styles** — five icon families with per-theme glyph aliases (Settings/topbar icons change shape with the theme)
+
+### Changed
+- **Nodes strip** — hidden on the dashboard until two or more agents are connected
+- **Add App** — larger primary CTA vs Settings / Sign Out
+- Release notes template includes Native / Proxmox, Docker, and Unraid upgrade steps
+
+---
+
 ## v1.9.4 — Multi-node agents
 
 **2026-09-30**

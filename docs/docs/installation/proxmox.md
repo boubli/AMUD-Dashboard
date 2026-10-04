@@ -1,4 +1,4 @@
----
+﻿---
 sidebar_position: 1
 ---
 
@@ -99,7 +99,7 @@ Once the installation completes, the script displays the container's IP address.
    - **Password**: `password`
 
 :::warning Change Default Password Immediately
-Log in, navigate to **Settings → Admin Profile**, and change the administrator password immediately to secure your installation.
+Log in, navigate to **Settings â†’ Admin Profile**, and change the administrator password immediately to secure your installation.
 :::
 
 ---
@@ -143,7 +143,7 @@ Copy this value.
 If you prefer to configure permissions visually:
 
 1. **Create the Role**:
-   - Navigate to **Datacenter → Permissions → Roles** and click **Create**.
+   - Navigate to **Datacenter â†’ Permissions â†’ Roles** and click **Create**.
    - Name the role `AMUDAgentRole`.
    - Check the following permissions:
      - **`VM.Audit`** (to inspect LXC/VM state)
@@ -151,17 +151,17 @@ If you prefer to configure permissions visually:
      - **`VM.PowerMgmt`** (optional, check this if you want to control container states like Start/Stop/Restart from the dashboard)
    - Click **Create**.
 2. **Create the User**:
-   - Navigate to **Datacenter → Permissions → Users** and click **Add**.
+   - Navigate to **Datacenter â†’ Permissions â†’ Users** and click **Add**.
    - Set User name to `amud` and Realm to `pve`. Click **Add**.
 3. **Assign Access Control Permissions (ACL)**:
-   - Navigate to **Datacenter → Permissions** and click **Add → API Path Permission**.
+   - Navigate to **Datacenter â†’ Permissions** and click **Add â†’ API Path Permission**.
    - Set **Path** to `/` (cluster root).
    - Select User `amud@pve`.
    - Select Role `AMUDAgentRole`. Click **Add**.
 4. **Generate the Token**:
-   - Navigate to **Datacenter → Permissions → API Tokens** and click **Add**.
+   - Navigate to **Datacenter â†’ Permissions â†’ API Tokens** and click **Add**.
    - Select User `amud@pve` and set Token ID to `amud-token`.
-   - **⚠️ CRITICAL: Uncheck "Privilege Separation"**.
+   - **âš ï¸ CRITICAL: Uncheck "Privilege Separation"**.
    - Click **Add** and copy the token secret displayed on your screen.
 
 :::danger Privilege Separation Notice
@@ -253,7 +253,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/u
 After the upgrade completes:
 
 1. **Hard-refresh the browser** (`Ctrl+Shift+R`) or [clear the PWA cache](../troubleshooting#pwa--browser-cache-issues) so new JavaScript and the service worker load.
-2. **Verify agent IPC** if host metrics show `0%` — see [AMUD Agent Secret](../troubleshooting#amud-agent-secret--ipc-authentication).
+2. **Verify agent IPC** if host metrics show `0%` â€” see [AMUD Agent Secret](../troubleshooting#amud-agent-secret--ipc-authentication).
 3. Review [Security](../security.md) if you serve AMUD over HTTPS (`AMUD_SECURE_COOKIES=1`).
 
 For a broken or partial update, see [Update or Release Recovery](../troubleshooting#update-or-release-recovery).
@@ -262,4 +262,4 @@ For a broken or partial update, see [Update or Release Recovery](../troubleshoot
 
 ## Multiple Proxmox nodes
 
-Install `amud-agent` on each PVE host with a unique `AMUD_NODE_TAG` and `AMUD_SERVER_ADDR` aimed at the single AMUD server. See [Remote agents / multi-node](./remote-agents).
+Install `amud-agent` on each PVE host with a unique `AMUD_NODE_TAG` and `AMUD_SERVER_ADDR` aimed at the single AMUD server. See [Multi-node agents](/docs/multi-node/overview).

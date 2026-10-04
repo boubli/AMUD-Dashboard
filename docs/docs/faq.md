@@ -65,7 +65,9 @@ On **ARM64** (Raspberry Pi, Oracle Ampere, etc.), use [native install](/docs/ins
 
 ## Can I monitor several hosts with one AMUD server?
 
-**Yes (v1.9.4+).** Run one `amud-server`, install `amud-agent` on each Proxmox / Unraid / CasaOS / Docker host with a unique `AMUD_NODE_TAG`, and point remotes at the server with `AMUD_SERVER_ADDR`. Enable `AMUD_AGENT_TCP_LISTEN` on the server (prefer VPN, or TLS). Set each app’s **Node tag** to match. Full guide: [Remote agents / multi-node](/docs/installation/remote-agents).
+**Yes (v1.9.5+).** Run one `amud-server`, install `amud-agent` on each Proxmox / Unraid / CasaOS / Docker host with a unique `AMUD_NODE_TAG`, and point remotes at the server with `AMUD_SERVER_ADDR`. Enable `AMUD_AGENT_TCP_LISTEN` on the server (prefer VPN, or TLS). Set each app’s **Node tag** to match. Manage status under **Settings → Infrastructure → Agents / Nodes**. The dashboard Nodes strip appears only when two or more agents are online.
+
+Full guide: [Multi-node overview](/docs/multi-node/overview) · [Connect](/docs/multi-node/connect)
 
 ---
 

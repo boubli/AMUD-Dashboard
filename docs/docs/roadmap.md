@@ -13,7 +13,8 @@ Items move between **Now**, **Next**, and **Later** as reality hits. Recently sh
 
 ## Recently shipped (v1.9.x / late v1.8.x)
 
-- **v1.9.4** — Multi-node agents (one server, many hosts; TCP/TLS or VPN; Nodes strip) — [Remote agents](./installation/remote-agents)
+- **v1.9.5** — Nodes polish (strip hide, Settings Agents/Nodes), theme icon styles, Add App CTA, Unraid/Docker/Native upgrade notes
+- **v1.9.4** — Multi-node agents (one server, many hosts; TCP/TLS or VPN; Nodes strip) — [Multi-node docs](./multi-node/overview)
 - **v1.9.3** — Clock timezone/format + custom web search engines ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17))
 - **v1.9.2** — Docs currency: Theme Gallery + roadmap + README surfaces synced to **41** themes; release-notes hygiene
 - **v1.9.1** — **Crimson Flare** theme (crimson light / obsidian dark, flare wallpaper, icon pack)

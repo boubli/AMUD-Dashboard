@@ -15,7 +15,7 @@ AMUD uses a decoupled client-server architecture to aggregate metrics and report
 ![AMUD Architecture Diagram](/img/amud-architecture.svg)
 
 1. **`amud-server`**: Axum-based web server that serves server-rendered HTML (via Alpine.js templates) and manages persistent state in SQLite.
-2. **`amud-agent`**: Standalone daemon installed on the homelab host. It queries host metrics, Proxmox VE containers, and Docker runtimes, streaming raw JSON payloads back to the server via UDS (`amud.sock`) or TCP.
+2. **`amud-agent`**: Standalone daemon on each homelab host (one or many). It queries host metrics, Proxmox VE containers, and Docker runtimes, streaming JSON to the server via UDS (`amud.sock`) locally or TCP/TLS remotely. See [Multi-node agents](/docs/multi-node/overview).
 
 ## Key Design Principles
 

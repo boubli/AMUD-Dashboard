@@ -1955,7 +1955,7 @@ fn render_auth_buttons(
             match mode {
                 PageMode::Feeds => {
                     r#"
-            <a href="/admin/settings?tab=rss" class="glass-panel topbar-action btn-admin">
+            <a href="/admin/settings?tab=rss" class="glass-panel topbar-action topbar-action--cta btn-admin">
                 <i data-lucide="rss"></i> Add RSS Feed
             </a>
             <a href="/admin/settings" class="glass-panel topbar-action btn-admin">
@@ -1965,7 +1965,7 @@ fn render_auth_buttons(
                 }
                 PageMode::Dashboard => {
                     r#"
-            <button type="button" class="glass-panel topbar-action btn-admin" @click="addAppModalOpen = true; appIconUrl = ''; newApp = { integration_type: '', api_key: '', card_span: '1x1', show_container_metrics: true, guest_visible: true, embed_mode: 'link', show_integration_metrics: true, integration_visible_metrics: [] };">
+            <button type="button" class="glass-panel topbar-action topbar-action--cta btn-admin" @click="addAppModalOpen = true; appIconUrl = ''; newApp = { integration_type: '', api_key: '', card_span: '1x1', show_container_metrics: true, guest_visible: true, embed_mode: 'link', show_integration_metrics: true, integration_visible_metrics: [] };">
                 <i data-lucide="plus"></i> Add App
             </button>
             <a href="/admin/settings" class="glass-panel topbar-action btn-admin">

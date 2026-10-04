@@ -1,4 +1,4 @@
----
+﻿---
 sidebar_position: 3
 ---
 
@@ -7,7 +7,7 @@ sidebar_position: 3
 Deploying AMUD in a Docker environment containerizes the entire dashboard and telemetry ecosystem. We publish pre-built **amd64** (`x86_64`) images on Docker Hub for instant setup on typical Intel/AMD hosts.
 
 :::info ARM64 / Raspberry Pi / Ampere
-The Docker image is **amd64 only**. On ARM64 hosts, use the [native Linux install](/docs/installation/linux) or `update-amud.sh` — GitHub Releases ship `amud-server-arm64` and `amud-agent-arm64` binaries.
+The Docker image is **amd64 only**. On ARM64 hosts, use the [native Linux install](/docs/installation/linux) or `update-amud.sh` â€” GitHub Releases ship `amud-server-arm64` and `amud-agent-arm64` binaries.
 :::
 
 ---
@@ -128,7 +128,7 @@ mkdir -p data && chown 99:100 data
 
 `AMUD_SOCKET_MODE=666` lets the root agent connect to the dashboard Unix socket when the server runs as a non-root user. The agent service uses `user: "0:0"` for Docker socket access.
 
-Unraid permission errors: [Troubleshooting — `.amud-secrets-key` permission denied](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied). `su-exec: setgroups` loop: [Troubleshooting — setgroups](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-su-exec-setgroups-loop).
+Unraid permission errors: [Troubleshooting â€” `.amud-secrets-key` permission denied](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-secrets-key-permission-denied). `su-exec: setgroups` loop: [Troubleshooting â€” setgroups](https://boubli.github.io/AMUD-Dashboard/docs/troubleshooting#unraid-su-exec-setgroups-loop).
 
 ### Deploying the Stack
 To start the services in detached background mode:
@@ -277,11 +277,11 @@ docker compose up -d
 After upgrading:
 
 1. **Hard-refresh the browser** (`Ctrl+Shift+R`) or [clear the PWA cache](../troubleshooting#pwa--browser-cache-issues).
-2. If you use HTTPS via a reverse proxy, set `AMUD_SECURE_COOKIES=1` on the dashboard container — see [Security](../security.md).
+2. If you use HTTPS via a reverse proxy, set `AMUD_SECURE_COOKIES=1` on the dashboard container â€” see [Security](../security.md).
 3. Confirm both `amud_app` and `amud_agent` containers are healthy: `docker compose ps`.
 
 ---
 
 ## Additional nodes (remote agents)
 
-To monitor other Docker hosts while keeping a single AMUD server, run **agent-only** containers elsewhere with `AMUD_SERVER_ADDR`, a unique `AMUD_NODE_TAG`, and the same `AMUD_AGENT_SECRET`. Enable `AMUD_AGENT_TCP_LISTEN` on the server. See [Remote agents / multi-node](./remote-agents).
+To monitor other Docker hosts while keeping a single AMUD server, run **agent-only** containers elsewhere with `AMUD_SERVER_ADDR`, a unique `AMUD_NODE_TAG`, and the same `AMUD_AGENT_SECRET`. Enable `AMUD_AGENT_TCP_LISTEN` on the server. See [Multi-node agents](/docs/multi-node/overview).

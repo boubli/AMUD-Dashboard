@@ -13,7 +13,7 @@
 
 **[Список изменений](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Блог](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Галерея тем](https://boubli.github.io/AMUD-Dashboard/themes)** · **[План разработки](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Документация](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### Что нового в v1.9.4
+### Что нового в v1.9.5
 
 - **Multi-node agents** — один сервер AMUD, агенты на каждом хосте Proxmox / Unraid / CasaOS / Docker ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
 - **Nodes strip** — выбор хоста для CPU/RAM; управление по `node_tag`
@@ -29,7 +29,7 @@
 
 ### Статус релизов
 
-Рекомендуется: **1.9.4**. Подробности и отозванные теги: **[английский README](../README.md)** (раздел Release status).
+Рекомендуется: **1.9.5**. Подробности и отозванные теги: **[английский README](../README.md)** (раздел Release status).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

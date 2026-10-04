@@ -190,17 +190,20 @@
         const nodes = data.nodes || {};
         const meta = data.nodes_meta || {};
         const tags = Object.keys(nodes).sort((a, b) => a.localeCompare(b));
-        if (tags.length <= 1) {
-            strip.hidden = tags.length === 0;
+
+        // Single-host: keep telemetry selection silent; hide the Nodes strip.
+        if (tags.length < 2) {
+            strip.hidden = true;
+            list.innerHTML = '';
+            if (summary) summary.textContent = '—';
             if (tags.length === 1) {
                 selectedNodeTag = tags[0];
-                strip.hidden = false;
-            } else {
-                return;
+                localStorage.setItem('amud_selected_node', selectedNodeTag);
             }
-        } else {
-            strip.hidden = false;
+            return;
         }
+
+        strip.hidden = false;
 
         if (selectedNodeTag && !nodes[selectedNodeTag]) {
             selectedNodeTag = tags.includes('Local') ? 'Local' : tags[0];

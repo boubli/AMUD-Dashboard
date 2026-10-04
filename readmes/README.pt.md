@@ -13,7 +13,7 @@
 
 **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Galeria de Temas](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Roadmap](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Documentação](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### Novidades na v1.9.4
+### Novidades na v1.9.5
 
 - **Multi-node agents** — um servidor AMUD, agentes em cada host Proxmox / Unraid / CasaOS / Docker ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
 - **Nodes strip** — escolha o host para CPU/RAM; controlos seguem o `node_tag`
@@ -29,7 +29,7 @@ Histórico completo: **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/
 
 ### Estado das versões
 
-Recomendado: **1.9.4**. Detalhes e tags retiradas: **[README em inglês](../README.md)** (secção Release status).
+Recomendado: **1.9.5**. Detalhes e tags retiradas: **[README em inglês](../README.md)** (secção Release status).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

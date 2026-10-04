@@ -136,11 +136,13 @@ pub async fn api_telemetry_handler(
     }
     let system = state.latest_telemetry.read().unwrap().clone();
     let nodes = state.telemetry_by_node.read().unwrap().clone();
+    let nodes_meta = state.nodes_meta.read().unwrap().clone();
     api_json(
         StatusCode::OK,
         serde_json::json!({
             "system": system,
             "nodes": nodes,
+            "nodes_meta": nodes_meta,
             "agent_connected": *state.agent_connected.read().unwrap(),
         }),
     )

@@ -5,7 +5,7 @@ title: Features
 
 # Features
 
-Complete inventory of what AMUD Dashboard ships today (1.9.3). Everything below is implemented in the compiled Rust binaries — no YAML files, no Node.js runtime.
+Complete inventory of what AMUD Dashboard ships today (1.9.5+). Everything below is implemented in the compiled Rust binaries — no YAML files, no Node.js runtime.
 
 ![AMUD Dashboard — default theme](/img/AMUD-Dashboard.png)
 
@@ -52,6 +52,8 @@ Complete inventory of what AMUD Dashboard ships today (1.9.3). Everything below 
 | **Live WebSocket stream** | `/ws` pushes telemetry; role-filtered payloads for Admin vs Guest |
 | **App health badges** | ONLINE / OFFLINE / BLOCKED with latency on URL checks |
 | **IPC authentication** | Challenge-response with shared `AMUD_AGENT_SECRET` |
+| **Multi-node agents** | One server, many hosts over UDS (local) or TCP/TLS (remote); Nodes strip when 2+ agents online — [Multi-node docs](/docs/multi-node/overview) |
+| **Agents / Nodes settings** | Settings → Infrastructure: live node table, copy env snippets, platform links |
 
 ---
 

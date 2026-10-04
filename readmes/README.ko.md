@@ -13,7 +13,7 @@
 
 **[변경 로그](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[블로그](https://boubli.github.io/AMUD-Dashboard/blog)** · **[테마 갤러리](https://boubli.github.io/AMUD-Dashboard/themes)** · **[로드맵](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[문서](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
-### v1.9.4 새로운 기능
+### v1.9.5 새로운 기능
 
 - **Multi-node agents** — AMUD 서버 하나, 각 Proxmox / Unraid / CasaOS / Docker 호스트에 agent ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))
 - **Nodes strip** — CPU/RAM용 호스트 선택; 제어는 `node_tag`로 라우팅
@@ -29,7 +29,7 @@
 
 ### 릴리스 상태
 
-권장 버전: **1.9.4**. 자세한 내용: **[영어 README](../README.md)** (Release status 섹션).
+권장 버전: **1.9.5**. 자세한 내용: **[영어 README](../README.md)** (Release status 섹션).
 
 ![AMUD Dashboard UI](https://raw.githubusercontent.com/boubli/AMUD-Dashboard/main/docs/static/img/AMUD-Dashboard.png)
 

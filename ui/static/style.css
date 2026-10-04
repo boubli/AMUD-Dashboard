@@ -242,6 +242,28 @@ body::-webkit-scrollbar-button {
     border-color: var(--accent-color);
 }
 
+.topbar-action--cta {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    background: color-mix(in srgb, var(--accent-color) 18%, transparent);
+    border-color: color-mix(in srgb, var(--accent-color) 55%, var(--border-card));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-color) 12%, transparent);
+}
+
+.topbar-action--cta:hover {
+    border-color: var(--accent-color);
+    background: color-mix(in srgb, var(--accent-color) 28%, transparent);
+}
+
+.topbar-action--cta i,
+.topbar-action--cta svg,
+.topbar-action--cta .amud-theme-icon svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
 .topbar-end {
     display: flex;
     align-items: center;
@@ -316,6 +338,58 @@ body::-webkit-scrollbar-button {
     font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-secondary);
+}
+
+/* Settings: Agents / Nodes panel */
+.agents-nodes-table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+}
+.agents-nodes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+}
+.agents-nodes-table th,
+.agents-nodes-table td {
+    padding: 0.55rem 0.7rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+}
+.agents-nodes-table th {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.agents-nodes-table tr:last-child td {
+    border-bottom: none;
+}
+.agents-transport-card {
+    padding: 0.85rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.12);
+}
+.agents-snippet {
+    margin: 0;
+    white-space: pre-wrap;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    padding: 0.7rem 0.8rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (max-width: 800px) {
+    .agents-transport-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 /* Multi-node agent strip */
