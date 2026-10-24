@@ -16,6 +16,16 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+}
+
 .coverLink {
   display: block;
   text-decoration: none;

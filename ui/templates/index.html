@@ -80,7 +80,13 @@
                     <i data-lucide="menu"></i>
                 </button>
 
-                <div id="topbar-overflow-menu" class="topbar-overflow" :class="{ 'is-open': topbarMenuOpen }" @click="topbarMenuOpen = false">
+                <div
+                    id="topbar-overflow-menu"
+                    class="topbar-overflow"
+                    :class="{ 'is-open': topbarMenuOpen }"
+                    @click="topbarMenuOpen = false"
+                    @keydown.enter="topbarMenuOpen = false"
+                    @keydown.space.prevent="topbarMenuOpen = false">
                 <!-- FEEDS_NAV -->
                 <!-- AUTH_BUTTONS -->
                 </div>

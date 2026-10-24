@@ -80,11 +80,13 @@
   border-color: rgba(255, 107, 43, 0.3);
 }
 
+a.glow-button,
+button.glow-button,
 .glow-button {
   position: relative;
   border: none;
   background: #c2410c;
-  color: #ffffff !important;
+  color: #ffffff;
   font-weight: 800;
   border-radius: 12px;
   padding: 0 2rem;
@@ -111,10 +113,12 @@
   transform: scale(1);
 }
 
+a.glow-button:hover,
+button.glow-button:hover,
 .glow-button:hover {
   box-shadow: 0 15px 30px rgba(255, 107, 43, 0.8);
   transform: translateY(-3px);
-  color: #fff !important;
+  color: #fff;
   text-decoration: none;
 }
 
@@ -128,18 +132,22 @@
   100% { box-shadow: 0 0 0 0 rgba(255, 107, 43, 0); }
 }
 
+a.outline-button,
+button.outline-button,
 .outline-button {
   background: transparent;
-  color: #cbd5e1 !important;
+  color: #cbd5e1;
   border: 2px solid #2d3345;
   border-radius: 12px;
   font-weight: 700;
   transition: all 0.3s ease;
 }
 
+a.outline-button:hover,
+button.outline-button:hover,
 .outline-button:hover {
   border-color: var(--amud-orange);
-  color: #ffffff !important;
+  color: #ffffff;
   background: #c2410c;
   transform: translateY(-3px);
   text-decoration: none;
@@ -306,8 +314,26 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dashboard-hero-carousel__slide {
+  .dashboard-hero-carousel__slide,
+  .gradient-text,
+  .glass-card,
+  .glass-card::before,
+  .glow-button,
+  .glow-button::after,
+  .pulse-btn,
+  .outline-button,
+  .floating-logo,
+  .logo-glow,
+  .dashboard-preview-container {
+    animation: none;
     transition: none;
+  }
+
+  .glass-card:hover,
+  .glow-button:hover,
+  .outline-button:hover,
+  .dashboard-preview-container:hover {
+    transform: none;
   }
 }
 

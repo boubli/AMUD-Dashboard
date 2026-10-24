@@ -37,7 +37,8 @@
   margin-bottom: 2rem;
 }
 
+.grid :global(article.margin-bottom--md),
 .grid :global(article) {
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
   height: 100%;
 }

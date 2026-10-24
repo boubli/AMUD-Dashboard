@@ -231,10 +231,12 @@
   border-color: rgba(255, 107, 43, 0.3);
 }
 
-.btnCopied {
-  background: #047857 !important;
-  border-color: #065f46 !important;
-  color: #ecfdf5 !important;
+.btn.btnCopied,
+.btnPrimary.btnCopied,
+.btnSecondary.btnCopied {
+  background: #047857;
+  border-color: #065f46;
+  color: #ecfdf5;
 }
 
 .howTo {
@@ -308,5 +310,20 @@
 
   .grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .btn,
+  .toast,
+  .searchInput,
+  .chip {
+    animation: none;
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
   }
 }

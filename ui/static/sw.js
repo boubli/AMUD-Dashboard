@@ -164,7 +164,9 @@ globalThis.addEventListener('fetch', event => {
       caches.match(request).then(cached => {
         return cached || fetch(request).then(response => {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+          void caches.open(CACHE_NAME)
+            .then(cache => cache.put(request, copy))
+            .catch(() => undefined);
           return response;
         });
       })
