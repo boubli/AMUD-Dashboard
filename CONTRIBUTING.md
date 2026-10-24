@@ -95,9 +95,20 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --lib
 ```
 
-GitHub Actions also runs **`cargo audit`**.
+GitHub Actions also runs **`cargo audit`** and a **SonarCloud** scan (job `sonar` in `.github/workflows/ci.yml`).
 
-**SonarCloud (forever config):** `sonar-project.properties` excludes theme packs / theme-guards (intentional `!important` + decorative motion) and ignores those CSS rules on `style.css` / docs CSS modules. Do **not** hand-fix hundreds of theme `!important`s after each push — update the Sonar config instead if a new intentional path shows up.
+### SonarCloud (keep Maintainability quiet forever)
+
+| File | Used by |
+|------|---------|
+| [`.sonarcloud.properties`](.sonarcloud.properties) | SonarCloud **Automatic Analysis** (if still enabled) |
+| [`sonar-project.properties`](sonar-project.properties) | **CI** Sonar job |
+
+Both exclude theme packs / theme-guards (intentional `!important` + decorative motion) and ignore those CSS rules on `style.css`. Do **not** hand-fix hundreds of theme `!important`s after each push — extend the exclusion lists instead.
+
+**One-time (SonarCloud UI):** after the CI `sonar` job is green, open **Administration → Analysis Method** and turn **off Automatic Analysis** so CI is the only scanner (otherwise Auto Analysis ignores `sonar-project.properties` and theme noise comes back).
+
+Repo secret required: `SONAR_TOKEN` (SonarCloud user token with analyze permission).
 
 ---
 
