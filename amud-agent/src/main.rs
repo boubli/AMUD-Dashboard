@@ -269,11 +269,11 @@ fn agent_capabilities() -> Vec<String> {
     if docker_enabled() {
         caps.push("docker".to_string());
     }
-    if !get_pve_api_token().is_empty() || pve_token_from_env().is_some() {
-        caps.push("proxmox".to_string());
-    } else if std::env::var("AMUD_PLATFORM")
-        .map(|s| s.eq_ignore_ascii_case("proxmox"))
-        .unwrap_or(false)
+    if !get_pve_api_token().is_empty()
+        || pve_token_from_env().is_some()
+        || std::env::var("AMUD_PLATFORM")
+            .map(|s| s.eq_ignore_ascii_case("proxmox"))
+            .unwrap_or(false)
     {
         caps.push("proxmox".to_string());
     }
@@ -774,12 +774,8 @@ fn wrap_tcp_maybe_tls(
             format!("Invalid TLS server name '{server_name}': {e}"),
         )
     })?;
-    let conn = rustls::ClientConnection::new(Arc::new(config), name).map_err(|e| {
-        std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("TLS client setup failed: {e}"),
-        )
-    })?;
+    let conn = rustls::ClientConnection::new(Arc::new(config), name)
+        .map_err(|e| std::io::Error::other(format!("TLS client setup failed: {e}")))?;
     let tls = rustls::StreamOwned::new(conn, tcp);
     Ok(AgentIpcStream::Tls(SharedTlsStream {
         inner: Arc::new(Mutex::new(tls)),
