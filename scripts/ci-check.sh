@@ -5,6 +5,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+echo "==> cargo fmt (auto-fix)"
+cargo fmt --all
+
 echo "==> cargo fmt --check"
 cargo fmt --all -- --check
 

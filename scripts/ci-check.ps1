@@ -1,7 +1,12 @@
 # Mirror .github/workflows/ci.yml locally before push (Windows).
+# Usage: .\scripts\ci-check.ps1
 $ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $Root
+
+Write-Host "==> cargo fmt (auto-fix)"
+cargo fmt --all
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "==> cargo fmt --check"
 cargo fmt --all -- --check

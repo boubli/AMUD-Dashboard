@@ -254,7 +254,12 @@ fn agent_platform_label() -> String {
     std::env::var("AMUD_PLATFORM")
         .ok()
         .map(|s| s.trim().to_ascii_lowercase())
-        .filter(|s| matches!(s.as_str(), "proxmox" | "unraid" | "casaos" | "docker" | "other"))
+        .filter(|s| {
+            matches!(
+                s.as_str(),
+                "proxmox" | "unraid" | "casaos" | "docker" | "other"
+            )
+        })
         .unwrap_or_default()
 }
 
@@ -717,7 +722,10 @@ fn agent_tls_enabled() -> bool {
     )
 }
 
-fn wrap_tcp_maybe_tls(tcp: std::net::TcpStream, server_name: &str) -> std::io::Result<AgentIpcStream> {
+fn wrap_tcp_maybe_tls(
+    tcp: std::net::TcpStream,
+    server_name: &str,
+) -> std::io::Result<AgentIpcStream> {
     if !agent_tls_enabled() {
         return Ok(AgentIpcStream::Tcp(tcp));
     }
@@ -856,10 +864,7 @@ fn establish_connection() -> Result<AgentIpcStream, std::io::Error> {
         let addr = std::env::var("AMUD_TCP_ADDR").unwrap_or_else(|_| "127.0.0.1:8050".to_string());
         println!("Connecting via TCP to {addr}");
         let tcp = std::net::TcpStream::connect(&addr)?;
-        let host = addr
-            .rsplit_once(':')
-            .map(|(h, _)| h)
-            .unwrap_or("localhost");
+        let host = addr.rsplit_once(':').map(|(h, _)| h).unwrap_or("localhost");
         wrap_tcp_maybe_tls(tcp, host)
     }
 

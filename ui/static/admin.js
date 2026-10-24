@@ -146,7 +146,7 @@
         container.appendChild(line2);
     }
 
-    function amudUploadImage(file, onSuccess, onError) {
+    async function amudUploadImage(file, onSuccess, onError) {
         if (!file) return;
         if (file.size > 5 * 1024 * 1024) {
             const err = new Error('File size exceeds 5MB limit!');
@@ -156,22 +156,19 @@
         }
         const formData = new FormData();
         formData.append('image', file);
-        fetch('/admin/upload', {
-            method: 'POST',
-            headers: amudCsrfHeaders(),
-            body: formData
-        })
-            .then(res => {
-                if (!res.ok) return res.text().then(text => { throw new Error(text); });
-                return res.json();
-            })
-            .then(data => {
-                if (onSuccess) onSuccess(data.url);
-            })
-            .catch(err => {
-                if (onError) onError(err);
-                else alert('Upload failed: ' + err.message);
+        try {
+            const res = await fetch('/admin/upload', {
+                method: 'POST',
+                headers: amudCsrfHeaders(),
+                body: formData
             });
+            if (!res.ok) throw new Error(await res.text());
+            const data = await res.json();
+            if (onSuccess) onSuccess(data.url);
+        } catch (err) {
+            if (onError) onError(err);
+            else alert('Upload failed: ' + err.message);
+        }
     }
 
     function handleFileUpload(event, type) {

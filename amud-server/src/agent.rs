@@ -528,9 +528,10 @@ fn load_tls_acceptor() -> Option<tokio_rustls::TlsAcceptor> {
     };
 
     let mut cert_reader = std::io::Cursor::new(cert_bytes);
-    let certs: Vec<rustls::pki_types::CertificateDer<'static>> = rustls_pemfile::certs(&mut cert_reader)
-        .filter_map(|r| r.ok())
-        .collect();
+    let certs: Vec<rustls::pki_types::CertificateDer<'static>> =
+        rustls_pemfile::certs(&mut cert_reader)
+            .filter_map(|r| r.ok())
+            .collect();
     if certs.is_empty() {
         eprintln!("AMUD_AGENT_TLS_CERT contained no certificates.");
         return None;

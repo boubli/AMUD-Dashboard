@@ -95,7 +95,9 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --lib
 ```
 
-GitHub Actions also runs **`cargo audit`**. SonarCloud is configured via `sonar-project.properties` (exclusions for docs theme mirrors and localized READMEs); it is not a required local gate.
+GitHub Actions also runs **`cargo audit`**.
+
+**SonarCloud (forever config):** `sonar-project.properties` excludes theme packs / theme-guards (intentional `!important` + decorative motion) and ignores those CSS rules on `style.css` / docs CSS modules. Do **not** hand-fix hundreds of theme `!important`s after each push — update the Sonar config instead if a new intentional path shows up.
 
 ---
 

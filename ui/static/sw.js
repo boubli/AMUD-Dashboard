@@ -74,15 +74,23 @@ function networkFirst(request) {
   });
 }
 
+function fetchAndPut(cache, request, fallback) {
+  return fetch(request)
+    .then(function (response) {
+      return putIfOk(cache, request, response);
+    })
+    .catch(function () { return fallback; });
+}
+
 function staleWhileRevalidate(request) {
   return caches.open(CACHE_NAME).then(function (cache) {
     return cache.match(request).then(function (cached) {
-      const networkFetch = fetch(request)
-        .then(function (response) {
-          return putIfOk(cache, request, response);
-        })
-        .catch(function () { return cached; });
-      return cached || networkFetch;
+      const networkFetch = fetchAndPut(cache, request, cached);
+      if (cached) {
+        void networkFetch;
+        return cached;
+      }
+      return networkFetch;
     });
   });
 }
@@ -118,18 +126,20 @@ globalThis.addEventListener('install', event => {
   );
 });
 
+function deleteStaleCaches() {
+  return caches.keys().then(function (keys) {
+    return Promise.all(
+      keys
+        .filter(function (key) { return key !== CACHE_NAME; })
+        .map(function (key) { return caches.delete(key); })
+    );
+  });
+}
+
 globalThis.addEventListener('activate', event => {
   event.waitUntil(
     purgeLayoutCssFromAllCaches()
-      .then(function () {
-        return caches.keys().then(function (keys) {
-          return Promise.all(
-            keys
-              .filter(function (key) { return key !== CACHE_NAME; })
-              .map(function (key) { return caches.delete(key); })
-          );
-        });
-      })
+      .then(deleteStaleCaches)
       .then(function () { return globalThis.clients.claim(); })
   );
 });
@@ -143,11 +153,7 @@ globalThis.addEventListener('fetch', event => {
   }
 
   if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request).catch(() =>
-        caches.match('/static/offline.html').then((cached) => cached || Response.error())
-      )
-    );
+    event.respondWith(fetch(request).catch(offlineFallback));
     return;
   }
 
@@ -161,15 +167,29 @@ globalThis.addEventListener('fetch', event => {
       return;
     }
     event.respondWith(
-      caches.match(request).then(cached => {
-        return cached || fetch(request).then(response => {
-          const copy = response.clone();
-          void caches.open(CACHE_NAME)
-            .then(cache => cache.put(request, copy))
-            .catch(() => undefined);
-          return response;
-        });
+      caches.match(request).then(function (cached) {
+        return cached || fetchAndCacheStatic(request);
       })
     );
   }
 });
+
+function offlineFallback() {
+  return caches.match('/static/offline.html').then(function (cached) {
+    return cached || Response.error();
+  });
+}
+
+function putStaticCopy(request, response) {
+  const copy = response.clone();
+  return caches.open(CACHE_NAME)
+    .then(function (cache) { return cache.put(request, copy); })
+    .catch(function () { return undefined; });
+}
+
+function fetchAndCacheStatic(request) {
+  return fetch(request).then(function (response) {
+    void putStaticCopy(request, response);
+    return response;
+  });
+}
