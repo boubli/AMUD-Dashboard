@@ -173,7 +173,7 @@
 
     function handleFileUpload(event, type) {
         const file = event.target.files[0];
-        amudUploadImage(file, function (url) {
+        void amudUploadImage(file, function (url) {
             if (type === 'logo') {
                 const el = document.querySelector('input[name="app_logo"]');
                 if (el) { el.value = url; el.dispatchEvent(new Event('input')); }
