@@ -716,9 +716,9 @@
         if (useTz) dateOptions.timeZone = cfg.timezone;
         let rawDate;
         try {
-            rawDate = now.toLocaleDateString('en-US', dateOptions);
+            rawDate = now.toLocaleDateString((global.amudI18n?.locale || 'en-US'), dateOptions);
         } catch (err) {
-            rawDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            rawDate = now.toLocaleDateString((global.amudI18n?.locale || 'en-US'), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
         const parts = rawDate.split(', ');
         if (parts.length >= 3) {
@@ -750,7 +750,7 @@
         }
         const greetingTextEl = document.getElementById('greeting-text');
         if (greetingTextEl) {
-            greetingTextEl.textContent = greeting;
+            greetingTextEl.textContent = global.amudI18n ? global.amudI18n.t(greeting) : greeting;
         }
     }
 

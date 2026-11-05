@@ -368,7 +368,7 @@ async fn render_page(
         String::new()
     };
 
-    let mut result = index_tmpl
+    let mut result = crate::i18n::render_template(index_tmpl, &branding.ui_language)
         .replace("/* ROOT_CSS */", &root_css)
         .replace("{{app_name}}", &safe_app_name)
         .replace("{{tagline}}", &safe_tagline)
@@ -398,6 +398,10 @@ async fn render_page(
         .replace("<!-- SUPPORT_SECTION -->", &support_html)
         .replace("<!-- AUTH_BUTTONS -->", &auth_buttons)
         .replace("{{username}}", &escape_html(username))
+        .replace(
+            "{{is_anonymous}}",
+            if session.is_none() { "true" } else { "false" },
+        )
         .replace("{{weather_latitude}}", &safe_weather_lat)
         .replace("{{weather_longitude}}", &safe_weather_lon)
         .replace("{{weather_temp_unit}}", &escape_html(weather_temp_unit))

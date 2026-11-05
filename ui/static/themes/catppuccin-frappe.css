@@ -1,0 +1,78 @@
+/* Catppuccin Frappé — https://catppuccin.com/palette/ */
+/* Self-contained for both inline settings overrides and gallery downloads. */
+
+:root[data-theme-id="catppuccin-frappe"] {
+    color-scheme: dark;
+    --theme-bg-fallback: #303446;
+    --bg-color: #303446;
+    --theme-input-bg: #292c3c;
+    --theme-sidebar-bg: rgba(41,44,60,.95);
+    --theme-on-accent: #232634;
+    --theme-body-stack: radial-gradient(ellipse at 12% 0%, rgba(202,158,230,.09), transparent 52%), radial-gradient(ellipse at 95% 90%, rgba(140,170,238,.07), transparent 50%), linear-gradient(145deg, #303446, #292c3c);
+    --theme-card-r: 65;
+    --theme-card-g: 69;
+    --theme-card-b: 89;
+    --bg-card: rgba(65,69,89,var(--glass-opacity));
+    --accent-color: #ca9ee6;
+    --accent-glow: rgba(202,158,230,.18);
+    --text-primary: #c6d0f5;
+    --text-secondary: #b5bfe2;
+    --text-muted: #a5adce;
+    --border-card: rgba(186,187,241,.18);
+    --border-hover: #babbf1;
+    --success: #a6d189;
+    --success-bg: rgba(166,209,137,.12);
+    --danger: #e78284;
+    --danger-bg: rgba(231,130,132,.12);
+    --radius-xl: 20px;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+}
+[data-theme-id="catppuccin-frappe"] body { background-color: var(--theme-bg-fallback); color-scheme: inherit; }
+[data-theme-id="catppuccin-frappe"] .wallpaper-bg { background-image: var(--theme-body-stack) !important; }
+[data-theme-id="catppuccin-frappe"] .wallpaper-overlay { background: transparent !important; }
+[data-theme-id="catppuccin-frappe"] .settings-sidebar { background: var(--theme-sidebar-bg); }
+[data-theme-id="catppuccin-frappe"] .app-card { border-color: var(--border-card); }
+[data-theme-id="catppuccin-frappe"] .app-card:hover { border-color: var(--border-hover); }
+[data-theme-id="catppuccin-frappe"] .btn-primary,
+[data-theme-id="catppuccin-frappe"] .filter-tab.active { color: var(--theme-on-accent) !important; background: var(--accent-color) !important; border-color: var(--accent-color) !important; }
+[data-theme-id="catppuccin-frappe"] .btn-secondary,
+[data-theme-id="catppuccin-frappe"] .form-control,
+[data-theme-id="catppuccin-frappe"] select,
+[data-theme-id="catppuccin-frappe"] input:not([type="checkbox"]):not([type="range"]):not([type="color"]) { background-color: var(--theme-input-bg); color: var(--text-primary); border-color: var(--border-card); }
+[data-theme-id="catppuccin-frappe"] .search-input { background: transparent !important; }
+[data-theme-id="catppuccin-frappe"] .clock-time { color: var(--border-hover); }
+[data-theme-id="catppuccin-frappe"] .brand-logo { color: var(--accent-color); }
+[data-theme-id="catppuccin-frappe"] .metric-label { color: var(--text-muted); }
+[data-theme-id="catppuccin-frappe"] .glass-panel { box-shadow: 0 8px 26px rgba(35,38,52,.16); }
+[data-theme-id="catppuccin-frappe"] .status-online { color: var(--success); }
+[data-theme-id="catppuccin-frappe"] .status-offline { color: var(--danger); }
+@media (prefers-reduced-motion: reduce) {
+    [data-theme-id="catppuccin-frappe"] * { scroll-behavior: auto !important; }
+}
+
+/* Catppuccin Latte provides the matching accessible light-mode variant. */
+:root[data-theme="light"][data-theme-id="catppuccin-frappe"] {
+    color-scheme: light;
+    --theme-bg-fallback: #eff1f5;
+    --bg-color: #eff1f5;
+    --theme-body-stack: linear-gradient(145deg, #eff1f5, #e6e9ef);
+    --theme-card-r: 204;
+    --theme-card-g: 208;
+    --theme-card-b: 218;
+    --theme-input-bg: #eff1f5;
+    --theme-sidebar-bg: rgba(230,233,239,.95);
+    --theme-on-accent: #eff1f5;
+    --accent-color: #8839ef;
+    --accent-glow: rgba(136,57,239,.15);
+    --text-primary: #4c4f69;
+    --text-secondary: #5c5f77;
+    --text-muted: #6c6f85;
+    --border-card: rgba(76,79,105,.22);
+    --border-hover: #8839ef;
+    --bg-card: rgba(204,208,218,var(--glass-opacity));
+    --success: #40a02b;
+    --success-bg: rgba(64,160,43,.12);
+    --danger: #d20f39;
+    --danger-bg: rgba(210,15,57,.12);
+}

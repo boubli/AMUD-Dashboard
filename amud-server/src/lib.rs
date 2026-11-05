@@ -14,6 +14,7 @@ pub mod homarr_import;
 pub mod homelab;
 pub mod homepage_import;
 pub mod http_client;
+mod i18n;
 pub mod integration_cache;
 pub mod integration_coordinator;
 pub mod integration_registry;

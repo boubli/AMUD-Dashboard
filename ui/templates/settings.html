@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="{{theme_mode}}" data-theme-id="{{active_theme_id}}">
+<html lang="{{ui_language}}" data-theme="{{theme_mode}}" data-theme-id="{{active_theme_id}}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -23,6 +23,8 @@
     <script src="/static/integration-wizard.js?v={{app_version}}"></script>
     <script id="amud-theme-config" type="application/json">{{theme_scheduler_config}}</script>
     <script src="/static/theme-scheduler.js?v={{app_version}}"></script>
+    <!-- I18N_CONFIG -->
+    <script src="/static/i18n.js?v={{app_version}}"></script>
     <script src="/static/theme-engine.js?v={{app_version}}"></script>
     <script src="/static/theme-picker.js?v={{app_version}}"></script>
     <script src="/static/pwa-install.js?v={{app_version}}"></script>
@@ -730,6 +732,18 @@
                     <div id="appearance-settings-panel" x-show="activeTab === 'appearance'" x-transition.opacity style="display:none;">
                         <h1 class="settings-page-title">Appearance</h1>
                         <p class="settings-page-subtitle">Colors, glass effects, layout density, bundled themes, and custom CSS. Branding (name, logo, wallpaper) lives in the Branding tab.</p>
+
+                        <section class="settings-block">
+                            <h3>{{t:Interface language}}</h3>
+                            <div class="form-group">
+                                <label for="setting-ui-language">{{t:Language}}</label>
+                                <select id="setting-ui-language" name="ui_language" class="form-control" @change="unsavedChanges = true">
+                                    <option value="en" {{ui_language_en_selected}}>English</option>
+                                    <option value="fr" {{ui_language_fr_selected}}>Français</option>
+                                </select>
+                                <p class="help-text">{{t:Choose the language used by the dashboard, sign-in page, and settings.}}</p>
+                            </div>
+                        </section>
 
                         <div class="appearance-layout">
                             <section class="settings-block appearance-preview-section">

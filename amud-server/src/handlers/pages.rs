@@ -94,7 +94,7 @@ pub async fn settings_page_handler(
         .unwrap_or("0");
     let feeds_enabled_flag = crate::settings::feeds_enabled(&settings);
 
-    let mut result = settings_tmpl
+    let mut result = crate::i18n::render_template(settings_tmpl, &branding.ui_language)
         .replace("/* ROOT_CSS */", &root_css)
         .replace("{{app_name}}", app_name)
         .replace("{{app_version}}", app_version)
