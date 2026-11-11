@@ -56,12 +56,6 @@ pub(crate) fn favicon_url_for_host(host: &str) -> String {
     format!("/api/rss/favicon?host={host}")
 }
 
-/// Legacy helper — prefer [`auto_feed_icon_url`] for new RSS feeds.
-#[allow(dead_code)]
-pub(crate) fn guess_feed_icon_key(_name: &str, site_url: &str, feed_url: &str) -> String {
-    auto_feed_icon_url(site_url, feed_url)
-}
-
 pub(crate) fn host_from_url(url: &str) -> String {
     let trimmed = url.trim();
     if trimmed.is_empty() {

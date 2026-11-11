@@ -21,5 +21,3 @@ docs/.docusaurus/
 docs/node_modules/
 
 docs/.gitignore
-
-/amud local/

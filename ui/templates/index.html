@@ -1135,9 +1135,7 @@
                 ctrlContainer.classList.remove('loading');
                 btns.forEach(btn => btn.disabled = false);
                 setButtonLoading(button, false);
-                if (ok && data.success) {
-                    console.log(`Action ${action} confirmed for ${provider} container ${id}`);
-                } else {
+                if (!ok || !data.success) {
                     alert(data.error || 'Failed to trigger action.');
                 }
             })
@@ -1171,8 +1169,6 @@
             .then(({ ok, data }) => {
                 setButtonLoading(button, false);
                 if (ok && data.success) {
-                    console.log(`Wake packet sent for app ${id}`);
-                    // Flash success
                     const icon = button.querySelector('i');
                     if (icon) {
                         icon.style.color = 'var(--success)';

@@ -171,7 +171,6 @@ pub struct Webhook {
     pub(crate) is_active: i32,
 }
 
-#[allow(dead_code)]
 pub struct AppState {
     pub db: Arc<Mutex<Connection>>,
     pub sessions: Arc<RwLock<HashMap<String, Session>>>,

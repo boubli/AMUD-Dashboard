@@ -40,22 +40,6 @@ pub(crate) fn opnsense_basic_auth(raw: &str) -> String {
     trimmed.to_string()
 }
 
-#[allow(dead_code)]
-pub(crate) fn format_duration_secs(secs: u64) -> String {
-    if secs == 0 {
-        return "—".to_string();
-    }
-    let days = secs / 86400;
-    let hours = (secs % 86400) / 3600;
-    if days > 0 {
-        format!("{days}d {hours}h")
-    } else if hours > 0 {
-        format!("{hours}h")
-    } else {
-        format!("{}m", secs / 60)
-    }
-}
-
 pub(crate) fn json_u64(v: &Value, keys: &[&str]) -> u64 {
     keys.iter()
         .find_map(|k| {
@@ -154,13 +138,6 @@ mod tests {
             .decode(encoded)
             .unwrap();
         assert_eq!(decoded, b"mykey:mysecret");
-    }
-
-    #[test]
-    fn format_duration_secs_formats_days_and_hours() {
-        assert_eq!(format_duration_secs(90061), "1d 1h");
-        assert_eq!(format_duration_secs(3600), "1h");
-        assert_eq!(format_duration_secs(0), "—");
     }
 
     #[test]

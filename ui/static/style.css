@@ -685,12 +685,6 @@ body::-webkit-scrollbar-button {
     object-fit: contain;
 }
 
-.stream-host-metrics {
-    margin-top: 0.15rem;
-    padding-top: 0.65rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
 .stream-player {
     display: flex;
     flex-direction: column;

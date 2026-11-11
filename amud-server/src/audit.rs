@@ -162,15 +162,6 @@ fn rebuild_audit_log_table(db: &Connection) -> Result<(), rusqlite::Error> {
     ))
 }
 
-#[allow(dead_code)]
-pub(crate) fn list_recent_audit(
-    db: &Connection,
-    limit: i64,
-) -> Result<Vec<serde_json::Value>, String> {
-    let (entries, _) = list_audit_page(db, limit, 0, AuditScope::All)?;
-    Ok(entries)
-}
-
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum AuditScope {
     All,

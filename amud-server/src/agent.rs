@@ -700,28 +700,6 @@ pub(crate) fn agent_config_for_node(
     agent_config_payload(&cache, pve_token_override, mode, &linked, tag)
 }
 
-#[allow(dead_code)]
-pub(crate) fn agent_config_for_state(
-    state: &AppState,
-    pve_token_override: Option<&str>,
-) -> serde_json::Value {
-    let default_tag = {
-        let cache = state.settings_cache.read().unwrap();
-        cache
-            .get("agent_node_tag")
-            .cloned()
-            .unwrap_or_else(|| "Local".into())
-    };
-    agent_config_for_node(state, &default_tag, pve_token_override)
-}
-
-#[allow(dead_code)]
-pub(crate) fn pve_config_payload(token: &str) -> serde_json::Value {
-    let mut settings = std::collections::HashMap::new();
-    settings.insert("pve_api_token".to_string(), token.to_string());
-    agent_config_payload(&settings, Some(token), "active", &[], "Local")
-}
-
 pub(crate) fn push_agent_config(state: &Arc<AppState>, pve_token_override: Option<&str>) {
     let sessions: Vec<(String, AgentCommandHandle)> = state
         .agent_sessions
