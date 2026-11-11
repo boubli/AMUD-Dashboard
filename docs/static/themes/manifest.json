@@ -115,6 +115,20 @@
       "layoutCss": "/static/theme-layouts/cafe.css"
     },
     {
+      "id": "catppuccin-frappe",
+      "name": "Catppuccin Frappé",
+      "file": "catppuccin-frappe.css",
+      "category": "classic",
+      "tags": [
+        "pastel"
+      ],
+      "preview": "/static/themes/previews/catppuccin-frappe.svg",
+      "usesWallpaper": false,
+      "uiProfile": "cafe",
+      "iconPack": "/static/themes/icons/catppuccin-mocha/pack.json",
+      "layoutCss": "/static/theme-layouts/cafe.css"
+    },
+    {
       "id": "gruvbox-dark",
       "name": "Gruvbox Dark",
       "file": "gruvbox-dark.css",

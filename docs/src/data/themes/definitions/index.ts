@@ -2,6 +2,7 @@ import auroraBorealis from './aurora-borealis';
 import brutalistMono from './brutalist-mono';
 import blueprintTech from './blueprint-tech';
 import catppuccinMocha from './catppuccin-mocha';
+import catppuccinFrappe from './catppuccin-frappe';
 import cottonCandy from './cotton-candy';
 import crimsonFlare from './crimson-flare';
 import cyberpunkNeon from './cyberpunk-neon';
@@ -49,6 +50,7 @@ const THEME_DEFINITIONS: ThemeDefinition[] = [
   nord,
   cyberpunkNeon,
   catppuccinMocha,
+  catppuccinFrappe,
   gruvboxDark,
   tokyoNight,
   oneDark,

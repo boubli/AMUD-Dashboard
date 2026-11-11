@@ -55,6 +55,8 @@ pub async fn settings_handler(
                 sanitize_custom_css(&val)
             } else if key == "ha_url" {
                 sanitize_integration_url(&val)
+            } else if key == "ui_language" {
+                crate::i18n::sanitize_language(&val).to_string()
             } else if key == "theme_mode" {
                 sanitize_theme_mode(&val)
             } else if key == "theme_scheduler" {

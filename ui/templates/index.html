@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="{{theme_mode}}" data-theme-id="{{active_theme_id}}" data-greeting-animations="{{greeting_animations_enabled}}">
+<html lang="{{ui_language}}" data-theme="{{theme_mode}}" data-theme-id="{{active_theme_id}}" data-greeting-animations="{{greeting_animations_enabled}}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -25,6 +25,8 @@
     <script src="/static/admin.js"></script>
     <script id="amud-theme-config" type="application/json">{{theme_scheduler_config}}</script>
     <script src="/static/theme-scheduler.js?v={{app_version}}"></script>
+    <!-- I18N_CONFIG -->
+    <script src="/static/i18n.js?v={{app_version}}"></script>
     <script src="/static/theme-engine.js?v={{app_version}}"></script>
     <script id="amud-live-config" type="application/json">{"isAdmin":{{is_admin}},"hideTelemetry":{{hide_telemetry}},"totalApps":{{total_apps}},"pageSize":50}</script>
     <script id="amud-clock-config" type="application/json">{{clock_config_json}}</script>
@@ -96,7 +98,7 @@
         <!-- Hero Greeting & Clock Widget -->
         <section class="hero-section">
             <div class="greeting-box greeting-widget">
-                <h2 class="greeting-title"><span id="greeting-text">Working late</span>, <span class="username-highlight" id="username-display">{{username}}</span></h2>
+                <h2 class="greeting-title"><span id="greeting-text">Working late</span>, <span class="username-highlight" id="username-display" data-i18n-guest="{{is_anonymous}}">{{username}}</span></h2>
                 <p class="greeting-subtitle" id="live-date">Monday · June 1, 2026</p>
             </div>
             <div class="hero-widgets">

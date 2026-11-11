@@ -99,6 +99,7 @@ pub(crate) struct BrandingVars {
     pub bento_radius: String,
     pub grid_columns: Option<String>,
     pub theme_mode: String,
+    pub ui_language: String,
 }
 
 pub(crate) fn branding_from_settings(settings: &HashMap<String, String>) -> BrandingVars {
@@ -125,6 +126,13 @@ pub(crate) fn branding_from_settings(settings: &HashMap<String, String>) -> Bran
         .map(|cols| cols.to_string());
 
     BrandingVars {
+        ui_language: crate::i18n::sanitize_language(
+            settings
+                .get("ui_language")
+                .map(String::as_str)
+                .unwrap_or("en"),
+        )
+        .to_string(),
         app_name: settings
             .get("app_name")
             .cloned()
@@ -416,6 +424,7 @@ pub(crate) fn build_web_manifest_json(branding: &BrandingVars) -> String {
 /// Shared placeholders for guest-facing pages (login, etc.) that should match dashboard branding.
 pub(crate) fn apply_shared_branding(mut html: String, opts: &BrandingRenderOptions<'_>) -> String {
     let branding = opts.branding;
+    html = crate::i18n::render_template(&html, &branding.ui_language);
     let root_css = build_root_css(branding);
     let safe_app_name = escape_html(&branding.app_name);
     let tagline = branding
@@ -434,7 +443,11 @@ pub(crate) fn apply_shared_branding(mut html: String, opts: &BrandingRenderOptio
         .replace("{{accent_color}}", &safe_accent)
         .replace("{{theme_mode}}", &safe_theme)
         .replace("{{active_theme_id}}", &escape_html(opts.active_theme_id))
-        .replace("{{custom_css}}", opts.custom_css);
+        .replace("{{custom_css}}", opts.custom_css)
+        .replace(
+            "{{app_version}}",
+            option_env!("GIT_TAG").unwrap_or(env!("CARGO_PKG_VERSION")),
+        );
 
     html = apply_branding_head(html, branding);
     html = apply_app_logo_template(html, &branding.app_logo, &branding.app_name);

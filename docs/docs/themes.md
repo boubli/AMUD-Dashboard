@@ -124,3 +124,11 @@ Advanced themes can also style `.glass-panel`, `.header-title`, `body::before`, 
 4. Add an entry to `ui/static/themes/manifest.json`
 
 After merging to `main`, the theme appears on GitHub Pages and ships offline with the next AMUD release.
+
+### Catppuccin Frappé
+
+Choose **Catppuccin Frappé** in **Settings → Appearance → Theme Gallery** for
+muted blue-gray surfaces, pastel text, and mauve accents from the
+[official Catppuccin palette](https://catppuccin.com/palette/). The theme uses
+an offline CSS gradient rather than a wallpaper download. Its light-mode
+variant uses the matching Catppuccin Latte palette.

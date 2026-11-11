@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="{{theme_mode}}" data-theme-id="{{active_theme_id}}">
+<html lang="{{ui_language}}" data-theme="{{theme_mode}}" data-theme-id="{{active_theme_id}}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>{{app_name}} - Sign In</title>
+    <title>{{app_name}} - {{t:Sign In}}</title>
     <link rel="icon" href="{{favicon_url}}" type="{{favicon_type}}">
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="{{accent_color}}">
@@ -15,7 +15,9 @@
     <link rel="stylesheet" href="/static/style.css?v={{app_version}}">
     <script id="amud-theme-config" type="application/json">{{theme_scheduler_config}}</script>
     <script src="/static/theme-scheduler.js"></script>
-    <script src="/static/theme-engine.js"></script>
+    <!-- I18N_CONFIG -->
+    <script src="/static/i18n.js?v={{app_version}}"></script>
+    <script src="/static/theme-engine.js?v={{app_version}}"></script>
 
     <style>
         :root {
@@ -56,33 +58,33 @@
 
             <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
                 <div class="brand-logo login-brand-logo">{{if app_logo}}<img src="{{app_logo}}" alt="{{app_name}}" class="brand-logo-img">{{end}}</div>
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: -0.03em;">Sign In</h2>
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; letter-spacing: -0.03em;">{{t:Sign In}}</h2>
                 <p style="font-size: 0.8rem; color: var(--text-secondary);">{{tagline}}</p>
             </div>
 
             <form action="/login" method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
                 <div id="error-message" style="display: none; background: #991b1b; color: #ffffff; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; text-align: center; border: 1px solid #b91c1c;">
-                    Invalid username or password
+                    {{t:Invalid username or password}}
                 </div>
 
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                    <label for="username">{{t:Username}}</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="{{t:Username}}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">{{t:Password}}</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
-                    Sign In
+                    {{t:Sign In}}
                 </button>
 
                 {{oidc_sso_block}}
 
                 <a href="/" style="text-align: center; font-size: 0.8rem; color: var(--text-secondary); text-decoration: none; display: block; margin-top: 0.25rem;">
-                    Return to Dashboard as Guest
+                    {{t:Return to Dashboard as Guest}}
                 </a>
             </form>
         </div>

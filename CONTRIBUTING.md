@@ -115,3 +115,22 @@ Repo secret required: `SONAR_TOKEN` (SonarCloud user token with analyze permissi
 ## 📊 Testing Metrics Locally
 
 If you run the agent on your local machine, it will capture your host's CPU, RAM, and disk metrics. However, it will skip Proxmox VE (`pve`) or Docker container telemetry if they are not running or configured on your development machine.
+
+## Interface translations
+
+The interface language is configured under **Settings → Appearance → Interface
+language**. English remains the default; French is available as an opt-in.
+The choice applies to the dashboard, sign-in form, and settings.
+
+French strings live in `ui/static/locales/fr.json`. The server embeds the
+selected catalog as JSON and renders explicit `{{t:English label}}` template
+markers before inserting user data. Sign-in labels therefore work even when
+JavaScript is disabled. Dynamic interface labels are translated by
+`ui/static/i18n.js`; unknown strings fall back to English. Technical integration
+help is not yet fully translated. Application names, descriptions, editable
+content, and form values must remain unchanged. Use `data-i18n-skip` around
+custom content that can contain words from the translation catalog. When one
+English word needs two translations, add `data-i18n-context="name"` to the
+element and a `"name:Word"` entry to the catalog (for example `preset:Light`).
+
+Translation regression tests are part of `cargo test --workspace --lib`.

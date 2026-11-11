@@ -3,6 +3,7 @@ use std::collections::HashMap;
 pub(crate) fn get_default_settings() -> HashMap<&'static str, &'static str> {
     let mut s = HashMap::new();
     s.insert("app_name", "AMUD");
+    s.insert("ui_language", "en");
     s.insert("tagline", "Homelab Operations Cockpit");
     s.insert("accent_color", "#cf6427");
     s.insert("custom_bg_url", "/static/wallpaper.png");
