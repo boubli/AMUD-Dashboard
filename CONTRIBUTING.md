@@ -97,18 +97,16 @@ cargo test --workspace --lib
 
 GitHub Actions also runs **`cargo audit`** and a **SonarCloud** scan (job `sonar` in `.github/workflows/ci.yml`).
 
-### SonarCloud (keep Maintainability quiet forever)
+### SonarCloud
 
 | File | Used by |
 |------|---------|
-| [`.sonarcloud.properties`](.sonarcloud.properties) | SonarCloud **Automatic Analysis** (if still enabled) |
-| [`sonar-project.properties`](sonar-project.properties) | **CI** Sonar job |
+| [`.sonarcloud.properties`](.sonarcloud.properties) | SonarCloud Automatic Analysis |
+| [`sonar-project.properties`](sonar-project.properties) | The CI `sonar` job |
 
-Both exclude theme packs / theme-guards (intentional `!important` + decorative motion) and ignore those CSS rules on `style.css`. Do **not** hand-fix hundreds of theme `!important`s after each push — extend the exclusion lists instead.
+Both files exclude the theme packs and `theme-guards.css`, and ignore the `!important` and reduced-motion rules on `style.css`. Themes use `!important` on purpose, so when Sonar flags a new theme file, add it to the exclusions in both files instead of rewriting the CSS.
 
-**One-time (SonarCloud UI):** after the CI `sonar` job is green, open **Administration → Analysis Method** and turn **off Automatic Analysis** so CI is the only scanner (otherwise Auto Analysis ignores `sonar-project.properties` and theme noise comes back).
-
-Repo secret required: `SONAR_TOKEN` (SonarCloud user token with analyze permission). Until it is set, and on pull requests from forks (which never receive secrets), the `sonar` job skips the scan with a warning instead of failing CI.
+The `sonar` job needs the `SONAR_TOKEN` repo secret. Without it, and on pull requests from forks, the job skips the scan with a warning. Once the job passes with the token, turn off Automatic Analysis in SonarCloud (**Administration → Analysis Method**) so the project is only scanned once.
 
 ---
 

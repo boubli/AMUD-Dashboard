@@ -55,11 +55,8 @@ jobs:
       - name: cargo audit
         uses: actions-rust-lang/audit@72c09e02f132669d52284a3323acdb503cfc1a24 # v1.2.7
 
-  # Authoritative SonarCloud analysis (uses sonar-project.properties).
-  # After first green run: SonarCloud → Administration → Analysis Method → turn OFF Automatic Analysis
-  # so this job is the only scanner (avoids double analysis / ignored exclusions).
-  # The scan needs the SONAR_TOKEN repo secret. It is skipped (not failed) when the
-  # secret is missing, and on fork pull requests, which never receive secrets.
+  # SonarCloud scan, configured by sonar-project.properties. Skipped when the
+  # SONAR_TOKEN secret is missing and on fork pull requests (forks get no secrets).
   sonar:
     runs-on: ubuntu-latest
     needs: [rust, docs]

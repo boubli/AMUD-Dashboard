@@ -33,10 +33,11 @@ pub(crate) fn translate<'a>(raw_language: &str, label: &'a str) -> &'a str {
 /// the sign-in form in a different language from the dashboard.
 pub(crate) fn render_template(template: &str, raw_language: &str) -> String {
     let language = sanitize_language(raw_language);
+    let english = HashMap::new();
     let messages = if language == "fr" {
-        french_catalog().clone()
+        french_catalog()
     } else {
-        HashMap::new()
+        &english
     };
     let mut html = String::with_capacity(template.len());
     let mut remaining = template;
