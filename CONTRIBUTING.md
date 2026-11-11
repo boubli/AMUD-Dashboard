@@ -95,7 +95,18 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --lib
 ```
 
-GitHub Actions also runs **`cargo audit`** and a **SonarCloud** scan (job `sonar` in `.github/workflows/ci.yml`).
+GitHub Actions also runs a **SonarCloud** scan (job `sonar` in `.github/workflows/ci.yml`) and **`cargo audit`**.
+
+### Dependency audit
+
+`cargo audit` lives in its own workflow, [`.github/workflows/audit.yml`](.github/workflows/audit.yml). It runs once a day and whenever `Cargo.toml` or `Cargo.lock` changes, so a newly published advisory does not fail CI on unrelated work.
+
+When it fails, the log names the crate and the first fixed version. Bump the dependency, then check locally:
+
+```bash
+cargo install cargo-audit
+cargo audit
+```
 
 ### SonarCloud
 
@@ -106,7 +117,14 @@ GitHub Actions also runs **`cargo audit`** and a **SonarCloud** scan (job `sonar
 
 Both files exclude the theme packs and `theme-guards.css`, and ignore the `!important` and reduced-motion rules on `style.css`. Themes use `!important` on purpose, so when Sonar flags a new theme file, add it to the exclusions in both files instead of rewriting the CSS.
 
-The `sonar` job needs the `SONAR_TOKEN` repo secret. Without it, and on pull requests from forks, the job skips the scan with a warning. Once the job passes with the token, turn off Automatic Analysis in SonarCloud (**Administration → Analysis Method**) so the project is only scanned once.
+The `sonar` job needs the `SONAR_TOKEN` repo secret. Without it, and on pull requests from forks, the job skips the scan with a warning and Automatic Analysis keeps scanning the project.
+
+SonarCloud rejects a CI scan while Automatic Analysis is on, so switch in this order:
+
+1. In SonarCloud, turn off Automatic Analysis (**Administration → Analysis Method**).
+2. Add the `SONAR_TOKEN` secret to the GitHub repository (**Settings → Secrets and variables → Actions**).
+
+The project key in `sonar-project.properties` is `boubli_AMUD-Dahsboard`. The typo is part of the key SonarCloud assigned, so leave it as it is.
 
 ---
 

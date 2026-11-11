@@ -24,7 +24,7 @@ if ((Test-Path "docs") -and (Test-Path "docs/package-lock.json")) {
     Write-Host "==> docs build"
     Push-Location docs
     try {
-        npm ci
+        npm ci --ignore-scripts
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         npm run build
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
