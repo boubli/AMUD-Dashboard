@@ -333,7 +333,7 @@ systemctl restart amud-agent
 
 ---
 
-## Unraid: `.amud-secrets-key` permission denied
+## Unraid: `.amud-secrets-key` permission denied {#unraid-secrets-key-permission-denied}
 
 **Symptom:** Dashboard container exits on first boot with:
 

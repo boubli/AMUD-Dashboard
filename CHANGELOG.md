@@ -8,6 +8,35 @@ All notable changes to AMUD Dashboard are documented here and on the docs site.
 
 ---
 
+## [1.9.5](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.5) — 2026-10-04
+
+Nodes polish, theme icon styles, and a clearer Add App button.
+
+### Added
+- **Settings → Infrastructure → Agents / Nodes** — live node table, VPN/TLS copy snippets, docs links
+- **Multi-node docs** — multi-page Multi-node agents section on GitHub Pages
+- **Theme icon styles** — five icon families with per-theme glyph aliases
+
+### Changed
+- **Nodes strip** — hidden on the dashboard until two or more agents are connected
+- **Add App** — larger primary button next to Settings / Sign Out
+- Release notes template includes Native / Proxmox, Docker, and Unraid upgrade steps
+
+---
+
+## [1.9.4](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.4) — 2026-09-30
+
+Multi-node agents: one `amud-server`, many `amud-agent` hosts.
+
+### Added
+- **Multi-node agents** — sessions keyed by `node_tag`
+- **Remote TCP** — `AMUD_AGENT_TCP_LISTEN` on the server; `AMUD_SERVER_ADDR` + required `AMUD_NODE_TAG` on remote agents (the Unix socket stays for co-located agents)
+- **Optional TLS** — `AMUD_AGENT_TLS` with cert/key (server) and CA (agent); plain TCP kept for VPN/LAN
+- **Nodes strip** — select a host for CPU/RAM/GPU/disk cards; app controls route to the correct agent
+- **Capability profiles** — `host` / `docker` / `proxmox` plus optional `AMUD_PLATFORM` badge
+
+---
+
 ## [1.9.3](https://github.com/boubli/AMUD-Dashboard/releases/tag/v1.9.3) — 2026-09-13
 
 Configurable dashboard clock timezone/format and custom web search engines ([#17](https://github.com/boubli/AMUD-Dashboard/issues/17)).

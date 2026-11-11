@@ -37,3 +37,13 @@ integrations:
   label: Integrations
   permalink: /integrations
   description: Plex, Jellyfin, Home Assistant, and more
+
+release:
+  label: Release
+  permalink: /release
+  description: Release announcements and upgrade notes
+
+pwa:
+  label: PWA
+  permalink: /pwa
+  description: Installable app and mobile layout

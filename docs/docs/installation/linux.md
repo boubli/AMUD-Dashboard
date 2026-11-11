@@ -249,7 +249,7 @@ sudo systemctl restart amud-server amud-agent
 After upgrading:
 
 1. **Hard-refresh the browser** (`Ctrl+Shift+R`) or [clear the PWA cache](../troubleshooting#pwa--browser-cache-issues).
-2. Set `AMUD_SECURE_COOKIES=1` when serving over HTTPS â€” see [Security](../security.md).
+2. Set `AMUD_SECURE_COOKIES=1` when serving over HTTPS — see [Security](../security.md).
 
 ---
 

@@ -13,6 +13,16 @@ title: Changelog
 
 ### Changed
 - **Docs** — [Add a second host (agent only)](./multi-node/connect): Node 1 dashboard → Node 2 agent-only (Docker / Unraid CA / native / Proxmox)
+- **CI** — `cargo audit` moved to its own daily workflow, so a new advisory no longer fails unrelated pushes and pull requests
+
+### Security
+- **SQLite** — `rusqlite` 0.31 → 0.42 (bundled SQLite 3.54.1), which clears [RUSTSEC-2026-0459](https://rustsec.org/advisories/RUSTSEC-2026-0459) in `libsqlite3-sys`
+
+### Fixed
+- **Docs** — garbled dashes and arrows on the Docker, Linux, Proxmox, and Unraid install pages; the Unraid "Step 3b" and `.amud-secrets-key` troubleshooting links now jump to the right section
+
+### Removed
+- Unused server helpers, the never-rendered Proxmox host card, and the old `ui/static/i18n/en.json` stub
 
 ---
 
