@@ -108,7 +108,7 @@ Both exclude theme packs / theme-guards (intentional `!important` + decorative m
 
 **One-time (SonarCloud UI):** after the CI `sonar` job is green, open **Administration → Analysis Method** and turn **off Automatic Analysis** so CI is the only scanner (otherwise Auto Analysis ignores `sonar-project.properties` and theme noise comes back).
 
-Repo secret required: `SONAR_TOKEN` (SonarCloud user token with analyze permission).
+Repo secret required: `SONAR_TOKEN` (SonarCloud user token with analyze permission). Until it is set, and on pull requests from forks (which never receive secrets), the `sonar` job skips the scan with a warning instead of failing CI.
 
 ---
 
