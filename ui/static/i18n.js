@@ -11,7 +11,8 @@
     window.amudI18n = {language, locale: language === 'fr' ? 'fr-FR' : 'en-US', t};
     if (language !== 'fr') return;
     const attributes = ['placeholder', 'title', 'aria-label'];
-    const ignored = 'script,style,code,pre,textarea,[contenteditable="true"],.app-name,.app-description,.app-card-title,.app-card-desc,.feed-card-title,.dashboard-widgets-row,.username-highlight,[data-i18n-skip]';
+    // User-authored content (app, feed, category, device and node names) must never be rewritten.
+    const ignored = 'script,style,code,pre,textarea,[contenteditable="true"],.app-name,.app-description,.app-card-title,.app-card-desc,.feed-card-title,.rss-feed-title,.feed-category-pill,.wol-name,.node-chip-name,.dashboard-widgets-row,.username-highlight,[data-i18n-skip]';
     const normalise = text => text.replace(/\s+/g, ' ').trim();
     function translateText(node) {
         if (!node.parentElement || node.parentElement.closest(ignored)) return;
@@ -20,8 +21,6 @@
             && category.parentElement?.getAttribute('data-filter-section') !== 'all') return;
         if (node.parentElement.tagName === 'OPTION' && !node.parentElement.hasAttribute('value')) return;
         let text = node.nodeValue;
-        if (node.parentElement.closest('.brand-title')) text = text.replace(/\bDASHBOARD\b/g, 'TABLEAU DE BORD');
-        if (node.parentElement.closest('.settings-header-brand')) text = text.replace(/\bSettings\b/g, 'Paramètres');
         text = text.replace(/\bSign Out(?=\s*\()/g, 'Se déconnecter');
         text = text.replace(/\bAgent offline\b/g, 'Agent hors ligne');
         if (node.parentElement.closest('.telemetry-row,.metric-value')) {
@@ -31,7 +30,10 @@
         }
         if (text !== node.nodeValue) node.nodeValue = text;
         const key = normalise(node.nodeValue);
-        const translation = t(key);
+        // data-i18n-context="preset" looks up "preset:Light" first, so one English word can have two meanings.
+        const context = node.parentElement.closest('[data-i18n-context]')?.dataset.i18nContext;
+        const contextKey = context ? context + ':' + key : '';
+        const translation = contextKey && Object.prototype.hasOwnProperty.call(labels, contextKey) ? labels[contextKey] : t(key);
         if (translation && translation !== key) {
             node.nodeValue = node.nodeValue.replace(/\S[\s\S]*\S|\S/, translation);
         } else if (node.parentElement.id === 'live-weather') {
@@ -61,7 +63,6 @@
         translate(document.body);
         const username = document.getElementById('username-display');
         if (username && username.dataset.i18nGuest === 'true') username.textContent = 'invité';
-        document.title = document.title.replace(/DASHBOARD|Dashboard/g, 'Tableau de bord').replace('Sign In', 'Connexion').replace('Settings', 'Paramètres');
         new MutationObserver(records => {
             for (const record of records) {
                 if (record.type === 'characterData') translateText(record.target);

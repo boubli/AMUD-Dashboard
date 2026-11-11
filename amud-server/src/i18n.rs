@@ -16,6 +16,18 @@ fn french_catalog() -> &'static HashMap<String, String> {
     })
 }
 
+/// Translate one server-inserted interface label. Unknown labels and languages
+/// fall back to the English text, so callers can pass any label safely.
+pub(crate) fn translate<'a>(raw_language: &str, label: &'a str) -> &'a str {
+    if sanitize_language(raw_language) != "fr" {
+        return label;
+    }
+    french_catalog()
+        .get(label)
+        .map(String::as_str)
+        .unwrap_or(label)
+}
+
 /// Translate explicit template markers before application/user data is inserted.
 /// Login labels are server-rendered so cached or disabled JavaScript cannot leave
 /// the sign-in form in a different language from the dashboard.
@@ -100,6 +112,33 @@ mod tests {
         let config: serde_json::Value = serde_json::from_str(json).unwrap();
         assert_eq!(config["language"], "fr");
         assert_eq!(config["messages"]["Sign In"], "Se connecter");
+    }
+
+    #[test]
+    fn page_title_labels_are_translated_on_the_server() {
+        assert_eq!(translate("fr", "DASHBOARD"), "TABLEAU DE BORD");
+        assert_eq!(translate("fr", "FEEDS"), "ACTUALITÉS");
+        assert_eq!(translate("en", "DASHBOARD"), "DASHBOARD");
+        assert_eq!(translate("de", "FEEDS"), "FEEDS");
+        assert_eq!(translate("fr", "My Dashboard"), "My Dashboard");
+    }
+
+    #[test]
+    fn settings_titles_keep_the_application_name() {
+        let html = render_template(include_str!("../../ui/templates/settings.html"), "fr");
+        assert!(html.contains("<title>Paramètres - {{app_name}}</title>"));
+        assert!(html.contains("<h2>{{app_name}} Paramètres</h2>"));
+    }
+
+    #[test]
+    fn empty_dashboard_hint_keeps_both_steps() {
+        let hint = translate(
+            "fr",
+            "Log in as Admin and click \"Add App\" to register your infrastructure.",
+        );
+        assert!(hint.contains("administrateur"));
+        assert!(hint.contains(translate("fr", "Add App")));
+        assert!(hint.contains("infrastructure"));
     }
 
     #[test]

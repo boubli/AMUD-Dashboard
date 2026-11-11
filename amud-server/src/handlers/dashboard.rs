@@ -150,7 +150,7 @@ async fn render_page(
     let mut category_options_html = String::new();
     for (_id, cat_name) in &db_categories {
         category_options_html.push_str(&format!(
-            r#"<option value="{}">{}</option>"#,
+            r#"<option value="{}" data-i18n-skip>{}</option>"#,
             escape_html(cat_name),
             escape_html(cat_name)
         ));
@@ -325,10 +325,14 @@ async fn render_page(
     let safe_app_version = escape_html(&app_version_formatted);
 
     // Page mode variables
-    let page_title_suffix = match mode {
-        PageMode::Dashboard => "DASHBOARD",
-        PageMode::Feeds => "FEEDS",
-    };
+    // Translated here, not in the browser, so an app name containing "Dashboard" is never rewritten.
+    let page_title_suffix = escape_html(crate::i18n::translate(
+        &branding.ui_language,
+        match mode {
+            PageMode::Dashboard => "DASHBOARD",
+            PageMode::Feeds => "FEEDS",
+        },
+    ));
     let feeds_on = crate::settings::feeds_enabled(&settings);
     let feeds_nav = if !feeds_on {
         String::new()
@@ -372,7 +376,7 @@ async fn render_page(
         .replace("/* ROOT_CSS */", &root_css)
         .replace("{{app_name}}", &safe_app_name)
         .replace("{{tagline}}", &safe_tagline)
-        .replace("{{page_title_suffix}}", page_title_suffix)
+        .replace("{{page_title_suffix}}", &page_title_suffix)
         .replace("<!-- FEEDS_NAV -->", &feeds_nav)
         .replace("{{main_grid_class}}", main_grid_class)
         .replace("{{body_page_class}}", body_page_class)

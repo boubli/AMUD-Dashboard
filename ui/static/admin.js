@@ -16,6 +16,8 @@
     function appendTableCell(tr, text, options) {
         const td = document.createElement('td');
         const opts = options || {};
+        // Cells hold API data (names, usernames, URLs), so i18n.js must leave them untranslated.
+        td.setAttribute('data-i18n-skip', '');
         if (opts.style) td.setAttribute('style', opts.style);
         if (opts.className) td.className = opts.className;
         if (opts.code) {

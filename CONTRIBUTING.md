@@ -129,6 +129,8 @@ JavaScript is disabled. Dynamic interface labels are translated by
 `ui/static/i18n.js`; unknown strings fall back to English. Technical integration
 help is not yet fully translated. Application names, descriptions, editable
 content, and form values must remain unchanged. Use `data-i18n-skip` around
-custom content that can contain words from the translation catalog.
+custom content that can contain words from the translation catalog. When one
+English word needs two translations, add `data-i18n-context="name"` to the
+element and a `"name:Word"` entry to the catalog (for example `preset:Light`).
 
 Translation regression tests are part of `cargo test --workspace --lib`.

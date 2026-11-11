@@ -859,7 +859,7 @@ fn render_guest_category_controls(
                 ""
             };
             checkboxes.push_str(&format!(
-                r#"<label style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; cursor:pointer;"><input type="checkbox" class="guest-category-checkbox" data-category="{}" {}> {}</label>"#,
+                r#"<label data-i18n-skip style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; cursor:pointer;"><input type="checkbox" class="guest-category-checkbox" data-category="{}" {}> {}</label>"#,
                 escape_html(name),
                 checked,
                 escape_html(name)

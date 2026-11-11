@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Settings - {{app_name}}</title>
+    <title>{{t:Settings}} - {{app_name}}</title>
     <link rel="icon" href="{{favicon_url}}" type="{{favicon_type}}">
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="{{accent_color}}">
@@ -571,7 +571,7 @@
                 <a href="/" class="settings-header-brand">
                     <i data-lucide="arrow-left" style="width:1.2rem; height:1.2rem; color:var(--text-muted);"></i>
                     <div class="brand-logo">{{if app_logo}}<img src="{{app_logo}}" alt="{{app_name}}" class="brand-logo-img">{{end}}</div>
-                    <h2>{{app_name}} Settings</h2>
+                    <h2>{{app_name}} {{t:Settings}}</h2>
                 </a>
                 <button
                     type="button"
@@ -1254,7 +1254,7 @@ AMUD_PLATFORM=unraid
                             <div class="perf-preset-grid">
                                 <label class="perf-preset-card">
                                     <input type="radio" name="performance_preset" value="light" {{eq_performance_preset_light}}>
-                                    <span class="perf-preset-card__title">Light</span>
+                                    <span class="perf-preset-card__title" data-i18n-context="preset">Light</span>
                                     <span class="perf-preset-card__hint">~35 MB idle · longer polls · smaller cache</span>
                                 </label>
                                 <label class="perf-preset-card">
@@ -3204,6 +3204,7 @@ AMUD_PLATFORM=unraid
                     const opt = document.createElement('option');
                     opt.value = e.id;
                     opt.textContent = e.name;
+                    opt.setAttribute('data-i18n-skip', '');
                     defaultSelect.appendChild(opt);
                 });
                 const ids = Array.from(defaultSelect.options).map(function (o) { return o.value; });
@@ -3444,6 +3445,7 @@ AMUD_PLATFORM=unraid
                 const opt = document.createElement('option');
                 opt.value = action;
                 opt.textContent = action;
+                opt.setAttribute('data-i18n-skip', '');
                 actionSelect.appendChild(opt);
             });
             if (prev && actions.includes(prev)) actionSelect.value = prev;
@@ -3996,6 +3998,7 @@ AMUD_PLATFORM=unraid
                 const opt = document.createElement('option');
                 opt.value = cat.name;
                 opt.textContent = cat.name;
+                opt.setAttribute('data-i18n-skip', '');
                 if (cat.name === selected) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -4082,6 +4085,7 @@ AMUD_PLATFORM=unraid
                     const label = document.createElement('span');
                     const strong = document.createElement('strong');
                     strong.textContent = w.title || 'Widget';
+                    if (w.title) strong.setAttribute('data-i18n-skip', '');
                     label.appendChild(strong);
                     label.appendChild(document.createTextNode(' (' + (w.widget_type || 'note') + ')'));
                     row.appendChild(label);
