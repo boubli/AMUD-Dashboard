@@ -13,6 +13,13 @@
 
 **[बदलावों की सूची](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[ब्लॉग](https://boubli.github.io/AMUD-Dashboard/blog)** · **[थीम गैलरी](https://boubli.github.io/AMUD-Dashboard/themes)** · **[रोडमैप](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[दस्तावेज़](https://boubli.github.io/AMUD-Dashboard/)** · **[अक्सर पूछे जाने वाले सवाल](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### `main` में नया (अगला रिलीज़)
+
+- **फ़्रेंच इंटरफ़ेस** — वैकल्पिक, **Settings → Appearance → Interface language** में (अंग्रेज़ी डिफ़ॉल्ट बनी रहती है)
+- **Catppuccin Frappé थीम** — पेस्टल नीला-धूसर और मॉव एक्सेंट, लाइट मोड में Catppuccin Latte
+
+दोनों योगदानों के लिए [@Lib-LOCALE](https://github.com/Lib-LOCALE) का धन्यवाद ([#18](https://github.com/boubli/AMUD-Dashboard/pull/18))।
+
 ### v1.9.5 में नया
 
 - **Multi-node agents** — एक AMUD सर्वर, हर Proxmox / Unraid / CasaOS / Docker होस्ट पर agent ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))

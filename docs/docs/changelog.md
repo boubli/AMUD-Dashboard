@@ -7,6 +7,10 @@ title: Changelog
 
 ## Unreleased
 
+### Added
+- **French interface** — optional, under **Settings → Appearance → Interface language**; English stays the default ([#18](https://github.com/boubli/AMUD-Dashboard/pull/18), thanks [@Lib-LOCALE](https://github.com/Lib-LOCALE))
+- **Catppuccin Frappé theme** — pastel blue-gray with mauve accents, and a Catppuccin Latte light mode ([#18](https://github.com/boubli/AMUD-Dashboard/pull/18))
+
 ### Changed
 - **Docs** — [Add a second host (agent only)](./multi-node/connect): Node 1 dashboard → Node 2 agent-only (Docker / Unraid CA / native / Proxmox)
 

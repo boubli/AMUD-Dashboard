@@ -13,6 +13,13 @@
 
 **[Registro de cambios](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Galería de temas](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Hoja de ruta](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Documentación](https://boubli.github.io/AMUD-Dashboard/)** · **[Preguntas frecuentes](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### Novedades en `main` (próxima versión)
+
+- **Interfaz en francés** — opcional, en **Settings → Appearance → Interface language** (el inglés sigue siendo el idioma predeterminado)
+- **Tema Catppuccin Frappé** — gris azulado pastel con acentos malva, y modo claro Catppuccin Latte
+
+Gracias a [@Lib-LOCALE](https://github.com/Lib-LOCALE) por ambas aportaciones ([#18](https://github.com/boubli/AMUD-Dashboard/pull/18)).
+
 ### Novedades en v1.9.5
 
 - **Multi-node agents** — un servidor AMUD, agentes en cada host Proxmox / Unraid / CasaOS / Docker ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))

@@ -13,6 +13,13 @@
 
 **[변경 로그](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[블로그](https://boubli.github.io/AMUD-Dashboard/blog)** · **[테마 갤러리](https://boubli.github.io/AMUD-Dashboard/themes)** · **[로드맵](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[문서](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### `main`의 새 기능 (다음 릴리스)
+
+- **프랑스어 인터페이스** — 선택 사항, **Settings → Appearance → Interface language**에서 설정 (기본값은 영어 유지)
+- **Catppuccin Frappé 테마** — 파스텔 블루그레이에 모브 포인트, 라이트 모드는 Catppuccin Latte
+
+두 기능을 기여해 주신 [@Lib-LOCALE](https://github.com/Lib-LOCALE) 님께 감사드립니다 ([#18](https://github.com/boubli/AMUD-Dashboard/pull/18)).
+
 ### v1.9.5 새로운 기능
 
 - **Multi-node agents** — AMUD 서버 하나, 각 Proxmox / Unraid / CasaOS / Docker 호스트에 agent ([Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents))

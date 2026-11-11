@@ -13,6 +13,13 @@
 
 **[更新日志](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[博客](https://boubli.github.io/AMUD-Dashboard/blog)** · **[主题画廊](https://boubli.github.io/AMUD-Dashboard/themes)** · **[路线图](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[文档](https://boubli.github.io/AMUD-Dashboard/)** · **[常见问题](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### `main` 分支新增（下一版本）
+
+- **法语界面** — 可选，在 **Settings → Appearance → Interface language** 中切换（默认仍为英语）
+- **Catppuccin Frappé 主题** — 柔和的蓝灰色搭配淡紫色点缀，浅色模式为 Catppuccin Latte
+
+感谢 [@Lib-LOCALE](https://github.com/Lib-LOCALE) 贡献了这两项功能（[#18](https://github.com/boubli/AMUD-Dashboard/pull/18)）。
+
 ### v1.9.5 新特性
 
 - **Multi-node agents** — 一台 AMUD 服务器，在每台 Proxmox / Unraid / CasaOS / Docker 主机上安装 agent（[Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents)）

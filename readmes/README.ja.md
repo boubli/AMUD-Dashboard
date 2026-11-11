@@ -13,6 +13,13 @@
 
 **[変更履歴](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[ブログ](https://boubli.github.io/AMUD-Dashboard/blog)** · **[テーマギャラリー](https://boubli.github.io/AMUD-Dashboard/themes)** · **[ロードマップ](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[ドキュメント](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### `main` の新機能（次回リリース）
+
+- **フランス語インターフェース** — 任意。**Settings → Appearance → Interface language** で切り替え（既定は英語のまま）
+- **Catppuccin Frappé テーマ** — パステル調のブルーグレーにモーブのアクセント。ライトモードは Catppuccin Latte
+
+両方を提供してくれた [@Lib-LOCALE](https://github.com/Lib-LOCALE) に感謝します（[#18](https://github.com/boubli/AMUD-Dashboard/pull/18)）。
+
 ### v1.9.5 の新機能
 
 - **Multi-node agents** — AMUD サーバーは 1 台、各 Proxmox / Unraid / CasaOS / Docker ホストに agent（[Remote agents](https://boubli.github.io/AMUD-Dashboard/docs/installation/remote-agents)）

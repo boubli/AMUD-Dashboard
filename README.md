@@ -13,6 +13,13 @@
 
 **[Changelog](https://boubli.github.io/AMUD-Dashboard/docs/changelog)** · **[Blog](https://boubli.github.io/AMUD-Dashboard/blog)** · **[Theme Gallery](https://boubli.github.io/AMUD-Dashboard/themes)** · **[Roadmap](https://boubli.github.io/AMUD-Dashboard/docs/roadmap)** · **[Docs](https://boubli.github.io/AMUD-Dashboard/)** · **[FAQ](https://boubli.github.io/AMUD-Dashboard/docs/faq)**
 
+### New on `main` (next release)
+
+- **French interface** — optional, under **Settings → Appearance → Interface language** (English stays the default)
+- **Catppuccin Frappé theme** — pastel blue-gray with mauve accents, and a Catppuccin Latte light mode
+
+Thanks to [@Lib-LOCALE](https://github.com/Lib-LOCALE) for both ([#18](https://github.com/boubli/AMUD-Dashboard/pull/18)).
+
 ### What's new in v1.9.5
 
 - **Nodes polish** — strip hidden until 2+ agents; **Settings → Agents / Nodes** live table + env snippets
