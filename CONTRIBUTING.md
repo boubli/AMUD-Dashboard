@@ -103,7 +103,7 @@ GitHub Actions also runs a **SonarCloud** scan (job `sonar` in `.github/workflow
 
 The check uses the resolved graph for the Linux targets we ship (see `deny.toml`), so optional lockfile entries that are never compiled do not fail the job. Unmaintained notices are ignored; only vulnerabilities fail the run.
 
-When it fails, the log names the crate and the first fixed version. Bump the dependency (or accept a Dependabot security PR), then check locally:
+When it fails, the log names the crate and the first fixed version. Bump the dependency, then check locally:
 
 ```bash
 cargo install cargo-deny --locked

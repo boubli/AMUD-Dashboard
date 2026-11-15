@@ -14,7 +14,6 @@ title: Changelog
 ### Changed
 - **Docs** — [Add a second host (agent only)](./multi-node/connect): Node 1 dashboard → Node 2 agent-only (Docker / Unraid CA / native / Proxmox)
 - **CI** — dependency advisories run in a daily Security audit workflow via `cargo deny` (resolved graph for shipped Linux targets), so a new advisory no longer fails unrelated pushes and pull requests
-- **CI** — Dependabot monthly Cargo and GitHub Actions update PRs; security updates open their own PRs when a fixed version is published
 
 ### Security
 - **SQLite** — `rusqlite` 0.31 → 0.42 (bundled SQLite 3.54.1), which clears [RUSTSEC-2026-0459](https://rustsec.org/advisories/RUSTSEC-2026-0459) in `libsqlite3-sys`
