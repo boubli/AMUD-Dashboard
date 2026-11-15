@@ -3,6 +3,10 @@ name: Security audit
 # Advisories are published on their own schedule, not when we push. Running the
 # audit here keeps a new advisory from failing CI on unrelated commits and pull
 # requests; it fails this workflow instead, once a day or when dependencies change.
+#
+# cargo-deny checks the resolved graph for the Linux targets we ship, so optional
+# lockfile entries that are never compiled (for example HTTP/3 under reqwest) do
+# not fail the job.
 on:
   schedule:
     - cron: '17 5 * * *'
@@ -11,12 +15,14 @@ on:
     paths:
       - '**/Cargo.toml'
       - 'Cargo.lock'
+      - 'deny.toml'
       - '.github/workflows/audit.yml'
   pull_request:
     branches: [main, master]
     paths:
       - '**/Cargo.toml'
       - 'Cargo.lock'
+      - 'deny.toml'
       - '.github/workflows/audit.yml'
   workflow_dispatch:
 
@@ -28,12 +34,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  cargo-audit:
+  cargo-deny:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - name: cargo audit
-        uses: actions-rust-lang/audit@72c09e02f132669d52284a3323acdb503cfc1a24 # v1.2.7
+      - name: cargo deny check advisories
+        uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
-          createIssues: false
+          # Match release/CI builds: do not enable unused optional features.
+          arguments: ''
+          command: check
+          command-arguments: advisories

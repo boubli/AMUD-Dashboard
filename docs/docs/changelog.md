@@ -13,10 +13,12 @@ title: Changelog
 
 ### Changed
 - **Docs** — [Add a second host (agent only)](./multi-node/connect): Node 1 dashboard → Node 2 agent-only (Docker / Unraid CA / native / Proxmox)
-- **CI** — `cargo audit` moved to its own daily workflow, so a new advisory no longer fails unrelated pushes and pull requests
+- **CI** — dependency advisories run in a daily Security audit workflow via `cargo deny` (resolved graph for shipped Linux targets), so a new advisory no longer fails unrelated pushes and pull requests
+- **CI** — Dependabot monthly Cargo and GitHub Actions update PRs; security updates open their own PRs when a fixed version is published
 
 ### Security
 - **SQLite** — `rusqlite` 0.31 → 0.42 (bundled SQLite 3.54.1), which clears [RUSTSEC-2026-0459](https://rustsec.org/advisories/RUSTSEC-2026-0459) in `libsqlite3-sys`
+- **Lockfile** — `quinn-udp` 0.5.14 → 0.5.16 (clears [RUSTSEC-2026-0538](https://rustsec.org/advisories/RUSTSEC-2026-0538); the crate is optional HTTP/3 under `reqwest` and is not compiled into AMUD)
 
 ### Fixed
 - **Docs** — garbled dashes and arrows on the Docker, Linux, Proxmox, and Unraid install pages; the Unraid "Step 3b" and `.amud-secrets-key` troubleshooting links now jump to the right section

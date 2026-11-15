@@ -95,17 +95,19 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --lib
 ```
 
-GitHub Actions also runs a **SonarCloud** scan (job `sonar` in `.github/workflows/ci.yml`) and **`cargo audit`**.
+GitHub Actions also runs a **SonarCloud** scan (job `sonar` in `.github/workflows/ci.yml`) and a **dependency advisory** check.
 
 ### Dependency audit
 
-`cargo audit` lives in its own workflow, [`.github/workflows/audit.yml`](.github/workflows/audit.yml). It runs once a day and whenever `Cargo.toml` or `Cargo.lock` changes, so a newly published advisory does not fail CI on unrelated work.
+[`cargo deny check advisories`](https://embarkstudios.github.io/cargo-deny/) lives in [`.github/workflows/audit.yml`](.github/workflows/audit.yml). It runs once a day and whenever `Cargo.toml`, `Cargo.lock`, or [`deny.toml`](deny.toml) changes, so a newly published advisory does not fail CI on unrelated work.
 
-When it fails, the log names the crate and the first fixed version. Bump the dependency, then check locally:
+The check uses the resolved graph for the Linux targets we ship (see `deny.toml`), so optional lockfile entries that are never compiled do not fail the job. Unmaintained notices are ignored; only vulnerabilities fail the run.
+
+When it fails, the log names the crate and the first fixed version. Bump the dependency (or accept a Dependabot security PR), then check locally:
 
 ```bash
-cargo install cargo-audit
-cargo audit
+cargo install cargo-deny --locked
+cargo deny check advisories
 ```
 
 ### SonarCloud

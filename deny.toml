@@ -1,0 +1,15 @@
+# Advisories for the crates that actually ship in AMUD binaries.
+# Optional lockfile entries (for example HTTP/3 under reqwest) are ignored
+# when they are not on the resolved graph for these targets.
+
+[graph]
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+    "x86_64-unknown-linux-musl",
+    "aarch64-unknown-linux-musl",
+]
+
+[advisories]
+# Match the previous cargo-audit job: unmaintained notices do not fail the run.
+unmaintained = "none"

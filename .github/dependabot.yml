@@ -1,0 +1,32 @@
+# Monthly version bumps and Dependabot security PRs for Cargo + Actions.
+# Security updates are enabled separately in the repository settings; this
+# file only controls the scheduled version bumps.
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: monthly
+      day: monday
+    open-pull-requests-limit: 1
+    groups:
+      cargo-deps:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: chore
+      include: scope
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+      day: monday
+    open-pull-requests-limit: 1
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: ci
+      include: scope
